@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/UploadDownloadFileServlet.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/Job.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/internal/ajax.jsp</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/GeneDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/test/GeneTest.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/BsJobResultDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/searchExperimentalData.jsp</file>
+        </group>
+    </open-files>
+</project-private>

@@ -1,0 +1,418 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 16, 2018, 3:49:27 PM
+    Author     : doglas
+*/
+
+.requirements-end{
+    margin-bottom: 100px;
+}
+
+.network-set-help{
+    font-size: 22px;   
+}
+
+.note-pos{
+    margin-bottom: 70px;
+}
+
+.tutorial-title-size{
+    font-size: 30px;
+}
+
+.tutorial-font-size{
+    font-size: 18px;
+}
+
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+.navbar {
+    font-family: Anton, sans-serif;
+    margin-bottom: 0;
+    border: 0;
+    opacity: 0.9;
+    min-height: 80px;
+    padding-top: 15px;
+}
+
+.navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px;
+}
+
+.font{
+    font-family: 'Anton', sans-serif;
+}
+
+.color{
+    color: #0099ff;
+}
+
+.color-reg{
+    color: white;
+}
+
+.check-options{
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.logo-size{
+    font-size: 55px;
+    margin-top: 5px;
+}
+
+.title-size{
+    text-align: center;
+    font-size: 40px;
+    color: black;
+}
+
+.title-network-vis{
+    font-size: 40px;
+    color: black;
+}
+
+.centered-top {
+    margin-top: 150px ;
+}
+.search-database{
+    margin-bottom: 30px;
+}
+
+li .active{
+    font-weight: bold;
+    color: black !important;
+}
+
+.col-8{
+    padding-left: 0px;
+    padding-right: 0px;    
+}
+
+.tables-top{
+    margin-top: 50px;
+}
+
+.btn-lg{
+    height: 150px;
+    width: 100%;
+    font-size: 30px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+}
+
+.shadow{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn-normal{
+    font-size: 20px;
+}
+
+.bottom-btn{
+    margin-top: 120px;
+    margin-bottom: 30px;    
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+#div-footer{
+    background-color: black;
+    padding: 5px 20px 5px 20px;
+}
+
+a{
+    color: white;
+    font-size: 20px;
+}
+
+hr {
+    border-top: 2px solid;
+    color: darkgrey;
+}
+
+.tum-logo{
+    width:40%;
+    margin-right: 15px;
+}
+
+.ufmg-logo{
+    width:50%;
+}
+
+.workflow-logo{
+    width: 100%;
+    padding: 100px;
+    padding-top: 30px;
+}
+
+.text-position{
+    text-align: right;
+}
+
+
+hr{
+    margin-top: 0px;
+    margin-bottom: 2px;
+    border-top-width: 2px;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.predicted-text{
+    font-size: medium; 
+    font-family: sans-serif;
+}
+
+button{
+    white-space: normal !important; 
+    word-wrap: break-word !important;
+}
+
+.badge-light{
+    white-space: normal; 
+    word-wrap: break-word;
+    background-color: white;
+}
+
+.badge{
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-align: justify;
+}
+
+.requirements{
+    padding-top: 50px;
+    font-size: 25px;
+    text-align: justify;
+}
+
+.dropdown-item{
+    color: white;
+}
+
+.navbar-nav{
+    display: -webkit-box;
+}
+
+#search-button{
+    padding: 20px 0px 20px 0px;
+}
+
+.d-flex{
+    display: inline !important;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.go-top-row{
+    margin: 20px 0px 140px 0px;  
+}
+
+.tables-info-screens{
+    font-weight: normal;
+}
+
+th a{
+    color: black; 
+    font-size: inherit; 
+    text-decoration: underline
+}
+
+span a{
+    color: black; 
+    font-size: inherit; 
+    text-decoration: underline
+}
+
+.tab-color{
+    color: black;
+    font-size: inherit;
+}
+
+.node .selected {
+    stroke: red;
+}
+
+.index-space{
+    margin-top: 70px;
+}
+
+/* selected link */
+a:active {
+    background-color: transparent !important;
+}
+
+@media (max-width: 1500px) { 
+    .statistics-padding{
+        padding-left: 20px;
+    }
+
+    .index-space{
+        margin-top: 80px;
+    }
+
+    .note-pos{
+        margin-bottom: 170px;
+    }
+}
+
+@media (max-width: 1369px) { 
+    .tum-logo{
+        margin-bottom: 15px;
+    }
+    .centered-top-process-to-download {
+        margin-top: 50px;
+    }
+    .footer-download{
+        margin-top: 150px;
+    }
+}
+
+@media only screen and (max-width: 850px) { 
+    /* For medium devices (tablets, less than 992px)*/
+    .footer {
+        font-size: 15px;
+    }
+
+    .btn-lg{
+        height: 100px;
+        margin-top: 120px;
+        margin-bottom: 20px;
+        font-size: 20px;
+        text-align: center;
+        padding: 0px;
+    }
+
+    .tum-logo{
+        width:80%;
+        margin-bottom: 15px;
+    }
+
+    .ufmg-logo{
+        width:100%;
+    }
+
+    button div{
+        font-size: small !important; 
+    }
+
+    .requirements{
+        margin-bottom: 200px;
+    }
+
+    .workflow-logo{
+        padding: 15px 50px 80px 50px;
+    }
+
+    .go-top-row{
+        margin: 20px 0px 160px 0px;  
+    }
+
+}
+
+@media only screen and (max-width: 767px) { 
+    .navbar-nav{
+        display: block;
+        padding-right: 0;
+    }
+
+    .bottom-btn{
+        margin-top: 160px;
+    }
+}
+
+@media only screen and (max-width: 680px) { 
+    .go-top-row{
+        margin: 20px 0px 200px 0px;  
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    /* For mobile phones: */
+    .footer {
+        position: relative;
+        font-size: 15px;
+    }
+
+    .logo-size{
+        font-size: 50px;
+    }
+
+    .tum-logo{
+        width:20%;
+        margin-right: 15px;
+    }
+
+    .ufmg-logo{
+        width:30%;
+    }
+
+    .text-position{
+        text-align: center;
+    }
+
+    .btn-small-screen{
+        margin-top: 20px;
+        margin-bottom: 150px;
+    }
+
+    .requirements{
+        font-size: 20px !important;
+        margin-bottom: 20px;
+        padding-top: 20px;
+    }
+
+    span span{
+        font-size: 18px;
+    }
+
+    .workflow-logo{
+        padding: 2px 0px 5px 0px;
+    }
+
+    .title-size{
+        font-size: 30px;
+    }
+
+    .form-small-screen{
+        margin-top: 20px; 
+    }
+
+    .go-top-row{
+        margin: 20px 0px 20px 0px;
+    }
+
+    .bottom-btn{
+        margin-top: 150px;
+    }
+
+    .download-page{
+        padding-bottom: 50px !important;
+    }
+
+}
+

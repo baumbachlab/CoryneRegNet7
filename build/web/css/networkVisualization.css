@@ -1,0 +1,187 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 10, 2018, 2:58:08 PM
+    Author     : doglas
+*/
+
+.link {
+    fill: none;
+    stroke: #555;
+    stroke-width: 1.2px;
+}
+
+#activator {
+    fill: #349834;
+}
+
+#activatorA {
+    fill: #349834;
+}
+
+#small-activator {
+    fill: #349834;
+}
+
+#activator-small {
+    fill: #349834;
+}
+
+
+#activator-normal {
+    fill: #349834;
+}
+
+#big-activator {
+    fill: #349834;
+}
+
+#activator-big {
+    fill: #349834;
+}
+
+#everest-activator {
+    fill: #349834;
+}
+
+.link.activator {
+    stroke: #349834;
+}
+
+#repressor {
+    fill: #ff6666;
+}
+
+#repressorA {
+    fill: #ff6666;
+}
+
+#small-repressor {
+    fill: #ff6666;
+}
+
+#repressor-small {
+    fill: #ff6666;
+}
+
+#repressor-normal {
+    fill: #ff6666;
+}
+
+#big-repressor {
+    fill: #ff6666;
+}
+
+#repressor-big {
+    fill: #ff6666;
+}
+
+#everest-repressor {
+    fill: #ff6666;
+}
+
+.link.repressor {
+    stroke: #ff6666;
+}
+
+#dual {
+    fill: blue;
+}
+
+#dualA {
+    fill: blue;
+}
+
+#small-dual {
+    fill: blue;
+}
+
+#dual-small {
+    fill: blue;
+}
+
+#dual-normal {
+    fill: blue;
+}
+
+#big-dual {
+    fill: blue;
+}
+
+#dual-big {
+    fill: blue;
+}
+
+#everest-dual {
+    fill: blue;
+}
+
+.link.dual {
+    stroke: blue;
+}
+
+#sigma {
+    fill: #00b3b3;
+}
+
+#sigmaA {
+    fill: #00b3b3;
+}
+
+#small-sigma {
+    fill: #00b3b3;
+}
+
+#sigma-small {
+    fill: #00b3b3;
+}
+
+#sigma-normal {
+    fill: #00b3b3;
+}
+
+#big-sigma {
+    fill: #00b3b3;
+}
+
+#sigma-big {
+    fill: #00b3b3;
+}
+
+everest-sigma {
+    fill: #00b3b3;
+}
+
+.link.sigma {
+    stroke: #00b3b3;
+}
+
+circle {
+    fill: #ccc;
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+text {
+    font: 10px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+div.tooltip {
+    position: absolute;
+    background-color: white;
+    max-width: 300px;
+    height: auto;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 6px;
+    border-width: 2px;
+    box-shadow: 4px 4px 13px rgba(0, 0, 0, .5);
+    pointer-events: none;
+    font: 25px sans-serif;
+    color: black;
+}
