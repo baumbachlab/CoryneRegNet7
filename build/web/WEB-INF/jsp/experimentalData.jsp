@@ -159,7 +159,7 @@
                                         </c:when>    
                                         <c:otherwise>
                                             <span>Regulated by:</span><br>
-                                            <c:forTokens var="token" items="${g.regulatedBy}"
+                                            <c:forTokens var="token" items="${g.regRna}"
                                                          delims=";">
                                                 <c:set var="i" value="0"/>
                                                 <c:forTokens var="tokenInside" items="${token}" delims=",">
@@ -200,8 +200,7 @@
                                         </c:when>    
                                         <c:otherwise>
                                             <span>Regulates:</span><br>
-                                            <c:forTokens var="token" items="${g.regulatedGenes}"
-                                                         delims=";">
+                                            <c:forTokens var="token" items="${g.regulatedGenes}" delims=";">
                                                 <c:set var="i" value="0"/>
                                                 <c:forTokens var="tokenInside" items="${token}" delims=",">
                                                     <c:choose>

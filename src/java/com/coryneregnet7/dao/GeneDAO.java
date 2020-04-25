@@ -818,4 +818,37 @@ public class GeneDAO extends GenericDAO {
 
     }
 
+    //findIfPredictedTfTg
+    public Gene findIfPredictedTfTg(Integer geneId) {
+        try {
+            Gene gene = new Gene();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Gene.findIfPredictedTfTg");
+            query.setInteger("geneId", geneId);
+            gene = (Gene) query.uniqueResult();
+            this.tx.commit();
+            return gene;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //findIfExperimentalTfTg
+    public Gene findIfExperimentalTfTg(Integer geneId) {
+        try {
+            Gene gene = new Gene();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Gene.findIfExperimentalTfTg");
+            query.setInteger("geneId", geneId);
+            gene = (Gene) query.uniqueResult();
+            this.tx.commit();
+            return gene;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 }

@@ -43,7 +43,7 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://db:5432/coryneregnet</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/coryneregnet</property>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">123</property>
     <property name="hibernate.show_sql">false</property>
@@ -75,8 +75,11 @@ Contributor(s):
     <mapping class="com.coryneregnet7.model.PredictedRegulatoryInteractionView"/>
     <mapping class="com.coryneregnet7.model.RegulatorsRegulations"/>
     <mapping class="com.coryneregnet7.model.RefStatistics"/>
+    <mapping class="com.coryneregnet7.model.RnaInteraction"/>
+    <mapping class="com.coryneregnet7.model.SmallRna"/>
     <mapping class="com.coryneregnet7.model.TfsRegulating"/>
     <mapping class="com.coryneregnet7.model.TableView"/>
+    <mapping class="com.coryneregnet7.model.RnaTableView"/>
     <mapping class="com.coryneregnet7.model.CoregulatorsStatistics"/>
     <mapping class="com.coryneregnet7.model.HmmProfilesLengths"/>
     <mapping class="com.coryneregnet7.model.StatisticsOverview"/>

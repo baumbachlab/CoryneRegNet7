@@ -12,6 +12,10 @@ and open the template in the editor.
     margin-bottom: 150px;
 }
 
+.space-after-input{
+    margin-bottom: 10px;
+}
+
 @media (max-width: 1500px) {
     .space-to-footer{
         margin-bottom: 30px;
