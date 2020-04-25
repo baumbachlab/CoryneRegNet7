@@ -96,6 +96,7 @@ function tfsRegAGene(data, count, maxValue) {
             .attr("fill", "grey")
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide);
+
 }
 
 

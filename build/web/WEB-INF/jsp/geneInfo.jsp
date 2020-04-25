@@ -300,11 +300,14 @@
                             <table id="regulatedby-table" class="table table-striped text-center" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Gene ID</th>
-                                        <th>Gene name</th>
-                                        <th>Protein id</th>
-                                        <th>Product</th>
-                                        <th>Role</th>
+                                    <c:if test="${type eq 'predicted'}">
+                                        <th>Type</th>
+                                        </c:if>
+                                    <th>Gene ID</th>
+                                    <th>Gene name</th>
+                                    <th>Protein id</th>
+                                    <th>Product</th>
+                                    <th>Role</th>
                                         <c:if test="${type eq 'predicted'}">
                                         <th>Model Organism</th>
                                         </c:if>
@@ -321,6 +324,9 @@
                             <tbody>
                                 <c:forEach items="${regulatedBy}" var="tf">
                                     <tr>
+                                        <c:if test="${type eq 'predicted'}">
+                                            <td>TF</td>
+                                        </c:if>
                                         <td><span><a href="geneInfo.htm?locusTag=${tf.transcriptionFactor.locusTag}&type=${type}">${tf.transcriptionFactor.locusTag}</a></span></td>
                                         <td>
                                             <c:choose>
@@ -335,7 +341,17 @@
                                         <td><span><a href="geneInfo.htm?locusTag=${tf.transcriptionFactor.locusTag}&type=${type}">${tf.transcriptionFactor.proteinId}</a></span></td>
                                         <td><span>${tf.transcriptionFactor.product}</span></td>
                                         <td><span>${tf.role}</span></td> 
-                                        <c:if test="${type eq 'predicted'}"><td><span><a href="organismInfo.htm?id=${tf.modelOrganism.id}&type=experimental" target="_blank">${tf.modelOrganism.genera} ${tf.modelOrganism.species} ${tf.modelOrganism.strain}</a></span></td></c:if>
+                                        <c:if test="${type eq 'predicted'}">
+                                            <td>
+                                                <span>
+                                                    <a href="organismInfo.htm?id=${tf.modelOrganism.id}&type=experimental" target="_blank">${tf.modelOrganism.genera} ${tf.modelOrganism.species} ${tf.modelOrganism.strain}</a>
+
+                                                    <c:if test="${empty tf.modelOrganism.genera}">-</c:if>
+                                                    </span>
+                                                </td>
+
+                                        </c:if>
+
                                         <td><span>${tf.evidence}</span></td>
                                         <c:if test="${type eq 'predicted'}">
                                             <td>
@@ -356,8 +372,34 @@
                                                 </c:if>
                                     </tr>
                                 </c:forEach>
+                                <c:if test="${type eq 'predicted'}">
+                                    <c:forEach items="${rnaRegViews}" var="rna">
+                                        <tr>
+                                            <td>sRNA</td>
+                                            <td><span><a href="geneInfo.htm?locusTag=${rna.smallRna.locusTag}&type=${type}">${rna.smallRna.locusTag}</a></span></td>
+                                            <td>
+                                                <span>-</span>
+                                            </td>
+                                            <td><span>-</span></td>
+                                            <td><span>-</span></td>
+                                            <td><span>-</span></td> 
+                                            <c:if test="${type eq 'predicted'}"><td><span>-</span></td></c:if>
+                                            <td><span>${rna.evidence}</span></td>
+                                            <c:if test="${type eq 'predicted'}">
+                                                <td>
+                                                    <span>${rna.copraPvalue}</span>
+                                                </td>
+                                            </c:if>
+                                            <td><span>-</span></td>
+                                            <c:if test="${type eq 'experimental'}">
+                                                <td><span>-</span></td>
+                                            </c:if>
+                                        </tr>
+                                    </c:forEach>    
+                                </c:if>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -411,7 +453,13 @@
                                         <td><span>${tg.role}</span></td> 
                                         <c:if test="${tg.operon eq '-'}"><td><span>${tg.operon}</span></td></c:if>
                                         <c:if test="${tg.operon ne '-'}"><td><span><a href="operonInfo.htm?name=${tg.operon}&type=${type}">${tg.operon}</a></span></td></c:if>
-                                        <c:if test="${type eq 'predicted'}"><td><span><a href="organismInfo.htm?id=${tg.modelOrganism.id}&type=experimental" target="_blank">${tg.modelOrganism.genera} ${tg.modelOrganism.species} ${tg.modelOrganism.strain}</a></span></td></c:if>
+                                                <c:if test="${type eq 'predicted'}">
+                                            <td>
+                                                <span><a href="organismInfo.htm?id=${tg.modelOrganism.id}&type=experimental" target="_blank">${tg.modelOrganism.genera} ${tg.modelOrganism.species} ${tg.modelOrganism.strain}</a>
+                                                </span>
+                                                <c:if test="${empty tf.modelOrganism.genera}">-</c:if>
+                                                </td>
+                                        </c:if>
                                         <td><span>${tg.evidence}</span></td>
                                         <c:if test="${type eq 'predicted'}">
                                             <td>
@@ -607,13 +655,13 @@
     <script>
         function thisGene() {
             document.getElementById('bsProfiles').style.display = "block";
-            document.getElementById('organism-search').name="selectedOrganism";
+            document.getElementById('organism-search').name = "selectedOrganism";
             //var x = document.getElementById('organism-search').name;
             document.getElementById('bs-search-type').value = "0";
         }
         function otherGenes() {
             document.getElementById('bsProfiles').style.display = "none";
-            document.getElementById('organism-search').name="organismId";
+            document.getElementById('organism-search').name = "organismId";
             //var x = document.getElementById('organism-search').name;
             document.getElementById('bs-search-type').value = "1";
         }

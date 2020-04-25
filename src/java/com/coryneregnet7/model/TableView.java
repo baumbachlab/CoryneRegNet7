@@ -36,7 +36,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 })
 public class TableView implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     private Integer id;
@@ -64,6 +64,22 @@ public class TableView implements Serializable {
     private String regulatedGenes;
     @Column(name = "regulated_by")
     private String regulatedBy;
+    @Column(name = "rnas_locus")
+    private String rnasLocus;
+    @Column(name = "reg_rna")
+    private String regRna;
+
+//reg_rna
+    
+    
+    
+    public String getRnasLocus() {
+        return rnasLocus;
+    }
+
+    public void setRnasLocus(String rnasLocus) {
+        this.rnasLocus = rnasLocus;
+    }
 
     public String getOperonName() {
         return operonName;
@@ -232,6 +248,20 @@ public class TableView implements Serializable {
      */
     public void setGeneName(String geneName) {
         this.geneName = geneName;
+    }
+
+    /**
+     * @return the regRna
+     */
+    public String getRegRna() {
+        return regRna;
+    }
+
+    /**
+     * @param regRna the regRna to set
+     */
+    public void setRegRna(String regRna) {
+        this.regRna = regRna;
     }
 
 }

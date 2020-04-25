@@ -23,6 +23,9 @@ import com.coryneregnet7.dao.PredictedRegulatoryInteractionViewDAO;
 import com.coryneregnet7.dao.RegulatorsRegulationsDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionViewDAO;
+import com.coryneregnet7.dao.RnaInteractionDAO;
+import com.coryneregnet7.dao.RnaTableViewDAO;
+import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.dao.StatisticsOverviewDAO;
 import com.coryneregnet7.dao.TableViewDAO;
 import com.coryneregnet7.dao.TfsRegulatingDAO;
@@ -44,6 +47,9 @@ import com.coryneregnet7.model.PredictedRegulatoryInteractionView;
 import com.coryneregnet7.model.RegulatorsRegulations;
 import com.coryneregnet7.model.RegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteractionView;
+import com.coryneregnet7.model.RnaInteraction;
+import com.coryneregnet7.model.RnaTableView;
+import com.coryneregnet7.model.SmallRna;
 import com.coryneregnet7.model.StatisticsOverview;
 import com.coryneregnet7.model.TableView;
 import com.coryneregnet7.model.TfsRegulating;
@@ -51,9 +57,11 @@ import com.coryneregnet7.processing.GetHmmLogo;
 import com.coryneregnet7.processing.SearchBindingSites;
 import com.coryneregnet7.processing.output.CytoscapeFile;
 import com.coryneregnet7.test.GeneOperonViewTest;
+import com.coryneregnet7.test.RnaTableViewTest;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -305,10 +313,13 @@ public class SearchController {
 
         return returnObj;
     }
+    
+    //rnaInfo
 
     @RequestMapping("dataSearch")
-    public String dataSearch(Model model, Integer organism, String gene, String searchType) throws InterruptedException {
+    public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
 
+        System.out.println("TF-RNA: " + geneRna);
         if (searchType == null) {
             return "index";
         }
@@ -323,17 +334,29 @@ public class SearchController {
         GeneOperonDAO goDAO = new GeneOperonDAO();
         GenomeDAO genomeDAO = new GenomeDAO();
         Genome genome = new Genome();
-        OperonDAO opDAO = new OperonDAO();
-        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
-        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
-        Hashtable<Gene, ArrayList<RegulationView>> regulates = new Hashtable<Gene, ArrayList<RegulationView>>();
-        Hashtable<Gene, ArrayList<RegulationView>> regulatedBy = new Hashtable<Gene, ArrayList<RegulationView>>();
-        List<RegulatoryInteraction> ris = new ArrayList<RegulatoryInteraction>();
-        List<PredictedRegulatoryInteraction> pris = new ArrayList<PredictedRegulatoryInteraction>();
+
+        if (geneRna.equals("rna")) {
+            //search rnas by genome. 
+            SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+
+            RnaTableViewDAO dao = new RnaTableViewDAO();
+            List<RnaTableView> rnaTableView = new ArrayList<>();
+
+            List<SmallRna> sRnaList = new ArrayList<>();
+            if (organism == 0) {
+                rnaTableView = dao.listAll();
+            } else {
+
+                genome = genomeDAO.findByOrganism(organism);
+                sRnaList = sRnaDAO.findByGenome(genome.getId());
+            }
+
+            model.addAttribute("type", searchType);
+            model.addAttribute("rnaTableView", rnaTableView);
+            return "rna";
+        }
+
         RegulationView regView = new RegulationView();
-        List<RegulationView> regulationsView = new ArrayList<RegulationView>();
-        List<GeneOperon> geneOperons = new ArrayList<GeneOperon>();
-        Hashtable<Integer, String> operons = new Hashtable<Integer, String>();
         List<TableView> tableViews = new ArrayList<TableView>();
         TableViewDAO tableViewDAO = new TableViewDAO();
 
@@ -575,339 +598,362 @@ public class SearchController {
         GeneDAO geneDAO = new GeneDAO();
         Gene gene = geneDAO.findByLocusTag(locusTag);
 
-        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
-        ArrayList<RegulationView> regulates = new ArrayList<>();
-        ArrayList<RegulationView> regulatedBy = new ArrayList<>();
-        RegulatoryInteraction riAux = new RegulatoryInteraction();
-        List<RegulatoryInteraction> risAux = new ArrayList<>();
-        List<RegulatoryInteraction> ris = new ArrayList<>();
-        List<BindingSite> bss = new ArrayList<>();
-        BindingSiteDAO bindingSiteDAO = new BindingSiteDAO();
-        GeneOperonDAO geneOperonDAO = new GeneOperonDAO();
-        GeneOperon geneOperon = new GeneOperon();
-        Hashtable<Gene, String> operonRegulatedGenes = new Hashtable<Gene, String>();
-        OperonDAO opDAO = new OperonDAO();
-        String autoregulator = "";
-        OrganismDAO organismDAO = new OrganismDAO();
-        List<Organism> organisms = new ArrayList<Organism>();
-        List<PredictedRegulatoryInteraction> pris = new ArrayList<PredictedRegulatoryInteraction>();
-        RegulationView regView = new RegulationView();
-        ArrayList<RegulationView> regulationsView = new ArrayList<RegulationView>();
-        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
-        String hmmLogo = "";
-        String hmmProfile = "";
-        String directoryPath = "";
-        GetHmmLogo getHmmLogo = new GetHmmLogo();
-        String[] stoDirectory;
-        Operon operon = new Operon();
-        HomologousDAO homDAO = new HomologousDAO();
-        ArrayList<Homologous> homologous = new ArrayList<>();
-        ArrayList<GeneDbType> orthologous = new ArrayList<>();
-        ArrayList<GeneDbType> paralogous = new ArrayList<>();
-        GeneDbType geneDbType = new GeneDbType();
+        if (gene != null) {
 
-        homologous = (ArrayList<Homologous>) homDAO.findByGene(gene.getId());
-        for (int i = 0; i < homologous.size(); i++) {
-            //System.out.println("homologous: " + homologous.get(i).getGeneOne().getLocusTag());
-            //System.out.println("homologous: " + homologous.get(i).getGeneTwo().getLocusTag());
-            if (homologous.get(i).getGeneOne().getId().equals(gene.getId())) {
-                //System.out.println("homologous.get(i).getGeneTwo().getGenome().getOrganism().getId(): " + homologous.get(i).getGeneTwo().getGenome().getOrganism().getId());
-                //System.out.println("gene.getGenome().getOrganism().getId(): " + gene.getGenome().getOrganism().getId());
-                if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getId().equals(gene.getGenome().getOrganism().getId())) {
-                    geneDbType = new GeneDbType();
-                    geneDbType.setGene(homologous.get(i).getGeneTwo());
-                    if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getType().equals("model")) {
-                        geneDbType.setDbType("experimental");
+            RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
+            ArrayList<RegulationView> regulates = new ArrayList<>();
+            ArrayList<RegulationView> regulatedBy = new ArrayList<>();
+            RegulatoryInteraction riAux = new RegulatoryInteraction();
+            List<RegulatoryInteraction> risAux = new ArrayList<>();
+            List<RegulatoryInteraction> ris = new ArrayList<>();
+            List<BindingSite> bss = new ArrayList<>();
+            BindingSiteDAO bindingSiteDAO = new BindingSiteDAO();
+            GeneOperonDAO geneOperonDAO = new GeneOperonDAO();
+            GeneOperon geneOperon = new GeneOperon();
+            Hashtable<Gene, String> operonRegulatedGenes = new Hashtable<Gene, String>();
+            OperonDAO opDAO = new OperonDAO();
+            String autoregulator = "";
+            OrganismDAO organismDAO = new OrganismDAO();
+            List<Organism> organisms = new ArrayList<Organism>();
+            List<PredictedRegulatoryInteraction> pris = new ArrayList<PredictedRegulatoryInteraction>();
+            RegulationView regView = new RegulationView();
+            ArrayList<RegulationView> regulationsView = new ArrayList<RegulationView>();
+            PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
+            String hmmLogo = "";
+            String hmmProfile = "";
+            String directoryPath = "";
+            GetHmmLogo getHmmLogo = new GetHmmLogo();
+            String[] stoDirectory;
+            Operon operon = new Operon();
+            HomologousDAO homDAO = new HomologousDAO();
+            ArrayList<Homologous> homologous = new ArrayList<>();
+            ArrayList<GeneDbType> orthologous = new ArrayList<>();
+            ArrayList<GeneDbType> paralogous = new ArrayList<>();
+            GeneDbType geneDbType = new GeneDbType();
+
+            homologous = (ArrayList<Homologous>) homDAO.findByGene(gene.getId());
+            for (int i = 0; i < homologous.size(); i++) {
+                //System.out.println("homologous: " + homologous.get(i).getGeneOne().getLocusTag());
+                //System.out.println("homologous: " + homologous.get(i).getGeneTwo().getLocusTag());
+                if (homologous.get(i).getGeneOne().getId().equals(gene.getId())) {
+                    //System.out.println("homologous.get(i).getGeneTwo().getGenome().getOrganism().getId(): " + homologous.get(i).getGeneTwo().getGenome().getOrganism().getId());
+                    //System.out.println("gene.getGenome().getOrganism().getId(): " + gene.getGenome().getOrganism().getId());
+                    if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getId().equals(gene.getGenome().getOrganism().getId())) {
+                        geneDbType = new GeneDbType();
+                        geneDbType.setGene(homologous.get(i).getGeneTwo());
+                        if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getType().equals("model")) {
+                            geneDbType.setDbType("experimental");
+                        } else {
+                            geneDbType.setDbType("predicted");
+                        }
+                        paralogous.add(geneDbType);
                     } else {
-                        geneDbType.setDbType("predicted");
+                        geneDbType = new GeneDbType();
+                        geneDbType.setGene(homologous.get(i).getGeneTwo());
+                        if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getType().equals("model")) {
+                            geneDbType.setDbType("experimental");
+                        } else {
+                            geneDbType.setDbType("predicted");
+                        }
+                        orthologous.add(geneDbType);
                     }
-                    paralogous.add(geneDbType);
                 } else {
-                    geneDbType = new GeneDbType();
-                    geneDbType.setGene(homologous.get(i).getGeneTwo());
-                    if (homologous.get(i).getGeneTwo().getGenome().getOrganism().getType().equals("model")) {
-                        geneDbType.setDbType("experimental");
+                    //System.out.println("homologous.get(i).getGeneTwo().getGenome().getOrganism().getId(): " + homologous.get(i).getGeneTwo().getGenome().getOrganism().getId());
+                    //System.out.println("gene.getGenome().getOrganism().getId(): " + gene.getGenome().getOrganism().getId());
+                    if (homologous.get(i).getGeneOne().getGenome().getOrganism().getId().equals(gene.getGenome().getOrganism().getId())) {
+                        geneDbType = new GeneDbType();
+                        geneDbType.setGene(homologous.get(i).getGeneOne());
+                        if (homologous.get(i).getGeneOne().getGenome().getOrganism().getType().equals("model")) {
+                            geneDbType.setDbType("experimental");
+                        } else {
+                            geneDbType.setDbType("predicted");
+                        }
+                        paralogous.add(geneDbType);
                     } else {
-                        geneDbType.setDbType("predicted");
+                        geneDbType = new GeneDbType();
+                        geneDbType.setGene(homologous.get(i).getGeneOne());
+                        if (homologous.get(i).getGeneOne().getGenome().getOrganism().getType().equals("model")) {
+                            geneDbType.setDbType("experimental");
+                        } else {
+                            geneDbType.setDbType("predicted");
+                        }
+                        orthologous.add(geneDbType);
                     }
-                    orthologous.add(geneDbType);
-                }
-            } else {
-                //System.out.println("homologous.get(i).getGeneTwo().getGenome().getOrganism().getId(): " + homologous.get(i).getGeneTwo().getGenome().getOrganism().getId());
-                //System.out.println("gene.getGenome().getOrganism().getId(): " + gene.getGenome().getOrganism().getId());
-                if (homologous.get(i).getGeneOne().getGenome().getOrganism().getId().equals(gene.getGenome().getOrganism().getId())) {
-                    geneDbType = new GeneDbType();
-                    geneDbType.setGene(homologous.get(i).getGeneOne());
-                    if (homologous.get(i).getGeneOne().getGenome().getOrganism().getType().equals("model")) {
-                        geneDbType.setDbType("experimental");
-                    } else {
-                        geneDbType.setDbType("predicted");
-                    }
-                    paralogous.add(geneDbType);
-                } else {
-                    geneDbType = new GeneDbType();
-                    geneDbType.setGene(homologous.get(i).getGeneOne());
-                    if (homologous.get(i).getGeneOne().getGenome().getOrganism().getType().equals("model")) {
-                        geneDbType.setDbType("experimental");
-                    } else {
-                        geneDbType.setDbType("predicted");
-                    }
-                    orthologous.add(geneDbType);
-                }
-            }
-        }
-
-        geneOperon = geneOperonDAO.findByGene(gene.getId());
-        if (geneOperon != null) {
-            operon = opDAO.findById(geneOperon.getGeneOperonPK().getOperon());
-        } else {
-            operon = null;
-        }
-
-        if (type.equals("experimental")) {
-            //System.out.println("EXPERIMENTALLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            organisms = organismDAO.findByType("model");
-        } else {
-            //System.out.println("Predict!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            organisms = organismDAO.listAll();
-        }
-
-        ris = riDAO.findByTG(gene.getId());
-        //System.out.println("gene.getId() " + gene.getId());
-        //System.out.println("gene.getLocus() " + gene.getLocusTag());
-        //System.out.println("ris.size(): " + ris.size());
-        for (RegulatoryInteraction ri : ris) {
-            //System.out.println("ri: " + ri.getCorrespondentTranscriptionFactor());
-            //System.out.println("###############################################model");
-            regView = new RegulationView();
-            regView.setId(ri.getId());
-            regView.setTargetGene(ri.getCorrespondentTargetGene());
-            regView.setTranscriptionFactor(ri.getCorrespondentTranscriptionFactor());
-            if (!ri.getRole().equals("")) {
-                //System.out.println("ri.getRole(): " + ri.getRole());
-                regView.setRole(ri.getRole().charAt(0) + "");
-            } else {
-                regView.setRole("-");
-            }
-            regView.setEvidence(ri.getEvidence());
-            if (ri.getPmid().equals("")) {
-                regView.setPmid("-");
-            } else {
-                regView.setPmid(ri.getPmid());
-            }
-
-            // System.out.println("--------------------- Model regulatedby: " + ri.toString());
-            bss = bindingSiteDAO.findByRegularotyInteraction(ri.getId());
-            String bssRI = "-";
-            for (int i = 0; i < bss.size(); i++) {
-                if (i == 0) {
-                    bssRI = bss.get(i).getSequence();
-                } else {
-                    bssRI += ", " + bss.get(i).getSequence();
                 }
             }
-            regView.setBindingSite(bssRI);
-            regulationsView.add(regView);
-        }
 
-        String evidence = "";
-        if (type.equals("predicted")) {
-            //System.out.println("###############################################predicted");
-            pris = priDAO.findByTG(gene.getId());
-            for (PredictedRegulatoryInteraction pri : pris) {
-                //System.out.println("pri " + pri.toString());
+            geneOperon = geneOperonDAO.findByGene(gene.getId());
+            if (geneOperon != null) {
+                operon = opDAO.findById(geneOperon.getGeneOperonPK().getOperon());
+            } else {
+                operon = null;
+            }
+
+            if (type.equals("experimental")) {
+                //System.out.println("EXPERIMENTALLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                organisms = organismDAO.findByType("model");
+            } else {
+                //System.out.println("Predict!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                organisms = organismDAO.listAll();
+            }
+
+            //recover regulated by:
+            ris = riDAO.findByTG(gene.getId());
+            //System.out.println("gene.getId() " + gene.getId());
+            //System.out.println("gene.getLocus() " + gene.getLocusTag());
+            //System.out.println("ris.size(): " + ris.size());
+            for (RegulatoryInteraction ri : ris) {
+                //System.out.println("ri: " + ri.getCorrespondentTranscriptionFactor());
+                //System.out.println("###############################################model");
                 regView = new RegulationView();
-                regView.setId(pri.getId());
-                regView.setTargetGene(pri.getHomologousTargetGene());
-                regView.setTranscriptionFactor(pri.getHomologousTranscriptionFactor());
-                if (!pri.getRegulatoryInteraction().getRole().equals("")) {
-                    //System.out.println("ri.getRole(): " + pri.getRegulatoryInteraction().getRole());
-                    regView.setRole(pri.getRegulatoryInteraction().getRole().charAt(0) + "");
+                regView.setId(ri.getId());
+                regView.setTargetGene(ri.getCorrespondentTargetGene());
+                regView.setTranscriptionFactor(ri.getCorrespondentTranscriptionFactor());
+                if (!ri.getRole().equals("")) {
+                    //System.out.println("ri.getRole(): " + ri.getRole());
+                    regView.setRole(ri.getRole().charAt(0) + "");
                 } else {
                     regView.setRole("-");
                 }
-                geneOperon = geneOperonDAO.findByGene(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getId());
-                if (geneOperon != null) {
-                    //System.out.println("*****************Operon: " + geneOperon.toString());
-                    evidence = "predicted - operon ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                regView.setEvidence(ri.getEvidence());
+                if (ri.getPmid().equals("")) {
+                    regView.setPmid("-");
                 } else {
-                    // System.out.println("****************Não operon");
-                    evidence = "predicted - ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                    regView.setPmid(ri.getPmid());
                 }
-                regView.setEvidence(evidence);
-                if (pri.getPredictedBindingSite() != null && !pri.getPredictedBindingSite().getSequence().isEmpty()) {
-                    regView.setBindingSite(pri.getPredictedBindingSite().getSequence());
-                } else {
-                    regView.setBindingSite("-");
-                }
-                regView.setpValue(pri.getHtgPvalue());
-                regView.setModelOrganism(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism());
-                regulationsView.add(regView);
-                //System.out.println("--------------------- predicted regulatedby: " + pri.toString());
-            }
-        }
 
-        regulatedBy = regulationsView;
+                // System.out.println("--------------------- Model regulatedby: " + ri.toString());
+                bss = bindingSiteDAO.findByRegularotyInteraction(ri.getId());
+                String bssRI = "-";
+                for (int i = 0; i < bss.size(); i++) {
+                    if (i == 0) {
+                        bssRI = bss.get(i).getSequence();
+                    } else {
+                        bssRI += ", " + bss.get(i).getSequence();
+                    }
+                }
+                regView.setBindingSite(bssRI);
+                regulationsView.add(regView);
+            }
+
+            String evidence = "";
+            if (type.equals("predicted")) {
+                //System.out.println("###############################################predicted");
+                pris = priDAO.findByTG(gene.getId());
+                for (PredictedRegulatoryInteraction pri : pris) {
+                    //System.out.println("pri " + pri.toString());
+                    regView = new RegulationView();
+                    regView.setId(pri.getId());
+                    regView.setTargetGene(pri.getHomologousTargetGene());
+                    regView.setTranscriptionFactor(pri.getHomologousTranscriptionFactor());
+                    if (!pri.getRegulatoryInteraction().getRole().equals("")) {
+                        //System.out.println("ri.getRole(): " + pri.getRegulatoryInteraction().getRole());
+                        regView.setRole(pri.getRegulatoryInteraction().getRole().charAt(0) + "");
+                    } else {
+                        regView.setRole("-");
+                    }
+                    geneOperon = geneOperonDAO.findByGene(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getId());
+                    if (geneOperon != null) {
+                        //System.out.println("*****************Operon: " + geneOperon.toString());
+                        evidence = "predicted - operon ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                    } else {
+                        // System.out.println("****************Não operon");
+                        evidence = "predicted - ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                    }
+                    regView.setEvidence(evidence);
+                    if (pri.getPredictedBindingSite() != null && !pri.getPredictedBindingSite().getSequence().isEmpty()) {
+                        regView.setBindingSite(pri.getPredictedBindingSite().getSequence());
+                    } else {
+                        regView.setBindingSite("-");
+                    }
+                    regView.setpValue(pri.getHtgPvalue());
+                    regView.setModelOrganism(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism());
+                    regulationsView.add(regView);
+                    //System.out.println("--------------------- predicted regulatedby: " + pri.toString());
+                }
+            }
+
+            regulatedBy = regulationsView;
+
+            RnaRegView reg = new RnaRegView();
+            //create object similar to regulations view with sRNA regulations
+            ArrayList<RnaRegView> rnaRegViews = new ArrayList<>();
+            RnaInteractionDAO rDAO = new RnaInteractionDAO();
+            List<RnaInteraction> rnaInteraction = rDAO.findByMrna(gene.getId());
+            for (RnaInteraction rnaInteraction1 : rnaInteraction) {
+
+                //Integer id,  Gene targetGene,            SmallRna smallRna, String role, String evidence, BigDecimal copraPvalue)
+                reg = new RnaRegView(Integer.SIZE, rnaInteraction1.getMrna(), rnaInteraction1.getSrna(), "", "predicted", rnaInteraction1.getCopraPvalue());
+                rnaRegViews.add(reg);
+                System.out.println(rnaInteraction1.getSrna());
+            }
+
 //        for (int x = 0; x < regulatedBy.size(); x++) {
 //            System.out.println("11111111111111 ---- Regulated by: " + regulatedBy.get(x).toString());
 //        }
-
-        //retrive the TGs regulated by a specific TF
-        regulationsView = new ArrayList<RegulationView>();
-        ris = riDAO.findRegulates(gene.getId());
-        Long coregulatorsAux;
-        String opName = "";
-        if (!ris.isEmpty()) {
-            autoregulator = "Unknown";
-        }
-        coregulatorsAux = new Long(0);
-        for (RegulatoryInteraction ri : ris) {
-            //System.out.println("###############################################model");
-            coregulatorsAux = riDAO.bringNumberOfCoregulators(ri.getCorrespondentTargetGene().getLocusTag()) - 1;
-            geneOperon = geneOperonDAO.findByGene(ri.getCorrespondentTargetGene().getId());
-            opName = "-";
-            if (geneOperon != null) {
-                int op = geneOperon.getGeneOperonPK().getOperon();
-                opName = opDAO.findById(op).getName();
+            //retrive the TGs regulated by a specific TF
+            regulationsView = new ArrayList<RegulationView>();
+            ris = riDAO.findRegulates(gene.getId());
+            Long coregulatorsAux;
+            String opName = "";
+            if (!ris.isEmpty()) {
+                autoregulator = "Unknown";
             }
-            regView = new RegulationView();
-            regView.setId(ri.getId());
-            regView.setTargetGene(ri.getCorrespondentTargetGene());
-            regView.setTranscriptionFactor(ri.getCorrespondentTranscriptionFactor());
-            if (!ri.getRole().equals("")) {
-                regView.setRole(ri.getRole().charAt(0) + "");
-            } else {
-                regView.setRole("-");
-            }
-            regView.setEvidence(ri.getEvidence());
-            if (ri.getPmid().equals("")) {
-                regView.setPmid("-");
-            } else {
-                regView.setPmid(ri.getPmid());
-            }
-            regView.setCoregulators(coregulatorsAux);
-            regView.setOperon(opName);
-            //System.out.println("--------------------- Model regulatedby: " + ri.toString());
-            bss = bindingSiteDAO.findByRegularotyInteraction(ri.getId());
-            String bssRI = "-";
-            for (int i = 0; i < bss.size(); i++) {
-                if (i == 0) {
-                    bssRI = bss.get(i).getSequence();
-                } else {
-                    bssRI += ", " + bss.get(i).getSequence();
-                }
-            }
-            regView.setBindingSite(bssRI);
-            regulationsView.add(regView);
-            //System.out.println("--------------------- Model regulates: " + ri.toString());
-            if (ri.getCorrespondentTargetGene().equals(ri.getCorrespondentTranscriptionFactor())) {
-                autoregulator = "Yes";
-            }
-        }
-
-        if (type.equals("predicted")) {
-            //System.out.println("###############################################model");
-            pris = priDAO.findRegulates(gene.getId());
-            evidence = "";
-            for (PredictedRegulatoryInteraction pri : pris) {
-                coregulatorsAux += priDAO.bringNumberOfCoregulators(pri.getHomologousTargetGene().getLocusTag()) - 1;
-                //System.out.println("Number of coregulators: " + coregulatorsAux);
-                geneOperon = new GeneOperon();
-                geneOperon = geneOperonDAO.findByGene(pri.getHomologousTargetGene().getId());
+            coregulatorsAux = new Long(0);
+            for (RegulatoryInteraction ri : ris) {
+                //System.out.println("###############################################model");
+                coregulatorsAux = riDAO.bringNumberOfCoregulators(ri.getCorrespondentTargetGene().getLocusTag()) - 1;
+                geneOperon = geneOperonDAO.findByGene(ri.getCorrespondentTargetGene().getId());
                 opName = "-";
                 if (geneOperon != null) {
                     int op = geneOperon.getGeneOperonPK().getOperon();
                     opName = opDAO.findById(op).getName();
-                    //System.out.println("*********************Predicted operon: " + geneOperon.toString());
                 }
                 regView = new RegulationView();
-                regView.setId(pri.getId());
-                regView.setTargetGene(pri.getHomologousTargetGene());
-                regView.setTranscriptionFactor(pri.getHomologousTranscriptionFactor());
-                if (pri.getRegulatoryInteraction().getRole().equals("")) {
+                regView.setId(ri.getId());
+                regView.setTargetGene(ri.getCorrespondentTargetGene());
+                regView.setTranscriptionFactor(ri.getCorrespondentTranscriptionFactor());
+                if (!ri.getRole().equals("")) {
+                    regView.setRole(ri.getRole().charAt(0) + "");
+                } else {
                     regView.setRole("-");
-                } else {
-                    regView.setRole(pri.getRegulatoryInteraction().getRole().charAt(0) + "");
                 }
-                geneOperon = geneOperonDAO.findByGene(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getId());
-                if (geneOperon != null) {
-                    //System.out.println("*****************Operon: " + geneOperon.toString());
-                    evidence = "predicted - operon ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                regView.setEvidence(ri.getEvidence());
+                if (ri.getPmid().equals("")) {
+                    regView.setPmid("-");
                 } else {
-                    evidence = "predicted - ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
-                }
-                regView.setEvidence(evidence);
-                if (pri.getPredictedBindingSite() != null && !pri.getPredictedBindingSite().getSequence().isEmpty()) {
-                    regView.setBindingSite(pri.getPredictedBindingSite().getSequence());
-                } else {
-                    regView.setBindingSite("-");
+                    regView.setPmid(ri.getPmid());
                 }
                 regView.setCoregulators(coregulatorsAux);
                 regView.setOperon(opName);
-                regView.setModelOrganism(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism());
-                regView.setpValue(pri.getHtgPvalue());
+                //System.out.println("--------------------- Model regulatedby: " + ri.toString());
+                bss = bindingSiteDAO.findByRegularotyInteraction(ri.getId());
+                String bssRI = "-";
+                for (int i = 0; i < bss.size(); i++) {
+                    if (i == 0) {
+                        bssRI = bss.get(i).getSequence();
+                    } else {
+                        bssRI += ", " + bss.get(i).getSequence();
+                    }
+                }
+                regView.setBindingSite(bssRI);
                 regulationsView.add(regView);
-                //System.out.println("--------------------- Predicted regulates: " + pri.toString());
+                //System.out.println("--------------------- Model regulates: " + ri.toString());
+                if (ri.getCorrespondentTargetGene().equals(ri.getCorrespondentTranscriptionFactor())) {
+                    autoregulator = "Yes";
+                }
+            }
+
+            if (type.equals("predicted")) {
+                //System.out.println("###############################################model");
+                pris = priDAO.findRegulates(gene.getId());
+                evidence = "";
+                for (PredictedRegulatoryInteraction pri : pris) {
+                    coregulatorsAux += priDAO.bringNumberOfCoregulators(pri.getHomologousTargetGene().getLocusTag()) - 1;
+                    //System.out.println("Number of coregulators: " + coregulatorsAux);
+                    geneOperon = new GeneOperon();
+                    geneOperon = geneOperonDAO.findByGene(pri.getHomologousTargetGene().getId());
+                    opName = "-";
+                    if (geneOperon != null) {
+                        int op = geneOperon.getGeneOperonPK().getOperon();
+                        opName = opDAO.findById(op).getName();
+                        //System.out.println("*********************Predicted operon: " + geneOperon.toString());
+                    }
+                    regView = new RegulationView();
+                    regView.setId(pri.getId());
+                    regView.setTargetGene(pri.getHomologousTargetGene());
+                    regView.setTranscriptionFactor(pri.getHomologousTranscriptionFactor());
+                    if (pri.getRegulatoryInteraction().getRole().equals("")) {
+                        regView.setRole("-");
+                    } else {
+                        regView.setRole(pri.getRegulatoryInteraction().getRole().charAt(0) + "");
+                    }
+                    geneOperon = geneOperonDAO.findByGene(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getId());
+                    if (geneOperon != null) {
+                        //System.out.println("*****************Operon: " + geneOperon.toString());
+                        evidence = "predicted - operon ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                    } else {
+                        evidence = "predicted - ref: " + pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " --> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                    }
+                    regView.setEvidence(evidence);
+                    if (pri.getPredictedBindingSite() != null && !pri.getPredictedBindingSite().getSequence().isEmpty()) {
+                        regView.setBindingSite(pri.getPredictedBindingSite().getSequence());
+                    } else {
+                        regView.setBindingSite("-");
+                    }
+                    regView.setCoregulators(coregulatorsAux);
+                    regView.setOperon(opName);
+                    regView.setModelOrganism(pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism());
+                    regView.setpValue(pri.getHtgPvalue());
+                    regulationsView.add(regView);
+                    //System.out.println("--------------------- Predicted regulates: " + pri.toString());
 //                bindingSitesRegulates.add(pri.getPredictedBindingSite());
+                }
+
             }
+
+            regulates = regulationsView;
+
+            if (gene != null && gene.getHmmLogo() != null && !gene.getHmmLogo().equals("")) {
+                hmmLogo = gene.getHmmLogo();
+                System.out.println("****************************************");
+                System.out.println("gene.getHmmLogo() => " + gene.getHmmLogo());
+                System.out.println("****************************************");
+
+                File tempFile = new File(gene.getHmmLogo());
+                boolean exists = tempFile.exists();
+                System.out.println("gene.getHmmLogo() => " + exists);
+                System.out.println("****************************************");
+
+                //System.out.println("HMM Logo path: " + hmmLogo);
+            } else if (gene != null && gene.getHmmProfile() != null && !gene.getHmmProfile().equals("")) {
+                hmmProfile = gene.getHmmProfile();
+                //System.out.println("-------------------------" + hmmProfile);
+                hmmProfile = hmmProfile.replace(".hmm", ".sto");
+                //System.out.println("------------");
+                //System.out.println("hmmProfile => " + hmmProfile);
+                String startPath = System.getProperty("user.dir");
+                stoDirectory = startPath.split("/");
+                //directoryPath = ("/" + stoDirectory[stoDirectory.length - 7] + "/" + stoDirectory[stoDirectory.length - 6] + "/database/CoryneRegNet7/web/images");
+                directoryPath = ("/home/ubuntu/database/CoryneRegNet7/web/images");
+                //directoryPath = "/home/doglas/Dropbox/Doutorado/CoryneRegNet7/bkps/pos-submissao/CoryneRegNet7-git-version/web/images";
+                //System.out.println("hmmProfile => " + hmmProfile);
+                //System.out.println("directoryPath => " + directoryPath);
+                hmmLogo = getHmmLogo.getLogo(hmmProfile, directoryPath);
+
+                //System.out.println("New HMM Logo path: " + hmmLogo);
+                if (!hmmLogo.startsWith("Skyalign")) {
+                    gene.setHmmLogo(hmmLogo);
+                    geneDAO.update(gene);
+                } else {
+                    hmmLogo = "Skyalign is not responding in this moment, please try again in a few minutes.";
+                }
+            }
+
+            System.out.println("hmmLogo: " + hmmLogo);
+
+            //System.out.println("Gooooooooooooooooooooooooooooo View!!!!!!!!");
+            String[] hmmLogoAux = hmmLogo.split("/");
+            String hmmLogoName = hmmLogoAux[hmmLogoAux.length - 1];
+            //System.out.println("hmmLogoName: " + hmmLogoName);
+            model.addAttribute("organisms", organisms);
+            model.addAttribute("hmmLogoName", hmmLogoName);
+            model.addAttribute("autoregulator", autoregulator);
+            model.addAttribute("operonRegulatedGenes", operonRegulatedGenes);
+            model.addAttribute("regulatedBy", regulatedBy);
+            model.addAttribute("regulates", regulates);
+            model.addAttribute("type", type);
+            model.addAttribute("gene", gene);
+            model.addAttribute("operon", operon);
+            model.addAttribute("orthologous", orthologous);
+            model.addAttribute("paralogous", paralogous);
+            model.addAttribute("rnaRegViews", rnaRegViews);
+            return "geneInfo";
+        } else {
+            System.out.println("É UM RNA! ");
+            return "geneInfo";
         }
 
-        regulates = regulationsView;
-
-        if (gene != null && gene.getHmmLogo() != null && !gene.getHmmLogo().equals("")) {
-            hmmLogo = gene.getHmmLogo();
-            System.out.println("****************************************");
-            System.out.println("gene.getHmmLogo() => " + gene.getHmmLogo());
-            System.out.println("****************************************");
-
-            File tempFile = new File(gene.getHmmLogo());
-            boolean exists = tempFile.exists();
-            System.out.println("gene.getHmmLogo() => " + exists);
-            System.out.println("****************************************");
-
-            //System.out.println("HMM Logo path: " + hmmLogo);
-        } else if (gene != null && gene.getHmmProfile() != null && !gene.getHmmProfile().equals("")) {
-            hmmProfile = gene.getHmmProfile();
-            //System.out.println("-------------------------" + hmmProfile);
-            hmmProfile = hmmProfile.replace(".hmm", ".sto");
-            //System.out.println("------------");
-            //System.out.println("hmmProfile => " + hmmProfile);
-            String startPath = System.getProperty("user.dir");
-            stoDirectory = startPath.split("/");
-            //directoryPath = ("/" + stoDirectory[stoDirectory.length - 7] + "/" + stoDirectory[stoDirectory.length - 6] + "/database/CoryneRegNet7/web/images");
-            directoryPath = ("/home/ubuntu/database/CoryneRegNet7/web/images");
-            //directoryPath = "/home/doglas/Dropbox/Doutorado/CoryneRegNet7/bkps/pos-submissao/CoryneRegNet7-git-version/web/images";
-            //System.out.println("hmmProfile => " + hmmProfile);
-            //System.out.println("directoryPath => " + directoryPath);
-            hmmLogo = getHmmLogo.getLogo(hmmProfile, directoryPath);
-
-            //System.out.println("New HMM Logo path: " + hmmLogo);
-            if (!hmmLogo.startsWith("Skyalign")) {
-                gene.setHmmLogo(hmmLogo);
-                geneDAO.update(gene);
-            } else {
-                hmmLogo = "Skyalign is not responding in this moment, please try again in a few minutes.";
-            }
-        }
-
-        System.out.println("hmmLogo: " + hmmLogo);
-
-        //System.out.println("Gooooooooooooooooooooooooooooo View!!!!!!!!");
-        String[] hmmLogoAux = hmmLogo.split("/");
-        String hmmLogoName = hmmLogoAux[hmmLogoAux.length - 1];
-        //System.out.println("hmmLogoName: " + hmmLogoName);
-        model.addAttribute("organisms", organisms);
-        model.addAttribute("hmmLogoName", hmmLogoName);
-        model.addAttribute("autoregulator", autoregulator);
-        model.addAttribute("operonRegulatedGenes", operonRegulatedGenes);
-        model.addAttribute("regulatedBy", regulatedBy);
-        model.addAttribute("regulates", regulates);
-        model.addAttribute("type", type);
-        model.addAttribute("gene", gene);
-        model.addAttribute("operon", operon);
-        model.addAttribute("orthologous", orthologous);
-        model.addAttribute("paralogous", paralogous);
-        return "geneInfo";
     }
 
     @RequestMapping("operonInfo")
@@ -2373,12 +2419,12 @@ public class SearchController {
         if (job.getStatus().equals("Ready")) {
             BsJobResultDAO jobResultDAO = new BsJobResultDAO();
             List<BsJobResult> results = new ArrayList<BsJobResult>();
-            results=jobResultDAO.findByJob(job.getId());
+            results = jobResultDAO.findByJob(job.getId());
             System.out.println("========================================");
-            System.out.println("RESULTS: "+"----JOB: "+job.getId());
-            
-            BindingSiteRegulationPrediction bsPrediction=new BindingSiteRegulationPrediction();
-            bsRegPredictions=new ArrayList<>();
+            System.out.println("RESULTS: " + "----JOB: " + job.getId());
+
+            BindingSiteRegulationPrediction bsPrediction = new BindingSiteRegulationPrediction();
+            bsRegPredictions = new ArrayList<>();
             for (BsJobResult result : results) {
                 System.out.println(result.toString());
                 bsPrediction = new BindingSiteRegulationPrediction(result);

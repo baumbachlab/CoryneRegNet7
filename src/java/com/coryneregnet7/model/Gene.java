@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Gene.findGenesOfModelsByLocusTagGeneName", query = "SELECT g FROM Gene g WHERE (g.locusTag = :locusTag or g.name = :geneName or g.alternativeLocusTag = :alternativeLocusTag) and g.genome in (SELECT genome FROM Genome genome WHERE genome.organism in (SELECT o FROM Organism o WHERE o.type = :type)) order by g.locusTag")
     , @NamedQuery(name = "Gene.findGeneByLocusTagOrGeneName", query = "SELECT g FROM Gene g WHERE (g.locusTag = :gene or g.name = :gene or g.alternativeLocusTag = :gene) and g.genome.organism.id = :organismId")
     , @NamedQuery(name = "Gene.findById", query = "SELECT g FROM Gene g WHERE g.id = :id")
-    , @NamedQuery(name = "Gene.findByLocusTag", query = "SELECT g FROM Gene g WHERE g.locusTag = :locusTag")
-    , @NamedQuery(name = "Gene.findByAltLocusTag", query = "SELECT g FROM Gene g WHERE g.alternativeLocusTag = :alternativeLocusTag")
+    , @NamedQuery(name = "Gene.findByLocusTag", query = "SELECT g FROM Gene g WHERE lower(g.locusTag) = lower(:locusTag)")
+    , @NamedQuery(name = "Gene.findByAltLocusTag", query = "SELECT g FROM Gene g WHERE lower(g.alternativeLocusTag) = lower(:alternativeLocusTag)")
     , @NamedQuery(name = "Gene.findByProteinId", query = "SELECT g FROM Gene g WHERE g.proteinId = :proteinId")
     , @NamedQuery(name = "Gene.findByStartPosition", query = "SELECT g FROM Gene g WHERE g.startPosition = :startPosition")
     , @NamedQuery(name = "Gene.findByEndPosition", query = "SELECT g FROM Gene g WHERE g.endPosition = :endPosition")
@@ -83,6 +83,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Gene.findByGenomeMin", query = "SELECT min(g.id) FROM Gene g WHERE g.genome = :genome")
     , @NamedQuery(name = "Gene.findByHmmLogo", query = "SELECT g FROM Gene g WHERE g.hmmLogo not like '/home/ubuntu/database/CoryneRegNet7/web/images/%'")
     , @NamedQuery(name = "Gene.findByHmmLogoDotPng", query = "SELECT g FROM Gene g WHERE g.hmmLogo like '%/.png'")
+    , @NamedQuery(name = "Gene.findIfPredictedTfTg", query = "SELECT g FROM Gene g WHERE g.id = :geneId and (g.id in (SELECT preg.homologousTargetGene from PredictedRegulatoryInteraction preg) or g.id in (SELECT preg1.homologousTranscriptionFactor from PredictedRegulatoryInteraction preg1))")
+    , @NamedQuery(name = "Gene.findIfExperimentalTfTg", query = "SELECT g FROM Gene g WHERE g.id = :geneId and (g.id in (SELECT reg.correspondentTargetGene from RegulatoryInteraction reg) or g.id in (SELECT reg1.correspondentTranscriptionFactor from RegulatoryInteraction reg1))")
 })
 public class Gene implements Serializable {
 
@@ -321,7 +323,7 @@ public class Gene implements Serializable {
     }
 
     public String toString2() {
-        return "Gene{" + "id=" + id + ", locusTag=" + locusTag+", alternativeLocusTag=" + alternativeLocusTag + ", role=" + role + ", proteinId=" + proteinId + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", name=" + name + ", product=" + product + ", alternativeLocusTag=" + alternativeLocusTag + ", hmmProfile=" + hmmProfile + ", searchSpace=" + searchSpace + ", orientation=" + orientation + ", hmmLogo=" + hmmLogo + ", bsNumber=" + bsNumber + ", profileLength=" + profileLength + ", isSigma=" + isSigma + '}';
+        return "Gene{" + "id=" + id + ", locusTag=" + locusTag + ", alternativeLocusTag=" + alternativeLocusTag + ", role=" + role + ", proteinId=" + proteinId + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", name=" + name + ", product=" + product + ", alternativeLocusTag=" + alternativeLocusTag + ", hmmProfile=" + hmmProfile + ", searchSpace=" + searchSpace + ", orientation=" + orientation + ", hmmLogo=" + hmmLogo + ", bsNumber=" + bsNumber + ", profileLength=" + profileLength + ", isSigma=" + isSigma + '}';
     }
 
     public Integer getProfileLength() {

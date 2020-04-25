@@ -137,17 +137,17 @@
                         <div class="col-sm-1"></div>
                         <div class="col-sm-11">${message}</div>
                     </div>
-                     <div class="row">
+                    <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-sm-10">
                             <label for="organism-search">Search by organism&nbsp;</label>
                             <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="How to search?" data-content="For network visualization it is necessary to select an organism. For search button it is possible to search the database content of all organisms, but a gene is required." style="text-rendering: optimizeLegibility;">
-                               <i class="fa fa-question-circle" style='color:black;'></i>
-                           </a>
-                            <select class="form-control" id="organism-search" name="organism" onchange="enableNetworkButton()">
+                                <i class="fa fa-question-circle" style='color:black;'></i>
+                            </a>
+                            <select class="form-control space-after-input" id="organism-search" name="organism" onchange="enableNetworkButton()">
                                 <option value="0">All</option>
                                 <c:forEach items="${items}" var="organismItem">
-                                    
+
                                     <option value="${organismItem.id}">${organismItem.name}</option>
                                 </c:forEach>                              
                             </select>
@@ -157,23 +157,35 @@
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-sm-10 form-small-screen">
-                            <label for="gene-search">Gene&nbsp;</label>
+                            <label for="gene-search">Gene/Small RNA&nbsp;</label>
                             <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search by gene id(locus_tag) and gene name. To search in all organisms a gene is mandatory." style="text-rendering: optimizeLegibility;">
-                               <i class="fa fa-question-circle" style='color:black;'></i>
-                           </a>
+                                <i class="fa fa-question-circle" style='color:black;'></i>
+                            </a>
                             <input type="text" class="form-control" id="gene-search" name="gene">
+                            <label for="checkbox-div" style="margin-top: 15px;">Search for:&nbsp;</label>
+                            <%-- <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search regulatory interactions regulated by Transcripction Factors (TFs), non-coding RNAs (ncRNAs) or both." style="text-rendering: optimizeLegibility;">
+                                <i class="fa fa-question-circle" style='color:black;'></i>
+                            </a>--%><br>
+                            <span class="align-text-bottom" id="checkbox-div">
+                                <input type="radio" id="gene" name="geneRna" value="gene" checked="checked">
+                                <label style="margin-right: 30px" for="tf">Genes</label>
+                                <input type="radio" id="rna" name="geneRna" value="rna">
+                                <label for="rna">Small RNAs</label><br>
+                            </span>
                             <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
-                             <span class="align-text-bottom"> 
+                            
+                            <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0;document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
-                                </span>
+                            </span>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                 </div>
                 <div class="col-sm-3"></div>
             </div>
+
             <div id="search-loader" style="display:none; margin-top: 50px;">
                 <center><span ><div class="loader" ></div> Loading data</span></center>
                 <br><br>
@@ -206,6 +218,8 @@
                     </div>
                     <div class="col-sm-3"></div>
                 </div>
+
+
 
                 <div class="row" style="padding-bottom: 20px">
                     <div class="col-sm-3"></div>
