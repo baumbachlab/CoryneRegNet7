@@ -18,9 +18,9 @@ public class RnaTableViewTest {
     public static void main(String[] args){
         RnaTableViewTest test = new RnaTableViewTest();
         RnaTableViewDAO dao = new RnaTableViewDAO();
-        List<RnaTableView> rnaTableView = dao.listAll();
+        List<RnaTableView> rnaTableView = dao.findPredicted();
         for (RnaTableView rnaTableView1 : rnaTableView) {
-            System.out.println(rnaTableView1.toString());
+            System.out.println(rnaTableView1);
         }
     }
     

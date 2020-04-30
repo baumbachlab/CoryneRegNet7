@@ -87,5 +87,20 @@ public class RnaTableViewDAO extends GenericDAO{
         }
     }
 
-    
+    //findPredicted
+          public List<RnaTableView> findPredicted() {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaTableView.findPredicted");
+            query.setString("type", "experimental");
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 }

@@ -90,7 +90,7 @@
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row">
             <div class="col-sm-12 text-center tables-top" style="font-size: 22px">
-                <p class="font">Results (${entriesFound} found)</p>
+                <p class="font">Results (${fn:length(rnaTableView)} found)</p>
             </div>
         </div>
         <div class="row">
@@ -108,8 +108,8 @@
                         <th>sRNA Class</th>
                         <th>Position</th>
                         <th>Orientation</th>
-                            <%--<th>Sequence</th>
-                            <th>Regulates</th>--%>
+                            <%--<th>Sequence</th>--%>
+                            <th>Regulates</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -141,13 +141,13 @@
                                 <c:otherwise>
                                     <td style="word-wrap:break-word; max-width: 450px;">${list.sequence}</td>
                                 </c:otherwise>    
-                            </c:choose>
+                            </c:choose>--%>
                             <td style="word-wrap:break-word; max-width: 500px;">      
                                 <c:forTokens var="token" items="${list.mrnas} " delims=",">
                                     <c:set var="i" value="0"/>
-                            <%--<a style="color: black" href="geneInfo.htm?locusTag=${token}&type=experimental"><c:out value="${token}"/></a>&nbsp;--%>
-                            <%--        ${token}&nbsp;
-                                </c:forTokens>--%>
+                               <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=experimental"><c:out value="${token}"/></a>&nbsp;
+                               
+                                </c:forTokens>
                             </td> 
                         </tr>
                     </c:forEach>

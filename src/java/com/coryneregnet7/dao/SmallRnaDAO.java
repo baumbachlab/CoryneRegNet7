@@ -70,6 +70,23 @@ public class SmallRnaDAO extends GenericDAO {
             return null;
         }
     }
+     
+       public List<SmallRna> findByType(String type) {
+        try {
+            SmallRna gene = new SmallRna();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.findByType");
+            query.setString("type", type);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
     
     
     //findByLocusTag

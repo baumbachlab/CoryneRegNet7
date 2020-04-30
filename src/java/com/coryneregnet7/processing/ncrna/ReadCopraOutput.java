@@ -32,12 +32,12 @@ public class ReadCopraOutput {
         //subfolder2 ok
         //subfolder1 ok
         //subfolder7 ok
-        File folder = new File("/data/home/mariana/Dropbox/Doutorado/ncRNA/six-strains-analysis/srna-glutamicum-rnadetect/results-to-copra/copra-rnadetect");
+        File folder = new File("/data/home/mariana/Dropbox/Doutorado/ncRNA/six-strains-analysis/BSRD/resuls");
         File[] listOfFiles = folder.listFiles();
         String sRnaLocus = "";
 
         for (File file : listOfFiles) {
-            if (file.getName().startsWith("c-") && !file.getName().endsWith(".txt") 
+            if (file.getName().startsWith("cg-") && !file.getName().endsWith(".txt") 
                     && !file.getName().endsWith(".fa") 
                     && !file.getName().endsWith(".fasta")
                     && !file.getName().endsWith(".sorted")) {
@@ -46,13 +46,13 @@ public class ReadCopraOutput {
                 System.out.println(sRnaLocus);
 
 //                IF BSRD GET THE SMALL RNA NAME FROM FILE. 
-             //   String txtFile = "/data/home/mariana/Dropbox/Doutorado/ncRNA/six-strains-analysis/BSRD/" + file.getName() + ".txt";
+                String txtFile = "/data/home/mariana/Dropbox/Doutorado/ncRNA/six-strains-analysis/BSRD/" + file.getName() + ".txt";
 
-//                BufferedReader br = new BufferedReader(new FileReader(txtFile));
-//                String line = br.readLine();
-//                br.close();
-//                String[] splitedLine = line.split("\\|");
-//                sRnaLocus = splitedLine[0].replace(">", "");
+                BufferedReader br = new BufferedReader(new FileReader(txtFile));
+                String line = br.readLine();
+                br.close();
+                String[] splitedLine = line.split("\\|");
+                sRnaLocus = splitedLine[0].replace(">", "");
                 System.out.println("sRNA locus= " + sRnaLocus.toString());
 //
                 SmallRnaDAO smallRnaDAO = new SmallRnaDAO();
@@ -110,9 +110,9 @@ public class ReadCopraOutput {
                         //System.out.println("locus tag: " + splitedLine[3]);
                         gene = geneDAO.findByLocusTag(splitedLine[3]);
                         if (gene == null) {
-                            geneDAO.findByAltLocusTag(splitedLine[3]);
+                            gene=geneDAO.findByAltLocusTag(splitedLine[3]);
                         }
-                        //System.out.println("Gene => "+gene);
+                        System.out.println("Gene => "+gene);
                         rnaInteraction.setMrna(gene);
 
                         //System.out.println("energy: " + splitedLine[5]);

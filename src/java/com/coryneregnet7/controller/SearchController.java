@@ -313,9 +313,8 @@ public class SearchController {
 
         return returnObj;
     }
-    
-    //rnaInfo
 
+    //rnaInfo
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
 
@@ -339,16 +338,21 @@ public class SearchController {
             //search rnas by genome. 
             SmallRnaDAO sRnaDAO = new SmallRnaDAO();
 
-            RnaTableViewDAO dao = new RnaTableViewDAO();
+            RnaTableViewDAO rnaTableViewDAO = new RnaTableViewDAO();
             List<RnaTableView> rnaTableView = new ArrayList<>();
 
-            List<SmallRna> sRnaList = new ArrayList<>();
             if (organism == 0) {
-                rnaTableView = dao.listAll();
+                //by type
+                if (searchType.equals("predicted")) {
+                    rnaTableView = rnaTableViewDAO.listAll();
+                }else{
+                    rnaTableView = rnaTableViewDAO.findByType("experimental");
+                }
             } else {
 
+                //search by genome and type. 
                 genome = genomeDAO.findByOrganism(organism);
-                sRnaList = sRnaDAO.findByGenome(genome.getId());
+                rnaTableView = rnaTableViewDAO.findByGenome(genome.getId());
             }
 
             model.addAttribute("type", searchType);

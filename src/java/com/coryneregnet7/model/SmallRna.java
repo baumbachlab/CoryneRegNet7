@@ -6,7 +6,6 @@
 package com.coryneregnet7.model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -75,6 +72,11 @@ public class SmallRna implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "evidence")
     private String evidence;
+     @Size(max = 2147483647)
+    @Column(name = "evidence_functional")
+    private String evidenceFunctional;
+    @Column(name = "functional_rna")
+    private Boolean functionalRna;
 
     public SmallRna() {
     }
@@ -185,8 +187,13 @@ public class SmallRna implements Serializable {
 
     @Override
     public String toString() {
-        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", evidence=" + evidence + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + '}';
+        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + '}';
     }
+
+//    @Override
+//    public String toString() {
+//        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", evidence=" + evidence + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + '}';
+//    }
 
     public String getEvidence() {
         return evidence;
@@ -194,6 +201,34 @@ public class SmallRna implements Serializable {
 
     public void setEvidence(String evidence) {
         this.evidence = evidence;
+    }
+
+    /**
+     * @return the functionalRna
+     */
+    public Boolean getFunctionalRna() {
+        return functionalRna;
+    }
+
+    /**
+     * @param functionalRna the functionalRna to set
+     */
+    public void setFunctionalRna(Boolean functionalRna) {
+        this.functionalRna = functionalRna;
+    }
+
+    /**
+     * @return the evidenceFunctional
+     */
+    public String getEvidenceFunctional() {
+        return evidenceFunctional;
+    }
+
+    /**
+     * @param evidenceFunctional the evidenceFunctional to set
+     */
+    public void setEvidenceFunctional(String evidenceFunctional) {
+        this.evidenceFunctional = evidenceFunctional;
     }
 
 }
