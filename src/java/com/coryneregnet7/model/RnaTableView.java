@@ -30,7 +30,8 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 @NamedQueries({
     @NamedQuery(name = "RnaTableView.findAll", query = "SELECT o FROM RnaTableView o order by o.genome, o.locusTag")
     , @NamedQuery(name = "RnaTableView.findByGenome", query = "SELECT o FROM RnaTableView o WHERE o.genome = :genome ORDER BY o.genome, o.locusTag")
-    , @NamedQuery(name = "RnaTableView.findType", query = "SELECT o FROM RnaTableView o WHERE o.type = :type ORDER BY o.type, o.type")
+    , @NamedQuery(name = "RnaTableView.findByType", query = "SELECT o FROM RnaTableView o WHERE o.type = :type ORDER BY o.type, o.type")
+    , @NamedQuery(name = "RnaTableView.findPredicted", query = "SELECT o FROM RnaTableView o WHERE o.type != :type ORDER BY o.genome")
 })
 public class RnaTableView implements Serializable {
 
@@ -172,4 +173,10 @@ public class RnaTableView implements Serializable {
         this.mrnas = mrnas;
     }
 
+    @Override
+    public String toString() {
+        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + '}';
+    }
+
+    
 }
