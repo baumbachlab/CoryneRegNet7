@@ -74,6 +74,14 @@ public class StatisticsOverview implements Serializable {
     private String type;
     @Column(name = "num_genomes")
     private Integer numGenomes;
+    @Column(name = "regulatory_rnas")
+    private Integer regulatoryRnas;
+    @Column(name = "small_rnas")
+    private Integer smallRnas;
+    @Column(name = "regulations_srna")
+    private Integer regulationsSrna;
+    @Column(name = "genes_by_rna")
+    private Integer genesByRna;
 
     public StatisticsOverview() {
     }
@@ -201,6 +209,62 @@ public class StatisticsOverview implements Serializable {
 
     public void setNumGenomes(Integer numGenomes) {
         this.numGenomes = numGenomes;
+    }
+
+    /**
+     * @return the regulatoryRnas
+     */
+    public Integer getRegulatoryRnas() {
+        return regulatoryRnas;
+    }
+
+    /**
+     * @param regulatoryRnas the regulatoryRnas to set
+     */
+    public void setRegulatoryRnas(Integer regulatoryRnas) {
+        this.regulatoryRnas = regulatoryRnas;
+    }
+
+    /**
+     * @return the smallRnas
+     */
+    public Integer getSmallRnas() {
+        return smallRnas;
+    }
+
+    /**
+     * @param smallRnas the smallRnas to set
+     */
+    public void setSmallRnas(Integer smallRnas) {
+        this.smallRnas = smallRnas;
+    }
+
+    /**
+     * @return the regulationsSrna
+     */
+    public Integer getRegulationsSrna() {
+        return regulationsSrna;
+    }
+
+    /**
+     * @param regulationsSrna the regulationsSrna to set
+     */
+    public void setRegulationsSrna(Integer regulationsSrna) {
+        this.regulationsSrna = regulationsSrna;
+    }
+
+    /**
+     * @return the genesByRna
+     */
+    public Integer getGenesByRna() {
+        return genesByRna;
+    }
+
+    /**
+     * @param genesByRna the genesByRna to set
+     */
+    public void setGenesByRna(Integer genesByRna) {
+        this.genesByRna = genesByRna;
     }
 
 }

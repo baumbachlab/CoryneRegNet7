@@ -81,7 +81,17 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="title-size text-center">Experimental data recovered from CoryneRegNet</div>
+                <div class="title-size text-center">
+                    <c:choose>
+                        <c:when test="${type eq 'predicted'}">
+                            Predicted
+                        </c:when>
+                        <c:otherwise>
+                            Experimental
+                        </c:otherwise>    
+                    </c:choose>
+                    data recovered from CoryneRegNet
+                </div>
             </div>
         </div>
     </div>
@@ -95,64 +105,85 @@
         </div>
         <div class="row">
             <%-- rnaTableView --%>
-            <table id="experimental-data" class="table table-striped text-center" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>RNA ID</th>
-                        <th>Evidence</th>
-                            <c:choose>
-                                <c:when test="${type eq 'predicted'}">
-                                <th>Source RNA</th>
-                                </c:when>
-                            </c:choose>
-                        <th>sRNA Class</th>
-                        <th>Position</th>
-                        <th>Orientation</th>
-                            <%--<th>Sequence</th>--%>
-                            <th>Regulates</th>
-                    </tr>
-                </thead>
-                <tbody> 
-                    <c:forEach items="${rnaTableView}" var="list">
+            <div class="col-12 align-self-center">
+                <table id="experimental-data" class="table table-striped text-center" style="width:100%">
+                    <thead>
                         <tr>
-                            <td>    
-                                <a style="color: black; font-size: medium; font-weight: bold" href="rnaInfo.htm?locusTag=${list.locusTag}&type=experimental">${list.locusTag}</a>
-                            </td>
-                            <td>${list.evidence}</td>
+                            <th>RNA ID</th>
+                            <th>Evidence</th>
+                                <c:choose>
+                                    <c:when test="${type eq 'predicted'}">
+                                    <th>Source RNA</th>
+                                    </c:when>
+                                </c:choose>
+                            <th>sRNA Class</th>
+                            <th>Position</th>
+                            <th>Orientation</th>
+                            <th>Sequence</th>
 
                             <c:choose>
                                 <c:when test="${type eq 'predicted'}">
-                                    <td> ${list.sourceRna}
-                                        <c:if test="${empty list.sourceRna}">-</c:if>
-                                        </td>
+                                    <%--<th>Is functional?</th>
+                                    <th>Functional evidence</th>--%>
+                                    <th>Regulates</th>
+                                    </c:when>
+                                </c:choose>
 
-                                </c:when>
-                            </c:choose>
-
-                            <td>${list.srnaClass}
-                                <c:if test="${empty list.srnaClass}">-</c:if>
-                                </td>
-                                <td>${list.startPosition} - ${list.endPosition}</td>
-                            <td>${list.orientation}</td>
-                            <%--<c:choose>
-                                <c:when test="${type eq 'predicted'}">
-                                    <td style="word-wrap:break-word; max-width: 250px;">${list.sequence}</td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td style="word-wrap:break-word; max-width: 450px;">${list.sequence}</td>
-                                </c:otherwise>    
-                            </c:choose>--%>
-                            <td style="word-wrap:break-word; max-width: 500px;">      
-                                <c:forTokens var="token" items="${list.mrnas} " delims=",">
-                                    <c:set var="i" value="0"/>
-                               <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=experimental"><c:out value="${token}"/></a>&nbsp;
-                               
-                                </c:forTokens>
-                            </td> 
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody> 
+                        <c:forEach items="${rnaTableView}" var="list">
+                            <tr>
+                                <td>    
+                                    <a style="color: black; font-size: medium; font-weight: bold" href="rnaInfo.htm?locusTag=${list.locusTag}&type=${type}">${list.locusTag}</a>
+                                </td>
+                                <td>${list.evidence}</td>
+
+                                <c:choose>
+                                    <c:when test="${type eq 'predicted'}">
+                                        <td> ${list.sourceRna}
+                                            <c:if test="${empty list.sourceRna}">-</c:if>
+                                            </td>
+
+                                    </c:when>
+                                </c:choose>
+
+                                <td>${list.srnaClass}
+                                    <c:if test="${empty list.srnaClass}">-</c:if>
+                                    </td>
+                                    <td>${list.startPosition} - ${list.endPosition}</td>
+                                <td>${list.orientation}</td>
+                                <c:choose>
+                                    <c:when test="${type eq 'predicted'}">
+                                        <td style="word-wrap:break-word; max-width: 250px;">${list.sequence}</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td style="word-wrap:break-word; max-width: 450px;">${list.sequence}</td>
+                                    </c:otherwise>    
+                                </c:choose>
+
+                                <%--<c:choose>
+                                    <c:when test="${type eq 'predicted'}">
+                                        <td>${list.functionalRna}</td>
+                                        <td>${list.evidenceFunctional}</td>
+                                     </c:when>
+                                </c:choose>--%>
+                                <c:choose>
+                                    <c:when test="${type eq 'predicted'}">
+                                        <td style="word-wrap:break-word; max-width: 500px;">      
+                                            <c:forTokens var="token" items="${list.mrnas} " delims=",">
+                                                <c:set var="i" value="0"/>
+                                                <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=experimental"><c:out value="${token}"/></a>&nbsp;
+
+                                            </c:forTokens>
+                                        </td>
+                                    </c:when>
+                                </c:choose>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

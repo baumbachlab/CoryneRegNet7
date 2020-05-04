@@ -262,12 +262,21 @@
                                 <td>${numberOfProteins}</td>
                             </tr>
                             <tr>
-                                <td>Regulations</td>
-                                <td>${numberOfRegulatoryInteractions}</td>
+                                <td>Small RNAs</td>
+                                <td>${numberOfSmallRnas}</td>
                             </tr>
                             <tr>
-                                <td>Regulators</td>
-                                <td>${numberOfRegulators}</td>
+                                <td>Regulatory RNAs</td>
+                                <td>${numberOfRegulatoryRnas}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Transcription factors</td>
+                                <td>${totalNumberOfRegulators}</td>
+                            </tr>
+                              <tr>
+                                <td>Genomes</td>
+                                <td>${numberOfGenomes}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -278,8 +287,20 @@
                     <table id="statistics" class="table table-striped text-center">
                         <tbody>
                             <tr>
-                                <td>Regulated genes</td>
-                                <td>${numberOfRegulatedGenes}</td>
+                                <td>Regulations (TFs)</td>
+                                <td>${totalNumberOfRegulatoryInteractions}</td>
+                            </tr>
+                            <tr>
+                                <td>Regulations (sRNAs)</td>
+                                <td>${numberOfRegulationsSrna}</td>
+                            </tr>
+                            <tr>
+                                <td>Genes regulated by TFs</td>
+                                <td>${totalNumberOfRegulatedGenes}</td>
+                            </tr>
+                            <tr>
+                                <td>Genes regulated by RNAs</td>
+                                <td>${numberOfGenesByRna}</td>
                             </tr>
                             <tr>
                                 <td>Binding motifs</td>
@@ -289,10 +310,7 @@
                                 <td>HMM profiles</td>
                                 <td>${numberOfHmmProfiles}</td>
                             </tr>
-                            <tr>
-                                <td>Genomes</td>
-                                <td>${numberOfGenomes}</td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </center>

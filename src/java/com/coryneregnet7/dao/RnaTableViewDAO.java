@@ -19,9 +19,8 @@ import java.util.List;
  *
  * @author mariana
  */
-public class RnaTableViewDAO extends GenericDAO{
-    
-   
+public class RnaTableViewDAO extends GenericDAO {
+
     public RnaTableView findById(Integer id) {
         try {
             RnaTableView rnaTableView = new RnaTableView();
@@ -54,8 +53,8 @@ public class RnaTableViewDAO extends GenericDAO{
             return null;
         }
     }
-    
-     public List<RnaTableView> findByGenome(Integer genome) {
+
+    public List<RnaTableView> findByGenome(Integer genome) {
         try {
             List list = new ArrayList<>();
             this.session = getSession();
@@ -70,8 +69,76 @@ public class RnaTableViewDAO extends GenericDAO{
             return null;
         }
     }
-     
-     public List<RnaTableView> findByType(String type) {
+
+    public List<RnaTableView> findByGenomeType(Integer genome, String type) {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaTableView.findByGenomeType");
+            query.setInteger("genome", genome);
+            query.setString("type", type);
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    public List<RnaTableView> findByGenomeLocusTag(Integer genome, String locusTag) {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaTableView.findByGenomeLocusTag");
+            query.setInteger("genome", genome);
+            query.setString("locusTag", locusTag.toLowerCase());
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    public List<RnaTableView> findByLocusTag(String locusTag) {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaTableView.findByLocusTag");
+            query.setString("locusTag", locusTag.toLowerCase());
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+    
+    //findByLocusTagType
+        public List<RnaTableView> findByLocusTagType(String locusTag, String type) {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaTableView.findByLocusTagType");
+            query.setString("locusTag", locusTag.toLowerCase());
+            query.setString("type", type);
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    public List<RnaTableView> findByType(String type) {
         try {
             List list = new ArrayList<>();
             this.session = getSession();
@@ -88,7 +155,7 @@ public class RnaTableViewDAO extends GenericDAO{
     }
 
     //findPredicted
-          public List<RnaTableView> findPredicted() {
+    public List<RnaTableView> findPredicted() {
         try {
             List list = new ArrayList<>();
             this.session = getSession();

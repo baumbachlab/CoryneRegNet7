@@ -30,6 +30,10 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 @NamedQueries({
     @NamedQuery(name = "RnaTableView.findAll", query = "SELECT o FROM RnaTableView o order by o.genome, o.locusTag")
     , @NamedQuery(name = "RnaTableView.findByGenome", query = "SELECT o FROM RnaTableView o WHERE o.genome = :genome ORDER BY o.genome, o.locusTag")
+    , @NamedQuery(name = "RnaTableView.findByGenomeLocusTag", query = "SELECT o FROM RnaTableView o WHERE o.genome = :genome and lower(o.locusTag) like :locusTag ORDER BY o.genome, o.locusTag")
+    , @NamedQuery(name = "RnaTableView.findByLocusTag", query = "SELECT o FROM RnaTableView o WHERE lower(o.locusTag) like :locusTag ORDER BY o.genome, o.locusTag")
+    , @NamedQuery(name = "RnaTableView.findByLocusTagType", query = "SELECT o FROM RnaTableView o WHERE lower(o.locusTag) like :locusTag and o.type = :type ORDER BY o.genome, o.locusTag")
+    , @NamedQuery(name = "RnaTableView.findByGenomeType", query = "SELECT o FROM RnaTableView o WHERE o.genome = :genome and o.type = :type ORDER BY o.genome, o.locusTag")
     , @NamedQuery(name = "RnaTableView.findByType", query = "SELECT o FROM RnaTableView o WHERE o.type = :type ORDER BY o.type, o.type")
     , @NamedQuery(name = "RnaTableView.findPredicted", query = "SELECT o FROM RnaTableView o WHERE o.type != :type ORDER BY o.genome")
 })
@@ -69,6 +73,10 @@ public class RnaTableView implements Serializable {
     private String evidence;
     @Column(name = "mrnas")
     private String mrnas;
+    @Column(name = "evidence_functional")
+    private String evidenceFunctional;
+    @Column(name = "functional_rna")
+    private Boolean functionalRna;
 
 //reg_rna
     public String getLocusTag() {
@@ -175,8 +183,35 @@ public class RnaTableView implements Serializable {
 
     @Override
     public String toString() {
-        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + '}';
+        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + '}';
     }
 
-    
+    /**
+     * @return the evidenceFunctional
+     */
+    public String getEvidenceFunctional() {
+        return evidenceFunctional;
+    }
+
+    /**
+     * @param evidenceFunctional the evidenceFunctional to set
+     */
+    public void setEvidenceFunctional(String evidenceFunctional) {
+        this.evidenceFunctional = evidenceFunctional;
+    }
+
+    /**
+     * @return the functionalRna
+     */
+    public Boolean getFunctionalRna() {
+        return functionalRna;
+    }
+
+    /**
+     * @param functionalRna the functionalRna to set
+     */
+    public void setFunctionalRna(Boolean functionalRna) {
+        this.functionalRna = functionalRna;
+    }
+
 }

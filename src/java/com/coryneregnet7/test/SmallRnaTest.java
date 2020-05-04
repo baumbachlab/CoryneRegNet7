@@ -6,6 +6,7 @@
 package com.coryneregnet7.test;
 
 import com.coryneregnet7.dao.GenomeDAO;
+import com.coryneregnet7.dao.RnaInteractionDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.SmallRna;
@@ -22,18 +23,40 @@ public class SmallRnaTest {
 
     public static void main(String[] args) {
         SmallRnaTest srTest = new SmallRnaTest();
-        srTest.getByGenome();
+        //srTest.getByGenome();
+
+        SmallRnaDAO rDAO = new SmallRnaDAO();
+        Long countSrnaExperimental = rDAO.bringByType("experimental");
+        System.out.println("countSrnaExperimental: " + countSrnaExperimental);
+        
+        Long countFunctionalSrnaExperimental = rDAO.bringFunctionalByType("experimental", true);
+        System.out.println("countFunctionalSrnaExperimental: " + countFunctionalSrnaExperimental);
+        
+        Long countSrnaPredicted = rDAO.bringByNotType("experimental");
+        System.out.println("countSrnaPredicted: " + countSrnaPredicted);
+        
+        Long countFunctionalSrnaPredicted = rDAO.bringFunctionalByNotType("experimental", true);
+        System.out.println("countFunctionalSrnaPredicted: " + countFunctionalSrnaPredicted);
+        
+        
+        RnaInteractionDAO rnaInteractionDAO = new RnaInteractionDAO();
+        Long countRnaRegulations = rnaInteractionDAO.bringAll();
+        System.out.println("countRnaRegulations "+countRnaRegulations);
+        
+        //bringDistinctMrna
+        Long countMrnas = rnaInteractionDAO.bringDistinctMrna();
+        System.out.println("countMrnas "+countMrnas);
     }
 
-    public void getByGenome(){
-         SmallRnaDAO rDAO = new SmallRnaDAO();
+    public void getByGenome() {
+        SmallRnaDAO rDAO = new SmallRnaDAO();
         List<SmallRna> sRnas = rDAO.findByGenome(1226);
-        System.out.println("size: "+sRnas);
+        System.out.println("size: " + sRnas);
         for (SmallRna sRna : sRnas) {
             System.out.println(sRna.toString());
         }
     }
-    
+
     public void insertEvidence() {
         SmallRnaDAO rDAO = new SmallRnaDAO();
         List<SmallRna> sRnas = rDAO.listAll();
