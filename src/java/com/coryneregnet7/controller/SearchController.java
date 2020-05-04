@@ -108,6 +108,10 @@ public class SearchController {
         Integer numberOfRegulatedGenes = 0;
         Integer numberOfBindingSites = 0;
         Integer numberOfHmmProfiles = 0;
+        Integer numberOfSmallRnas = 0;
+        Integer numberOfGenesByRna = 0;
+        Integer numberOfRegulatoryRnas = 0;
+        Integer numberOfRegulationsSrna = 0;
 
         if (so != null) {
 
@@ -122,11 +126,18 @@ public class SearchController {
             numberOfRegulators = so.getRegulators();
             //System.out.println("Total number of regulators: " + totalNumberOfRegulators);
             numberOfRegulatedGenes = so.getRegulatedGenes();
-            //System.out.println("Total number of regulated genes: " + totalNumberOfRegulatedGenes);
+            //System.out.println("Total numbergetSmallRnas of regulated genes: " + totalNumberOfRegulatedGenes);
             numberOfBindingSites = so.getBindingMotifs();
             //System.out.println("Total number of binding sites: " + numberOfBindingSites);
             numberOfHmmProfiles = so.getHmmProfiles();
             //System.out.println("Total number of numberOfHmmProfiles: " + numberOfHmmProfiles);
+            numberOfSmallRnas = so.getSmallRnas();
+
+            numberOfGenesByRna = so.getGenesByRna();
+
+            numberOfRegulatoryRnas = so.getRegulatoryRnas();
+
+            numberOfRegulationsSrna = so.getRegulationsSrna();
         }
 
         ///
@@ -140,6 +151,10 @@ public class SearchController {
         model.addAttribute("numberOfGenomes", numberOfGenomes);
         //   model.addAttribute("organisms", organisms);
         model.addAttribute("items", items);
+        model.addAttribute("numberOfSmallRnas", numberOfSmallRnas);
+        model.addAttribute("numberOfGenesByRna", numberOfGenesByRna);
+        model.addAttribute("numberOfRegulatoryRnas", numberOfRegulatoryRnas);
+        model.addAttribute("numberOfRegulationsSrna", numberOfRegulationsSrna);
         return "searchExperimentalData";
     }
 
@@ -178,6 +193,10 @@ public class SearchController {
         Integer numberOfRegulatedGenes = 0;
         Integer numberOfBindingSites = 0;
         Integer numberOfHmmProfiles = 0;
+        Integer numberOfSmallRnas = 0;
+        Integer numberOfGenesByRna = 0;
+        Integer numberOfRegulatoryRnas = 0;
+        Integer numberOfRegulationsSrna = 0;
 
         if (so != null) {
 
@@ -197,10 +216,19 @@ public class SearchController {
             //System.out.println("Total number of binding sites: " + numberOfBindingSites);
             numberOfHmmProfiles = so.getHmmProfiles();
             //System.out.println("Total number of numberOfHmmProfiles: " + numberOfHmmProfiles);
+
+            numberOfSmallRnas = so.getSmallRnas();
+
+            numberOfGenesByRna = so.getGenesByRna();
+
+            numberOfRegulatoryRnas = so.getRegulatoryRnas();
+
+            numberOfRegulationsSrna = so.getRegulationsSrna();
         }
 
         Object[] returnObj = {numberOfHmmProfiles, numberOfBindingSites, numberOfRegulatedGenes, numberOfRegulators,
-            numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items};
+            numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items, numberOfSmallRnas,
+            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna};
 
         return returnObj;
     }
@@ -208,8 +236,8 @@ public class SearchController {
     @RequestMapping("searchPredictedData")
     public String searchPredictedData(Model model) {
         //  model.addAttribute("testString", "blablabla");
-        //System.out.println("***********************Predicted DATA");
-        //System.out.println("==================================================================================================");
+        System.out.println("***********************Predicted DATA");
+        System.out.println("==================================================================================================");
 
         OrganismDAO organismDAO = new OrganismDAO();
         List<Organism> organisms = organismDAO.listAll();
@@ -228,6 +256,12 @@ public class SearchController {
         Integer numberOfRegulatedGenes = 0;
         Integer numberOfBindingSites = 0;
         Integer numberOfHmmProfiles = 0;
+        Integer numberOfSmallRnas = 0;
+        Integer numberOfGenesByRna = 0;
+        Integer numberOfRegulatoryRnas = 0;
+        Integer numberOfRegulationsSrna = 0;
+        //novel atributtes: numberOfSmallRnas,
+        //numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna
 
         if (so != null) {
 
@@ -247,6 +281,14 @@ public class SearchController {
             //System.out.println("Total number of binding sites: " + numberOfBindingSites);
             numberOfHmmProfiles = so.getHmmProfiles();
             //System.out.println("Total number of numberOfHmmProfiles: " + numberOfHmmProfiles);
+            numberOfSmallRnas = so.getSmallRnas();
+
+            numberOfGenesByRna = so.getGenesByRna();
+
+            numberOfRegulatoryRnas = so.getRegulatoryRnas();
+
+            numberOfRegulationsSrna = so.getRegulationsSrna();
+
         }
 
         model.addAttribute("numberOfHmmProfiles", numberOfHmmProfiles);
@@ -259,6 +301,11 @@ public class SearchController {
         model.addAttribute("numberOfGenomes", numberOfGenomes);
         model.addAttribute("organisms", organisms);
         model.addAttribute("items", items);
+        model.addAttribute("numberOfSmallRnas", numberOfSmallRnas);
+        model.addAttribute("numberOfGenesByRna", numberOfGenesByRna);
+        model.addAttribute("numberOfRegulatoryRnas", numberOfRegulatoryRnas);
+        model.addAttribute("numberOfRegulationsSrna", numberOfRegulationsSrna);
+
         return "searchPredictedData";
     }
 
@@ -287,6 +334,10 @@ public class SearchController {
         Integer numberOfRegulatedGenes = 0;
         Integer numberOfBindingSites = 0;
         Integer numberOfHmmProfiles = 0;
+        Integer numberOfSmallRnas = 0;
+        Integer numberOfGenesByRna = 0;
+        Integer numberOfRegulatoryRnas = 0;
+        Integer numberOfRegulationsSrna = 0;
 
         if (so != null) {
 
@@ -306,15 +357,42 @@ public class SearchController {
             //System.out.println("Total number of binding sites: " + numberOfBindingSites);
             numberOfHmmProfiles = so.getHmmProfiles();
             //System.out.println("Total number of numberOfHmmProfiles: " + numberOfHmmProfiles);
+            numberOfSmallRnas = so.getSmallRnas();
+
+            numberOfGenesByRna = so.getGenesByRna();
+
+            numberOfRegulatoryRnas = so.getRegulatoryRnas();
+
+            numberOfRegulationsSrna = so.getRegulationsSrna();
+
         }
 
         Object[] returnObj = {numberOfHmmProfiles, numberOfBindingSites, numberOfRegulatedGenes, numberOfRegulators,
-            numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items};
+            numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items, numberOfSmallRnas,
+            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna};
 
         return returnObj;
     }
 
     //rnaInfo
+    @RequestMapping("rnaInfo")
+    public String rnaInfo(Model model, String locusTag, String type) {
+        //  model.addAttribute("testString", "blablabla");
+        SmallRna srna = new SmallRna();
+        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+        srna = srnaDAO.findByLocusTag(locusTag);
+
+        List<RnaInteraction> rnaInteractions;
+        RnaInteractionDAO rnaInteractionDAO = new RnaInteractionDAO();
+        rnaInteractions = rnaInteractionDAO.findBySrna(srna.getId());
+
+        System.out.println("TYPE: " + type);
+        model.addAttribute("srna", srna);
+        model.addAttribute("type", type);
+        model.addAttribute("rnaInteractions", rnaInteractions);
+        return "rnaInfo";
+    }
+
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
 
@@ -341,18 +419,40 @@ public class SearchController {
             RnaTableViewDAO rnaTableViewDAO = new RnaTableViewDAO();
             List<RnaTableView> rnaTableView = new ArrayList<>();
 
+            //search in all genomes
             if (organism == 0) {
                 //by type
-                if (searchType.equals("predicted")) {
-                    rnaTableView = rnaTableViewDAO.listAll();
-                }else{
-                    rnaTableView = rnaTableViewDAO.findByType("experimental");
-                }
-            } else {
+                if (gene.isEmpty()) {
+                    if (searchType.equals("predicted")) {
+                        rnaTableView = rnaTableViewDAO.listAll();
+                    } else {
+                        rnaTableView = rnaTableViewDAO.findByType("experimental");
+                    }
+                } else {
 
-                //search by genome and type. 
+                    if (searchType.equals("predicted")) {
+                        //search for locus_tag in general.
+                        rnaTableView = rnaTableViewDAO.findByLocusTag(gene);
+                    } else {
+                        //search for locus_tag and type.
+                        rnaTableView = rnaTableViewDAO.findByLocusTagType(gene, "experimental");
+
+                    }
+                }
+
+                //search a specific genome. 
+            } else {
                 genome = genomeDAO.findByOrganism(organism);
-                rnaTableView = rnaTableViewDAO.findByGenome(genome.getId());
+                if (gene.isEmpty()) {
+                    //search by genome and type. 
+
+                    rnaTableView = rnaTableViewDAO.findByGenome(genome.getId());
+                } else {
+                    //search by gene name and genome
+                    //findByGenomeLocusTag
+                    rnaTableView = rnaTableViewDAO.findByGenomeLocusTag(genome.getId(), gene);
+
+                }
             }
 
             model.addAttribute("type", searchType);
@@ -368,7 +468,7 @@ public class SearchController {
 
             //if all organisms
             if (organism == 0) {
-
+                System.out.println("TESTE1.");
                 //if gene is empty
                 if (gene.equals("")) {
                     //System.out.println("IF >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>vazio");
@@ -384,6 +484,17 @@ public class SearchController {
                     model.addAttribute("numberOfGenomes", features[7]);
                     //   model.addAttribute("organisms", organisms);
                     model.addAttribute("items", (List<OrganismItem>) features[8]);
+                    
+                    
+                    model.addAttribute("numberOfSmallRnas", features[9]);
+        
+                    model.addAttribute("numberOfSmallRnas", features[10]);
+        
+                    model.addAttribute("numberOfSmallRnas", features[11]);
+        
+                    model.addAttribute("numberOfSmallRnas", features[12]);
+
+                    
                     model.addAttribute("message", "Please, choose a gene or an organism!");
                     return "searchExperimentalData";
 

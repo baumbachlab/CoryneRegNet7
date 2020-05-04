@@ -54,7 +54,7 @@ public class SmallRnaDAO extends GenericDAO {
         }
     }
 
-     public List<SmallRna> findByGenome(Integer genome) {
+    public List<SmallRna> findByGenome(Integer genome) {
         try {
             SmallRna gene = new SmallRna();
             List lista = new ArrayList<Object>();
@@ -70,8 +70,8 @@ public class SmallRnaDAO extends GenericDAO {
             return null;
         }
     }
-     
-       public List<SmallRna> findByType(String type) {
+
+    public List<SmallRna> findByType(String type) {
         try {
             SmallRna gene = new SmallRna();
             List lista = new ArrayList<Object>();
@@ -87,8 +87,7 @@ public class SmallRnaDAO extends GenericDAO {
             return null;
         }
     }
-    
-    
+
     //findByLocusTag
     public SmallRna findByLocusTag(String locusTag) {
         try {
@@ -146,4 +145,69 @@ public class SmallRnaDAO extends GenericDAO {
 
     }
 
+    //bringByType
+    public Long bringByType(String type) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByType");
+            query.setString("type", type);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByNotType
+    public Long bringByNotType(String type) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByNotType");
+            query.setString("type", type);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringFunctionalByType
+    public Long bringFunctionalByType(String type, Boolean functionalRna) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringFunctionalByType");
+            query.setString("type", type);
+            query.setBoolean("functionalRna", functionalRna);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringFunctionalByNotType
+    public Long bringFunctionalByNotType(String type, Boolean functionalRna) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringFunctionalByNotType");
+            query.setString("type", type);
+            query.setBoolean("functionalRna", functionalRna);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 }

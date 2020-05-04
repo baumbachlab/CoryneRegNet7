@@ -13,6 +13,8 @@ import com.coryneregnet7.dao.OrganismDAO;
 import com.coryneregnet7.dao.PredictedRegulatoryInteractionDAO;
 import com.coryneregnet7.dao.StatisticsOverviewDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
+import com.coryneregnet7.dao.RnaInteractionDAO;
+import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.StatisticsOverview;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.Organism;
@@ -32,9 +34,55 @@ public class StatisticsOverviewCacl {
     public static void main(String[] args) {
         
         StatisticsOverviewCacl soCalc = new StatisticsOverviewCacl();
-        soCalc.calculate();
+        soCalc.calculateRnaStatistics();
     }
 
+    public void calculateRnaStatistics(){
+        SmallRnaDAO rDAO = new SmallRnaDAO();
+        Long countSrnaExperimental = rDAO.bringByType("experimental");
+        System.out.println("countSrnaExperimental: " + countSrnaExperimental);
+        
+        Long countFunctionalSrnaExperimental = rDAO.bringFunctionalByType("experimental", true);
+        System.out.println("countFunctionalSrnaExperimental: " + countFunctionalSrnaExperimental);
+        
+        Long countSrnaPredicted = rDAO.bringByNotType("experimental");
+        System.out.println("countSrnaPredicted: " + countSrnaPredicted);
+        
+        Long countFunctionalSrnaPredicted = rDAO.bringFunctionalByNotType("experimental", true);
+        System.out.println("countFunctionalSrnaPredicted: " + countFunctionalSrnaPredicted);
+        
+        
+        RnaInteractionDAO rnaInteractionDAO = new RnaInteractionDAO();
+        Long countRnaRegulations = rnaInteractionDAO.bringAll();
+        System.out.println("countRnaRegulations "+countRnaRegulations);
+        
+        //bringDistinctMrna
+        Long countMrnas = rnaInteractionDAO.bringDistinctMrna();
+        System.out.println("countMrnas "+countMrnas);
+        
+        StatisticsOverviewDAO soDAO = new StatisticsOverviewDAO();
+        StatisticsOverview statisticsOverview;
+        statisticsOverview =soDAO.findByTypeAndDatabase("database", "predicted");
+        
+        statisticsOverview.setSmallRnas(countSrnaPredicted.intValue()+countSrnaExperimental.intValue());
+        statisticsOverview.setGenesByRna(countMrnas.intValue());
+        statisticsOverview.setRegulatoryRnas(countFunctionalSrnaPredicted.intValue()+countFunctionalSrnaExperimental.intValue());
+        statisticsOverview.setRegulationsSrna(countRnaRegulations.intValue());
+        
+        soDAO.update(statisticsOverview);
+        
+        statisticsOverview =soDAO.findByTypeAndDatabase("database", "experimental");
+        
+        statisticsOverview.setSmallRnas(countSrnaExperimental.intValue());
+        statisticsOverview.setGenesByRna(0);
+        statisticsOverview.setRegulatoryRnas(0);
+        statisticsOverview.setRegulationsSrna(0);
+        
+        soDAO.update(statisticsOverview);
+        
+      
+    }
+    
     public void calculate() {
 
         OrganismDAO organismDAO = new OrganismDAO();

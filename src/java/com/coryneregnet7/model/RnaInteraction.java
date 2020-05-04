@@ -30,9 +30,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RnaInteraction.findAll", query = "SELECT r FROM RnaInteraction r")
+    ,@NamedQuery(name = "RnaInteraction.bringAll", query = "SELECT count(r) FROM RnaInteraction r")
     , @NamedQuery(name = "RnaInteraction.findById", query = "SELECT r FROM RnaInteraction r WHERE r.id = :id")
     , @NamedQuery(name = "RnaInteraction.findByRank", query = "SELECT r FROM RnaInteraction r WHERE r.rank = :rank")
     , @NamedQuery(name = "RnaInteraction.findByMrna", query = "SELECT r FROM RnaInteraction r WHERE r.mrna = :mrna")
+    , @NamedQuery(name = "RnaInteraction.bringDistinctMrna", query = "SELECT count(distinct r.mrna) FROM RnaInteraction r")
+    , @NamedQuery(name = "RnaInteraction.findBySrna", query = "SELECT r FROM RnaInteraction r WHERE r.srna = :srna")
     , @NamedQuery(name = "RnaInteraction.findByCopraPvalue", query = "SELECT r FROM RnaInteraction r WHERE r.copraPvalue = :copraPvalue")
     , @NamedQuery(name = "RnaInteraction.findByCopraFdr", query = "SELECT r FROM RnaInteraction r WHERE r.copraFdr = :copraFdr")
     , @NamedQuery(name = "RnaInteraction.findByEnergy", query = "SELECT r FROM RnaInteraction r WHERE r.energy = :energy")

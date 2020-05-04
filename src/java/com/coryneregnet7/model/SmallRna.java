@@ -35,7 +35,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findByLocusTag", query = "SELECT s FROM SmallRna s WHERE s.locusTag = :locusTag")
     , @NamedQuery(name = "SmallRna.findBySequence", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence")
     , @NamedQuery(name = "SmallRna.findByGenome", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome")
-    , @NamedQuery(name = "SmallRna.findByType", query = "SELECT s FROM SmallRna s WHERE s.type = :type")})
+    , @NamedQuery(name = "SmallRna.findByType", query = "SELECT s FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type")
+    , @NamedQuery(name = "SmallRna.bringFunctionalByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna")    
+    , @NamedQuery(name = "SmallRna.bringFunctionalByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna")
+        //functionalRna
+})
 public class SmallRna implements Serializable {
 
     private static final long serialVersionUID = 1L;

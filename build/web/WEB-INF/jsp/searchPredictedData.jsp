@@ -164,8 +164,8 @@
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
                             <input type="text" class="form-control space-after-input" id="gene-search" name="gene">
-                            
-                            
+
+
                             <label for="checkbox-div">Search for:&nbsp;</label>
                             <%-- <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search regulatory interactions regulated by Transcripction Factors (TFs), non-coding RNAs (ncRNAs) or both." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
@@ -176,7 +176,7 @@
                                 <input type="radio" id="rna" name="geneRna" value="rna">
                                 <label for="rna">Small RNAs</label><br>
                             </span>
-                            
+
                             <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
@@ -263,13 +263,23 @@
                                 <td>${numberOfProteins}</td>
                             </tr>
                             <tr>
-                                <td>Regulations</td>
-                                <td>${totalNumberOfRegulatoryInteractions}</td>
+                                <td>Small RNAs</td>
+                                <td>${numberOfSmallRnas}</td>
                             </tr>
                             <tr>
-                                <td>Regulators</td>
+                                <td>Regulatory RNAs</td>
+                                <td>${numberOfRegulatoryRnas}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Transcription factors</td>
                                 <td>${totalNumberOfRegulators}</td>
                             </tr>
+                              <tr>
+                                <td>Genomes</td>
+                                <td>${numberOfGenomes}</td>
+                            </tr>
+                           
                         </tbody>
                     </table>
                 </center>
@@ -278,9 +288,21 @@
                 <center>
                     <table id="statistics" class="table table-striped text-center">
                         <tbody>
+                             <tr>
+                                <td>Regulations (TFs)</td>
+                                <td>${totalNumberOfRegulatoryInteractions}</td>
+                            </tr>
                             <tr>
-                                <td>Regulated genes</td>
+                                <td>Regulations (sRNAs)</td>
+                                <td>${numberOfRegulationsSrna}</td>
+                            </tr>
+                            <tr>
+                                <td>Genes regulated by TFs</td>
                                 <td>${totalNumberOfRegulatedGenes}</td>
+                            </tr>
+                            <tr>
+                                <td>Genes regulated by RNAs</td>
+                                <td>${numberOfGenesByRna}</td>
                             </tr>
                             <tr>
                                 <td>Binding motifs</td>
@@ -290,10 +312,7 @@
                                 <td>HMM profiles</td>
                                 <td>${numberOfHmmProfiles}</td>
                             </tr>
-                            <tr>
-                                <td>Genomes</td>
-                                <td>${numberOfGenomes}</td>
-                            </tr>
+                          
                         </tbody>
                     </table>
                 </center>

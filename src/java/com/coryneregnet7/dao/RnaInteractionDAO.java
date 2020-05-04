@@ -19,9 +19,8 @@ import java.util.List;
  *
  * @author mariana
  */
-public class RnaInteractionDAO extends GenericDAO{
-    
-   
+public class RnaInteractionDAO extends GenericDAO {
+
     public RnaInteraction findById(Integer id) {
         try {
             RnaInteraction rnaInteraction = new RnaInteraction();
@@ -38,16 +37,33 @@ public class RnaInteractionDAO extends GenericDAO{
         }
 
     }
-    
-    
-        public List<RnaInteraction> findByMrna(Integer id) {
+
+    public List<RnaInteraction> findByMrna(Integer id) {
         try {
-              List lista = new ArrayList<Object>();
+            List lista = new ArrayList<Object>();
             this.session = getSession();
             this.tx = this.session.beginTransaction();
             Query query = session.getNamedQuery("RnaInteraction.findByMrna");
             query.setInteger("mrna", id);
-           lista = query.list();
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+
+    }
+
+    //findBySrna
+    public List<RnaInteraction> findBySrna(Integer id) {
+        try {
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.findBySrna");
+            query.setInteger("srna", id);
+            lista = query.list();
             this.tx.commit();
             return lista;
         } catch (Exception E) {
@@ -72,6 +88,34 @@ public class RnaInteractionDAO extends GenericDAO{
             return null;
         }
     }
-
     
+    //bringAll
+    public Long bringAll() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.bringAll");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+    
+    //bringDistinctMrna
+    public Long bringDistinctMrna() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.bringDistinctMrna");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 }
