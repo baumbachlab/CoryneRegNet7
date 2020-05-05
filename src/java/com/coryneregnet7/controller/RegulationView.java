@@ -11,6 +11,7 @@ import com.coryneregnet7.model.Organism;
 import com.coryneregnet7.model.PredictedRegulatoryInteraction;
 import com.coryneregnet7.model.Regulation;
 import com.coryneregnet7.model.RegulatoryInteraction;
+import com.coryneregnet7.model.SmallRna;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -28,18 +29,18 @@ import javax.validation.constraints.Size;
  */
 public class RegulationView {
 
-    private Integer id;
+    private Integer id;//no
     private Gene targetGene;
     private Gene transcriptionFactor;
     private String role;
     private String evidence;
-    private String bindingSite;
-    private Long coregulators;
-    private String pmid;
+    private String bindingSite;//no
+    private Long coregulators;//no
+    private String pmid;//no
     private String operon;
-    private Organism modelOrganism;
+    private Organism modelOrganism;//no
     private BigDecimal pValue;
-    private Long regulatorsDensity;
+    private Long regulatorsDensity;//non
 
     public RegulationView(Integer id, Gene targetGene, Gene transcriptionFactor, String role, String evidence, String bindingSite, Long coregulators, String pmid, String operon, Organism modelOrganism, BigDecimal pValue, Long regulatorsDensity) {
         this.id = id;
