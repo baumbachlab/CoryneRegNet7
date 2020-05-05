@@ -3,10 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/PredictedRegulatoryInteractionView.java</file>
-            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RegulationView.java</file>
-            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/networkDinamicVisualization-fast.jsp</file>
-            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RegulationView.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RnaRegulationView.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/StatisticsOverviewDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/rna.jsp</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/RnaInteractionDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/SmallRnaDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/GetNcRnaRfam.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/DeleteInteractions.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/searchExperimentalData.jsp</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/IntergenicRegion.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/test/RnaRegulationViewTest.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/RnaRegulationViewDAO.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/RnaDetect.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/SmallRna.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/Rnaz.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/rnaInfo.jsp</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RnaInteraction.java</file>
+            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/experimentalData.jsp</file>
         </group>
     </open-files>
 </project-private>
