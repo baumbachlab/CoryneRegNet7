@@ -3,32 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RnaTableView.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/searchPredictedData.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/DeleteInteractions.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RnaRegView.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/searchExperimentalData.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/statistics/StatisticsOverviewCacl.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/RnaDetect.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/geneInfo.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/StatisticsOverview.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/SmallRna.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/Rnaz.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RnaInteraction.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/experimentalData.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/index.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RegulationView.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/StatisticsOverviewDAO.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/rna.jsp</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/RnaInteractionDAO.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/SmallRnaDAO.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/GetNcRnaRfam.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/RnaTableViewDAO.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RegulatoryInteractionView.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/processing/ncrna/IntergenicRegion.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/dao/TableViewDAO.java</file>
-            <file>file:/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/rnaInfo.jsp</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/PredictedRegulatoryInteractionView.java</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RegulationView.java</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/networkDinamicVisualization-fast.jsp</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
         </group>
     </open-files>
 </project-private>
