@@ -484,17 +484,15 @@ public class SearchController {
                     model.addAttribute("numberOfGenomes", features[7]);
                     //   model.addAttribute("organisms", organisms);
                     model.addAttribute("items", (List<OrganismItem>) features[8]);
-                    
-                    
+
                     model.addAttribute("numberOfSmallRnas", features[9]);
-        
+
                     model.addAttribute("numberOfSmallRnas", features[10]);
-        
+
                     model.addAttribute("numberOfSmallRnas", features[11]);
-        
+
                     model.addAttribute("numberOfSmallRnas", features[12]);
 
-                    
                     model.addAttribute("message", "Please, choose a gene or an organism!");
                     return "searchExperimentalData";
 
@@ -1635,6 +1633,10 @@ public class SearchController {
         ArrayList<BindingSite> bss = new ArrayList<>();
         //GeneInfo geneInfo = new GeneInfo();
         TreeMap<String, GeneInfo> genesInfo = new TreeMap<>();
+        TreeMap<String, SmallRna> srnasInfo = new TreeMap<>();
+        List<SmallRna> srnalist = new ArrayList<SmallRna>();
+        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+
         OperonDAO opDAO = new OperonDAO();
         //  GeneOperonDAO geneOpDAO = new GeneOperonDAO();
         TreeMap<String, ArrayList<String>> operons = new TreeMap<>();
@@ -1691,6 +1693,8 @@ public class SearchController {
 
             operons = govDAO.getOperonsTreeByGenome(genome.getId());
             genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
+
+            srnalist = srnaDAO.findByGenome(genome.getId());
 
 ////            if (pris != null && !pris.isEmpty()) {
 ////                for (PredictedRegulatoryInteraction pri11 : pris) {
@@ -1753,6 +1757,10 @@ public class SearchController {
             operons = govDAO.getOperonsTreeByGenome(genome.getId());
             genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
 
+        }
+
+        for (int i = 0; i < srnalist.size(); i++) {
+            srnasInfo.put(srnalist.get(i).getLocusTag(), srnalist.get(i));
         }
 
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
