@@ -38,9 +38,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findByType", query = "SELECT s FROM SmallRna s WHERE s.type = :type")
     , @NamedQuery(name = "SmallRna.bringByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
     , @NamedQuery(name = "SmallRna.bringByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type")
-    , @NamedQuery(name = "SmallRna.bringFunctionalByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna")    
+    , @NamedQuery(name = "SmallRna.bringFunctionalByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna")
     , @NamedQuery(name = "SmallRna.bringFunctionalByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna")
-        //functionalRna
+    //functionalRna
+    
 })
 public class SmallRna implements Serializable {
 
@@ -78,7 +79,7 @@ public class SmallRna implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "evidence")
     private String evidence;
-     @Size(max = 2147483647)
+    @Size(max = 2147483647)
     @Column(name = "evidence_functional")
     private String evidenceFunctional;
     @Column(name = "functional_rna")
@@ -200,7 +201,6 @@ public class SmallRna implements Serializable {
 //    public String toString() {
 //        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", evidence=" + evidence + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + '}';
 //    }
-
     public String getEvidence() {
         return evidence;
     }

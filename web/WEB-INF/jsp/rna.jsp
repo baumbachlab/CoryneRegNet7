@@ -84,13 +84,13 @@
                 <div class="title-size text-center">
                     <c:choose>
                         <c:when test="${type eq 'predicted'}">
-                            Predicted
+                            Predicted and experimental
                         </c:when>
                         <c:otherwise>
                             Experimental
                         </c:otherwise>    
                     </c:choose>
-                    data recovered from CoryneRegNet
+                    data
                 </div>
             </div>
         </div>
@@ -173,7 +173,7 @@
                                         <td style="word-wrap:break-word; max-width: 500px;">      
                                             <c:forTokens var="token" items="${list.mrnas} " delims=",">
                                                 <c:set var="i" value="0"/>
-                                                <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=experimental"><c:out value="${token}"/></a>&nbsp;
+                                                <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=${type}"><c:out value="${token}"/></a>&nbsp;
 
                                             </c:forTokens>
                                         </td>
@@ -193,7 +193,15 @@
         <div class="col-sm-12">
             <center>
                 <a href="#top-button"><button id="bottom-button" type="button" class="btn btn-primary btn-normal">Top</button></a>
-                <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
+                 <c:choose>
+                        <c:when test="${type eq 'predicted'}">
+                            <a href="searchPredictedData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
+                        </c:otherwise>    
+                    </c:choose>
+                
             </center>
         </div>
     </div>

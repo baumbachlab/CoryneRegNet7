@@ -161,7 +161,7 @@ public class RnaRegulationView implements Serializable {
 
     @Override
     public String toString() {
-        return "RnaRegulationView{" + "id=" + id + ", srna=" + srna.getId() + ", tg=" + tg.getId()+ ", role=" + role + ", genome=" + genome.getId() + ", operon=" + operon + ", pvalue=" + pvalue + '}';
+        return "RnaRegulationView{" + "id=" + id + ", srna=" + srna + ", tg=" + tg+ ", role=" + role + ", genome=" + genome + ", operon=" + operon + ", pvalue=" + pvalue + '}';
     }
 
 }

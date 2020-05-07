@@ -47,7 +47,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnaInteraction.findByPositionSeedNcrna", query = "SELECT r FROM RnaInteraction r WHERE r.positionSeedNcrna = :positionSeedNcrna")
     , @NamedQuery(name = "RnaInteraction.findByHybridizationEnergy", query = "SELECT r FROM RnaInteraction r WHERE r.hybridizationEnergy = :hybridizationEnergy")
     , @NamedQuery(name = "RnaInteraction.findByUnfoldingEnergyMrna", query = "SELECT r FROM RnaInteraction r WHERE r.unfoldingEnergyMrna = :unfoldingEnergyMrna")
-    , @NamedQuery(name = "RnaInteraction.findByUnfoldingEnergyNcrna", query = "SELECT r FROM RnaInteraction r WHERE r.unfoldingEnergyNcrna = :unfoldingEnergyNcrna")})
+    , @NamedQuery(name = "RnaInteraction.findByUnfoldingEnergyNcrna", query = "SELECT r FROM RnaInteraction r WHERE r.unfoldingEnergyNcrna = :unfoldingEnergyNcrna")
+    , @NamedQuery(name = "RnaInteraction.findByTfMrna", query = "SELECT count(r) FROM RnaInteraction r WHERE r.mrna in (SELECT g FROM Gene g WHERE g.role != '')")
+})
+
 public class RnaInteraction implements Serializable {
 
     private static final long serialVersionUID = 1L;

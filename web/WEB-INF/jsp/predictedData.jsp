@@ -80,7 +80,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="title-size text-center">Predicted data recovered from CoryneRegNet</div>
+                <div class="title-size text-center">Predicted and experimental data</div>
             </div>
         </div>
     </div>
