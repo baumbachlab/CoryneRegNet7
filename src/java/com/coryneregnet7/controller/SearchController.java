@@ -24,6 +24,7 @@ import com.coryneregnet7.dao.RegulatorsRegulationsDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionViewDAO;
 import com.coryneregnet7.dao.RnaInteractionDAO;
+import com.coryneregnet7.dao.RnaRegulationViewDAO;
 import com.coryneregnet7.dao.RnaTableViewDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.dao.StatisticsOverviewDAO;
@@ -48,6 +49,7 @@ import com.coryneregnet7.model.RegulatorsRegulations;
 import com.coryneregnet7.model.RegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteractionView;
 import com.coryneregnet7.model.RnaInteraction;
+import com.coryneregnet7.model.RnaRegulationView;
 import com.coryneregnet7.model.RnaTableView;
 import com.coryneregnet7.model.SmallRna;
 import com.coryneregnet7.model.StatisticsOverview;
@@ -66,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -394,7 +397,7 @@ public class SearchController {
     }
 
     @RequestMapping("dataSearch")
-    public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
+    public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException   {
 
         System.out.println("TF-RNA: " + geneRna);
         if (searchType == null) {
@@ -1627,8 +1630,8 @@ public class SearchController {
         ArrayList<RegulatoryInteraction> ris = new ArrayList<>();
         PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
         ArrayList<PredictedRegulatoryInteraction> pris = new ArrayList<>();
-        RegulationView regView = new RegulationView();
-        BindingSiteDAO bindingSiteDAO = new BindingSiteDAO();
+        
+        
         GeneOperonViewDAO govDAO = new GeneOperonViewDAO();
         GeneInfoViewDAO gInfoDAO = new GeneInfoViewDAO();
         //GeneOperonView operons = new GeneOperonView();
@@ -1654,8 +1657,8 @@ public class SearchController {
         CytoscapeFile cytoscapeFile = new CytoscapeFile();
         String cytoscapeFileName = "";
         //String[] hubsConnected;
-        Long regulatorsDensityTf;
-        Long regulatorsDensityTg;
+
+
         Gene g = new Gene();
         GeneDAO geneDAO = new GeneDAO();
         //ArrayList<Gene> nodes = new ArrayList<>();
@@ -1671,11 +1674,19 @@ public class SearchController {
         PredictedRegulatoryInteractionView priView = new PredictedRegulatoryInteractionView();
         List<PredictedRegulatoryInteractionView> predictedRegulatoryInteractionViews;
 
+       
+        RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
+        List<RnaRegulationView> rnaRegList = new LinkedList<>();
+                
+        
+        
+        
         if (gene == null || gene.isEmpty()) {
             System.out.println("Gene is empty!!! -->> Experimental + Predicted data");
             ris = riDAO.findByOrganism(organism);
             pris = priDAO.findByOrganism(organism);
-
+            rnaRegList = rnaRegDAO.findByGenome(genome.getId());
+            
             if (o.getType().equals("model")) {
                 regulatoryInteractionViews = riViewDAO.findByGenome(genome.getId());
                 regulationsView = riView.getRegulationViewList(regulatoryInteractionViews);
@@ -1766,6 +1777,8 @@ public class SearchController {
             return "networkEmpty";
         }
 
+        //rnaRegList
+        model.addAttribute("rnaRegList", rnaRegList);
         model.addAttribute("goBackTo", goBackTo);
         model.addAttribute("typeOfGoBack", "normal");
         model.addAttribute("type", searchType);

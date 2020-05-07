@@ -5,7 +5,10 @@
         <group>
             <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/PredictedRegulatoryInteractionView.java</file>
             <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/RegulationView.java</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/test/RnaRegulationViewTest.java</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/searchExperimentalData.jsp</file>
             <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/web/WEB-INF/jsp/networkDinamicVisualization-fast.jsp</file>
+            <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/model/RnaRegulationView.java</file>
             <file>file:/home/doglas/NetBeansProjects/CoryneRegNet7/src/java/com/coryneregnet7/controller/SearchController.java</file>
         </group>
     </open-files>
