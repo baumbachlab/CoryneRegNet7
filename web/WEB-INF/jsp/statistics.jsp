@@ -74,17 +74,6 @@
         </div>
     </div>
 
-    <script>
-        var svgData = $("#regulator-types")[0].outerHTML;
-        var svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = "newesttree.svg";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    </script>
     <div class="container-fluid badge badge-light shadow space-to-footer">
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row" style="font-size: 20px">
@@ -569,16 +558,6 @@
                 .attr("fill", "grey")
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
-        var svgData = $('#co-regulators')[0].outerHTML;
-        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        var svgBlob = new Blob([preface, svgData], {type: "image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = "coReg.svg";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
     </script>
 
     <!-- Bar Chart - HMM profiles lengths -->
@@ -703,17 +682,6 @@
                 .attr("fill", "grey")
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
-        
-        var svgData = $('#profile-len')[0].outerHTML;
-        var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-        var svgBlob = new Blob([preface, svgData], {type: "image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = "profile-len.svg";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
     </script>
 
     <!-- Bar Chart - distribution of TFBS distances from gene start. -->
