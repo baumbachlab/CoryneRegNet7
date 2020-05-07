@@ -203,7 +203,8 @@
                     </a>
 
                     <br>
-                    <input type="radio" name="op" id="noOP" value="0" onchange="noOperon()" checked> Genes<br>
+                    <input type="radio" name="op" id="noOP" value="0" onchange="noOperon()" checked> Genes
+                    <input type="checkbox" id="rnas1" name="rna-genes" onclick="rnasStatus()"><label for="rnas1">RNAs</label><br>
                     <input type="radio" name="op" id="opCo" value="1" onchange="operonsCombined()"> Operons<br>
                 </div>
                 <div class="col-md-12 font" style="margin-top: 20px;">
@@ -715,7 +716,6 @@
                     //Take transcription factor's name or locus_tag
                     //console.log("regulationsView");
                     var regInteraction = [];
-                    regInteraction.id = '${ri.id}';
                     regInteraction.tgId = '${ri.targetGene.id}';
                     if ('${ri.targetGene.name}' != "") {
                         regInteraction.tgName = '${ri.targetGene.name}';
@@ -729,7 +729,7 @@
 
                     regInteraction.tgAltLocusTag = '${ri.targetGene.alternativeLocusTag}';
                     regInteraction.tgProteinId = '${ri.targetGene.proteinId}';
-                    regInteraction.tfId = '${ri.transcriptionFactor.id}';
+                    //regInteraction.tfId = '${ri.transcriptionFactor.id}';
                     if ('${ri.transcriptionFactor.name}' != "") {
                         regInteraction.tfName = '${ri.transcriptionFactor.name}';
                         regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
@@ -740,7 +740,7 @@
                     //                    console.log("tfLocusTag: " + regInteraction.tfLocusTag);
                     //                  console.log("tfName: " + regInteraction.tfName);
 
-                    regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
+                    //regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
                     regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
                     //console.log('${ri.transcriptionFactor.role}');
                     regInteraction.tfRole = '${ri.transcriptionFactor.role}';
@@ -749,6 +749,36 @@
                     regInteraction.pValue = '${ri.pValue}';
                     regInteractions.push(regInteraction);
                     //console.log("-------------------------------------");
+                </script> 
+            </c:forEach>
+
+            <c:forEach items="${rnaRegList}" var="rnaRL">
+                <script>
+                    //Take transcription factor's name or locus_tag
+                    //console.log("rnaRegList");
+
+                    regInteraction.tfName = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfName);
+                    regInteraction.tfLocusTag = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfLocusTag);
+
+                    if ('${rnaRL.tg.name}' != "") {
+                        regInteraction.tgName = '${rnaRL.tg.name}';
+                        //console.log(regInteraction.tgName);
+                    } else {
+                        regInteraction.tgName = '${rnaRL.tg.locusTag}';
+                        //console.log("regInteraction.tgName: " + regInteraction.tgName);
+                    }
+                    regInteraction.tgLocusTag = '${rnaRL.tg.locusTag}';
+                    //console.log(regInteraction.tgLocusTag);
+
+                    regInteraction.tfProteinId = '-';
+                    regInteraction.tfRole = '${rnaRL.role}';
+                    //console.log(regInteraction.tfRole);
+                    regInteraction.riRole = '${rnaRL.role}';
+                    regInteraction.pValue = '${rnaRL.pvalue}';
+                    //console.log(regInteraction.pValue);
+                    regInteractions.push(regInteraction);
                 </script> 
             </c:forEach>
 
@@ -761,8 +791,8 @@
                 //window.alert("Am I fast enough?");
                 var network;
                 var screenHeightString;
-                //console.log("geneInfoMap.size: " + geneInfoMap.size);
-                //console.log("regInteractions.length: " + regInteractions.length);
+                console.log("geneInfoMap.size: " + geneInfoMap.size);
+                console.log("regInteractions.length: " + regInteractions.length);
                 if (geneInfoMap.size < 50) {
                     var firstDivHeight = document.getElementById('first-div').clientHeight;
                     //console.log("firstDivHeight: " + firstDivHeight);
@@ -786,6 +816,7 @@
 
                 noOperons();
                 function  noOperons() {
+                    console.log("Starting noOperons");
                     var createEdges = {id: "", label: ""};
                     var mapEdges = new Array();
                     var createNodes = {id: "", label: ""};
@@ -796,9 +827,9 @@
                     var edges;
                     var container;
                     for (var i = 0; i < regInteractions.length; i++) {
-                        //console.log("from: " + regInteractions[i].tfName);
-                        //console.log("to: " + regInteractions[i].tgName);
-                        //.log("role: " + regInteractions[i].riRole);
+                        console.log("from: " + regInteractions[i].tfName);
+                        console.log("to: " + regInteractions[i].tgName);
+                        console.log("role: " + regInteractions[i].riRole);
                         if ((regInteractions[i].riRole == "R") || (regInteractions[i].riRole == "Repressor")) {
                             edgeColor = '#ff6666';
                             riRole = "Repressor";
@@ -813,8 +844,11 @@
                                 riRole = "";
                             }
                         } else if ((regInteractions[i].riRole == "Dual") || (regInteractions[i].riRole == "D")) {
-                            edgeColor = '#0080ff';
+                            edgeColor = "#0080ff";
                             riRole = "Dual";
+                        } else if (regInteractions[i].riRole == "X") {
+                            edgeColor = "#f5b042";
+                            riRole = "X";
                         }
 
                         //console.log("edgeColor: " + edgeColor);
@@ -844,8 +878,8 @@
                     var nodeColor;
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
-                        //console.log("geneInfoMap.get(mapNode):");
-                        //   console.log(geneInfoMap.get(mapNode));
+                        console.log("geneInfoMap.get(mapNode):");
+                        console.log(geneInfoMap.get(mapNode));
                         geneInfo = geneInfoMap.get(mapNode);
                         nodeColor = "#b3b3b3";
                         //console.log("mapNode: ");
@@ -863,9 +897,17 @@
                         } else if (geneInfo.role == "unknown") {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#66d9ff";
+                        } else if (geneInfo.role == "X") {
+                            //console.log("mapNode.role: " + geneInfo.role)
+                            nodeColor = "#f5b042";
                         }
                         //console.log("mapNode: " + mapNode);
+
+                        //if (mapNode == "CA40472_RS08255" || mapNode == "clpP" || mapNode == "acnA") {
+                        //    createNodes = {id: mapNode, label: mapNode, color: nodeColor, shape: "database", hidden: true};
+                        //} else {
                         createNodes = {id: mapNode, label: mapNode, color: nodeColor};
+                        //}
                         mapNodesToNodes.push(createNodes);
                         count++;
                     });
@@ -939,7 +981,10 @@
                             });
                         }
                     });
+                    var toggle = false;
                     network.on('click', function (properties) {
+
+                        console.log("Starting onClick");
                         var ids = properties.nodes;
                         var clickedNodes = nodes.get(ids);
                         //console.log('clicked nodes:', clickedNodes);
@@ -960,6 +1005,8 @@
                                         nodeInfo += "<br>" + "<b>Role:</b> Repressor";
                                     } else if (nodeAux.role == "D") {
                                         nodeInfo += "<br>" + "<b>Role:</b> Dual";
+                                    } else if (nodeAux.role == "X") {
+                                        nodeInfo += "<br>" + "<b>Role:</b> -";
                                     }
                                 } else {
                                     if (nodeAux.role == "unknown") {
@@ -1031,7 +1078,7 @@
                         //var nodeInfo = "Name: " + d.data.name
                         //      + "<br>" + "Colname: " + d.data.colname;
 
-
+                        console.log("Finishing onClick");
                     });
                     network.setOptions({
                         physics: {enabled: false},
@@ -1044,11 +1091,12 @@
                         }
                     });
                     network.stabilize(1000); // 100 works for me, YMMV
+                    console.log("End noOperons");
                 }
 
                 //console.log("Gene based layout DONE!");
                 function operonsCombined2() {
-
+                    console.log("Starting operonsCombined2");
                     var createEdges = {id: "", label: ""};
                     var mapEdges = new Array();
                     var createNodes = {id: "", label: ""};
@@ -1321,6 +1369,7 @@
                         }
                     });
                     network.stabilize(1000); // 100 works for me, YMMV
+                    console.log("End operonsCombined2");
                 }
 
 
@@ -1361,7 +1410,6 @@
                         }
                     });
                 }
-
             </script>
         </div>
 
