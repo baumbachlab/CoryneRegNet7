@@ -10,6 +10,7 @@ import com.coryneregnet7.dao.RnaInteractionDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.SmallRna;
+import com.coryneregnet7.processing.output.RnaFile;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -23,6 +24,29 @@ public class SmallRnaTest {
 
     public static void main(String[] args) {
         SmallRnaTest srTest = new SmallRnaTest();
+        //srTest.getByGenome();
+        
+        //RnaFile creator = new RnaFile();
+        //List<String> rnaFileNames = creator.bringRnaFiles("model");
+        
+        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+                List<SmallRna> smallRnaList = sRnaDAO.findByGenomeType(1226, "experimental");
+
+        for (SmallRna smallRna : smallRnaList) {
+            System.out.println(smallRna);
+        }
+        
+        
+//        SmallRnaDAO rDAO = new SmallRnaDAO();
+//        List<Genome> genomes = rDAO.bringGenomesByType("model");
+//        for (Genome genome : genomes) {
+//            System.out.println(genome.toString());
+//        }
+
+    }
+    
+    public void statisticTest(){
+          SmallRnaTest srTest = new SmallRnaTest();
         //srTest.getByGenome();
 
         SmallRnaDAO rDAO = new SmallRnaDAO();

@@ -5,7 +5,10 @@
  */
 package com.coryneregnet7.test;
 
+import com.coryneregnet7.dao.GenesRegulatedBySrnasViewDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
+import com.coryneregnet7.model.GenesRegulatedBySrnasView;
+import java.util.List;
 
 /**
  *
@@ -16,7 +19,6 @@ public class RnaStatisticsTest {
     public static void main(String[] args){
         
         //quantities of rna types
-        
         //experimental
         SmallRnaDAO sRnaDAO = new SmallRnaDAO();
         Long experimental = sRnaDAO.bringByType("experimental");
@@ -36,16 +38,19 @@ public class RnaStatisticsTest {
         
         
         
-        //rnas regulating TFs
+        //rnas regulating TFs ---> saiu.
         
         
         
         //genes regulated by TFs and RNAs
         
         
-        // quantidade de smallrnas regulating a gene. 
         //distribuition of smallRnas regulating a gene. 
-        
+        GenesRegulatedBySrnasViewDAO dao = new GenesRegulatedBySrnasViewDAO();
+        List<GenesRegulatedBySrnasView> list = dao.findByGenome(0);
+        for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : list) {
+            System.out.println(genesRegulatedBySrnasView.toString());
+        }
     }
     
 }

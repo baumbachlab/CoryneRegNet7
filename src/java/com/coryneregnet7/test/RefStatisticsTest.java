@@ -30,7 +30,10 @@ public class RefStatisticsTest {
     public static void main(String[] args) {
 
         RefStatisticsTest rrTest = new RefStatisticsTest();
-        rrTest.delete();
+        //rrTest.delete();
+        
+        
+        
 //        RefStatistics rDAO = new RefStatistics();
 //        RefStatistics regulatorsRegulation = new RefStatistics();
 //        OrganismDAO orgDAO = new OrganismDAO();

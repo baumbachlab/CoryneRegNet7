@@ -5,6 +5,7 @@
  */
 package com.coryneregnet7.dao;
 
+import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.SmallRna;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,43 @@ public class SmallRnaDAO extends GenericDAO {
             return null;
         }
     }
+    
+    //bringGenomes
+    public List<Genome> bringGenomes() {
+        try {
+            SmallRna gene = new SmallRna();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringGenomes");
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 
+    //bringGenomes
+    public List<Genome> bringGenomesByType(String type) {
+        try {
+            SmallRna gene = new SmallRna();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringGenomesByType");
+            query.setString("type", type);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    
     public List<SmallRna> findByGenome(Integer genome) {
         try {
             SmallRna gene = new SmallRna();
@@ -62,6 +99,25 @@ public class SmallRnaDAO extends GenericDAO {
             this.tx = this.session.beginTransaction();
             Query query = session.getNamedQuery("SmallRna.findByGenome");
             query.setInteger("genome", genome);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+    
+    //findByGenomeType
+      public List<SmallRna> findByGenomeType(Integer genome, String type) {
+        try {
+            SmallRna gene = new SmallRna();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.findByGenomeType");
+            query.setInteger("genome", genome);
+            query.setString("type", type);
             lista = query.list();
             this.tx.commit();
             return lista;
