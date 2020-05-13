@@ -148,7 +148,7 @@
         </nav>
 
         <div id="first-div" class="row font">
-            <div class="col-sm-6 bottom-btn" style="padding-left: 0px;">
+            <div class="col-sm-12 bottom-btn" style="padding-left: 0px;">
                 <c:choose>
                     <c:when test="${typeOfGoBack eq 'normal'}">
                         <c:choose>
@@ -174,10 +174,8 @@
                         </c:choose>
                     </c:otherwise>
                 </c:choose>
-            </div>
-            <div class="col-sm-6 bottom-btn" align="right">
                 <a href="downloadFiles.htm?fileName=${cytoscapeFileName}">
-                    <button class="btn btn-primary btn-normal">Download files</button>
+                    <button class="btn btn-primary btn-normal">Download network file</button>
                 </a>
             </div>
         </div>
@@ -191,7 +189,7 @@
         </div>
 
         <div id="wrapper" class="row" style="margin-top: 20px; padding-left: 0px; padding-right: 0px;">
-            <div  class="col-md-2">
+            <div id="side-div" class="col-md-2">
                 <div class="col-md-12" style="font-size: 22px;">
                     <span>How to explore the network&nbsp;</span>
                     <a href="#" data-toggle="modal" data-target="#helpModal">
@@ -199,19 +197,20 @@
                     </a>
                 </div>
                 <div class="col-md-12" style="font-size: 22px; margin-top: 20px;">
-                    <span>Network Layout:</span>
+                    <span>Network Layout:</span>&nbsp;
                     <a href="#" data-toggle="modal" data-target="#helpLayoutModal">
                         <i class="fa fa-question-circle" style="color:black; text-rendering: optimizeLegibility;"></i>
                     </a>
+
                     <br>
                     <input type="radio" name="op" id="noOP" value="0" onchange="noOperon()" checked> Genes<br>
                     <input type="radio" name="op" id="opCo" value="1" onchange="operonsCombined()"> Operons<br>
                 </div>
                 <div class="col-md-12 font" style="margin-top: 20px;">
-                    <button id="stop-layout-button" class="btn btn-primary btn-normal" onclick="layoutStatus()">Start Layouting</button>
+                    <button id="stop-layout-button" class="btn btn-primary btn-normal" onclick="layoutStatus()">Improve Layout</button>
                 </div>
             </div>
-            <div  class="col-md-10">
+            <div id="net-div" class="col-md-10">
                 <div id="no-operons"></div>
                 <div id="operons-combined" style="display: none;"></div>
                 <div id="loadingBar">
@@ -227,11 +226,18 @@
 
         <script>
             var screenWidth = $(window).width();
+            //var loaderPosition = (screenWidth / 2) -300; To be in the center of the entire screen
+            //           var sideDivWidth = document.getElementById('side-div').clientWidth;
+            //         var netDivWidth = document.getElementById('net-div').clientWidth;
             if (screenWidth > 1500) {
                 var loaderPosition = (screenWidth / 2) - 600;
             } else {
                 var loaderPosition = (screenWidth / 2) - 450;
             }
+//            console.log("sideDivWidth: " + sideDivWidth);
+            //           console.log("netDivWidth: " + netDivWidth);
+            //         console.log("screenWidth: " + screenWidth);
+            //       console.log("loaderPosition: " + loaderPosition);
             document.getElementById('loader-id').style.marginLeft = loaderPosition + "px";
         </script>
 
@@ -254,9 +260,11 @@
 
 
                             <li><b>Operons:</b> It shows the genes that belongs to an operon in a unique node in yellow</li>
-                            <img class="img-fluid" src="images/Layouts.png" alt="Layouts"> 
+
 
                         </ul>
+
+                        <img class="img-fluid" src="images/Layouts.png" alt="Layouts"> 
 
                     </div>
 
@@ -266,6 +274,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Modal - Help -->
         <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -290,7 +299,7 @@
                         </ul>
                         <p><b>Show node & edge information:</b></p>
                         <ul>
-                            <li><b>A gene or an operon:</b> click in the correspondent node. It shows the locus_tag (gene id), name, protein id, regulator role
+                            <li><b>A gene or an operon:</b> click in the correspondent node. It shows the locus tag (gene id), name, protein id, regulator role
                                 (if a TF) or the genes that belong the operon (if it is an operon). Additionally, it shows a "Network Visualization" button, 
                                 it opens a new tab showing the regulations of the selected gene or operon.</li>
 
@@ -339,7 +348,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel">Regulatoy Interaction Information</h4>
+                        <h4 class="modal-title" id="exampleModalLabel">Regulatory Interaction Information</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -355,7 +364,9 @@
         </div>
 
         <div class="container-fluid font">
-
+            <c:if test="${empty regulationsView}">
+                <p class="centered-top">No entries found in the database.</p>
+            </c:if>
             <script>
                 var regInteractions = [];
                 var geneInfoMap = new Map;
@@ -376,6 +387,7 @@
                     value = '${op.value}';
                     //console.log("value:");
                     //console.log(value);
+                    //console.log("-----------------------------------");
                     var operonObject = {};
                     operonObject = operonObjectFunction(value);
                     operons.set(key, operonObject);
@@ -446,8 +458,10 @@
                                 //console.log(attributes[0] + " = " + attributes[1]);
                                 geneAttributes.locusTag = attributes[1];
                             } else if (attributes[0] == "name") {
+                                //console.log(attributes[0] + " = " + attributes[1]);
                                 geneAttributes.name = attributes[1];
                             } else if (attributes[0] == "proteinId") {
+                                //console.log(attributes[0] + " = " + attributes[1]);
                                 geneAttributes.proteinId = attributes[1];
                             } else if (attributes[0] == "role") {
                                 if (attributes[1] != "null") {
@@ -460,6 +474,7 @@
                                     }
                                 }
                             } else if (attributes[0] == "operon") {
+                                //console.log(attributes[0] + " = " + attributes[1]);
                                 geneAttributes.operon = attributes[1];
                             }
                         }
@@ -478,18 +493,19 @@
                     if (geneObjectOpVis.operon != "") {
                         opInfos.set(key, geneObjectOpVis.operon);
                     }
-                    // console.log("geneObject:");
+                    //console.log("geneObject:");
                     //console.log(geneObject);
                     if (!geneInfoMapCombined.get(geneObjectOpVis.operon)) {
-                        //console.log("Não está em um operon ou é um novo operon:");
+                        //console.log("Não está em um operon ou é um novg.o operon:");
                         //console.log(geneInfoMapCombined.get(geneObject.operon));
                         if (geneObjectOpVis.pos == "0") {
                             //console.log("Não está em um operon:");
                             //console.log("Key: " + key + " - value: " + geneObject.name);
                             geneInfoMapCombined.set(key, geneObjectOpVis);
                         } else {
-                            //console.log(geneObject);
-                            //console.log(geneObject.operon);
+                            //console.log("-----------------");
+                            //console.log(geneObjectOpVis);
+                            //console.log(geneObjectOpVis.operon);
                             var belongToOperon = operons.get(geneObjectOpVis.operon);
                             //console.log(belongToOperon);
                             //for (var i = 0; i < belongToOperon.genes.length; i++) {
@@ -563,7 +579,28 @@
                         //console.log(geneAttributes);
                         return geneAttributes;
                     }
+                    //FIM operon based layout
+                </script>
+            </c:forEach>
+
+            <c:forEach var="srnai" items="${srnasInfo}">
+                <script>
+                    //console.log("genesInfo");
+                    key = '${srnai.key}';
+                    value = '${srnai.value}';
+                    console.log("Key: " + key);
+                    //console.log("Value: " + value);
+                    //console.log("<br>");
+
+                    //GeneInfo for gene based layout
+                    var geneObjectGeneVis = {};
+                    geneObjectGeneVis = geneObjectGeneVisFunction(value);
+                    //console.log("Key: " + key + " - value: " + geneObject.locusTag);
+                    var srnaAttributes = {locusTag: key, name: key, proteinId: '', role: 'X', operon: ''};
+                    //console.log("srnaAttributes.locusTag: " + srnaAttributes.locusTag)
+                    geneInfoMap.set(key, srnaAttributes);
                     //FIM gene based layout
+
                 </script>
             </c:forEach>
 
@@ -699,7 +736,6 @@
                     //Take transcription factor's name or locus_tag
                     //console.log("regulationsView");
                     var regInteraction = [];
-                    regInteraction.id = '${ri.id}';
                     regInteraction.tgId = '${ri.targetGene.id}';
                     if ('${ri.targetGene.name}' != "") {
                         regInteraction.tgName = '${ri.targetGene.name}';
@@ -713,7 +749,7 @@
 
                     regInteraction.tgAltLocusTag = '${ri.targetGene.alternativeLocusTag}';
                     regInteraction.tgProteinId = '${ri.targetGene.proteinId}';
-                    regInteraction.tfId = '${ri.transcriptionFactor.id}';
+                    //regInteraction.tfId = '${ri.transcriptionFactor.id}';
                     if ('${ri.transcriptionFactor.name}' != "") {
                         regInteraction.tfName = '${ri.transcriptionFactor.name}';
                         regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
@@ -724,7 +760,7 @@
                     //                    console.log("tfLocusTag: " + regInteraction.tfLocusTag);
                     //                  console.log("tfName: " + regInteraction.tfName);
 
-                    regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
+                    //regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
                     regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
                     //console.log('${ri.transcriptionFactor.role}');
                     regInteraction.tfRole = '${ri.transcriptionFactor.role}';
@@ -736,7 +772,41 @@
                 </script> 
             </c:forEach>
 
+            <c:forEach items="${rnaRegList}" var="rnaRL">
+                <script>
+                    //Take transcription factor's name or locus_tag
+                    //console.log("rnaRegList");
+
+                    var regInteraction = [];
+                    regInteraction.tfName = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfName);
+                    regInteraction.tfLocusTag = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfLocusTag);
+
+                    if ('${rnaRL.tg.name}' != "") {
+                        regInteraction.tgName = '${rnaRL.tg.name}';
+                        //console.log(regInteraction.tgName);
+                    } else {
+                        regInteraction.tgName = '${rnaRL.tg.locusTag}';
+                        //console.log("regInteraction.tgName: " + regInteraction.tgName);
+                    }
+                    regInteraction.tgLocusTag = '${rnaRL.tg.locusTag}';
+                    //console.log("tg: " + regInteraction.tgLocusTag);
+
+                    regInteraction.tfProteinId = '-';
+                    regInteraction.tfRole = '${rnaRL.role}';
+                    //console.log(regInteraction.tfRole);
+                    regInteraction.riRole = '${rnaRL.role}';
+                    regInteraction.pValue = '${rnaRL.pvalue}';
+                    //console.log("RNA reg info:");
+                    //console.log(regInteraction);
+                    regInteractions.push(regInteraction);
+                </script> 
+            </c:forEach>
+
             <script>
+                //console.log("------------------------END----------------------------");
+                //console.log("------------------------Lets start baby!!!!!!!!!");
                 //console.log("links:");
                 //console.log(regInteractions);
 
@@ -762,12 +832,13 @@
                     //console.log("regInteractions.length: " + regInteractions.length);
                 } else {
                     var screenHeight = $(window).height();
-                    //console.log("screenHeight: " + screenHeight);
+                    //.log("screenHeight: " + screenHeight);
                     screenHeightString = screenHeight.toString(10) + "px";
                 }
 
                 noOperons();
                 function  noOperons() {
+                    console.log("Starting noOperons");
                     var createEdges = {id: "", label: ""};
                     var mapEdges = new Array();
                     var createNodes = {id: "", label: ""};
@@ -795,8 +866,11 @@
                                 riRole = "";
                             }
                         } else if ((regInteractions[i].riRole == "Dual") || (regInteractions[i].riRole == "D")) {
-                            edgeColor = '#0080ff';
+                            edgeColor = "#0080ff";
                             riRole = "Dual";
+                        } else if (regInteractions[i].riRole == "X") {
+                            edgeColor = "#f5b042";
+                            riRole = "X";
                         }
 
                         //console.log("edgeColor: " + edgeColor);
@@ -826,10 +900,13 @@
                     var nodeColor;
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
-                        //  console.log("geneInfoMap.get(mapNode):");
-                        //   console.log(geneInfoMap.get(mapNode));
+                        console.log(mapNode);
+                        console.log("geneInfoMap.get(mapNode):");
+                        console.log(geneInfoMap.get(mapNode));
                         geneInfo = geneInfoMap.get(mapNode);
                         nodeColor = "#b3b3b3";
+                        console.log("mapNode: ");
+                        console.log(geneInfo);
                         //console.log("mapNode.role: " + geneInfo.role);
                         if ((geneInfo.role == "Repressor") || (geneInfo.role == "R")) {
                             //console.log("mapNode.role: " + geneInfo.role)
@@ -843,24 +920,28 @@
                         } else if (geneInfo.role == "unknown") {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#66d9ff";
+                        } else if (geneInfo.role == "X") {
+                            //console.log("mapNode.role: " + geneInfo.role)
+                            nodeColor = "#f5b042";
                         }
                         //console.log("mapNode: " + mapNode);
+
+                        //if (mapNode == "CA40472_RS08255" || mapNode == "clpP" || mapNode == "acnA") {
+                        //    createNodes = {id: mapNode, label: mapNode, color: nodeColor, shape: "database", hidden: true};
+                        //} else {
                         createNodes = {id: mapNode, label: mapNode, color: nodeColor};
+                        //}
                         mapNodesToNodes.push(createNodes);
                         count++;
                     });
                     //console.log(mapNodesToNodes);
                     nodes = new vis.DataSet(mapNodesToNodes);
-
                     // create a network
                     container = document.getElementById('no-operons');
-
                     var data = {
                         nodes: nodes,
                         edges: edges
                     };
-
-
                     // initialize your network!
                     network = new vis.Network(container, data, options);
                     var options = {
@@ -876,9 +957,13 @@
                         edges: {
                             arrows: {
                                 to: {enabled: true, scaleFactor: 1, type: 'arrow'}
+                            },
+                            smooth: {
+                                enabled: false
                             }
                         },
                         physics: {
+                            adaptiveTimestep: true,
                             solver: 'forceAtlas2Based',
                             forceAtlas2Based: {
                                 gravitationalConstant: -50,
@@ -887,11 +972,6 @@
                                 springLength: 100,
                                 damping: 0.4,
                                 avoidOverlap: 0
-                            },
-                            stabilization: {
-                                enabled: true,
-                                iterations: 1000,
-                                updateInterval: 25
                             }
                         },
                         layout: {improvedLayout: false}
@@ -911,14 +991,11 @@
                         document.getElementById('text').innerHTML = '100%';
                         document.getElementById('bar').style.width = '496px';
                         document.getElementById('loadingBar').style.opacity = 0;
-                        stopLayout();
                     });
-
                     //NetWork on Zoom
                     network.on("zoom", function () {
                         pos = [];
                         pos = network.getViewPosition();
-
                         if (network.getScale() >= 2.00) {
 
                             network.moveTo({
@@ -927,8 +1004,10 @@
                             });
                         }
                     });
-
+                    var toggle = false;
                     network.on('click', function (properties) {
+
+                        //console.log("Starting onClick");
                         var ids = properties.nodes;
                         var clickedNodes = nodes.get(ids);
                         //console.log('clicked nodes:', clickedNodes);
@@ -949,6 +1028,8 @@
                                         nodeInfo += "<br>" + "<b>Role:</b> Repressor";
                                     } else if (nodeAux.role == "D") {
                                         nodeInfo += "<br>" + "<b>Role:</b> Dual";
+                                    } else if (nodeAux.role == "X") {
+                                        nodeInfo += "<br>" + "<b>Role:</b> -";
                                     }
                                 } else {
                                     if (nodeAux.role == "unknown") {
@@ -995,14 +1076,12 @@
                                 var edgeInfo;
                                 if (sourceNode.locusTag != sourceNode.name) {
                                     edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>' + '(' + sourceNode.name + ")";
-
                                 } else {
                                     edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>';
                                 }
 
                                 if (targetNode.locusTag != targetNode.name) {
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
-
                                 } else {
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
                                 }
@@ -1022,12 +1101,25 @@
                         //var nodeInfo = "Name: " + d.data.name
                         //      + "<br>" + "Colname: " + d.data.colname;
 
-
+                        //console.log("Finishing onClick");
                     });
+                    network.setOptions({
+                        physics: {enabled: false},
+                        edges: {
+                            smooth: {
+                                enabled: false, //setting to true enables curved lines
+                                //type: "dynamic",
+                                //roundness: 0.5
+                            },
+                        }
+                    });
+                    network.stabilize(1000); // 100 works for me, YMMV
+                    console.log("End noOperons");
                 }
 
+                //console.log("Gene based layout DONE!");
                 function operonsCombined2() {
-
+                    console.log("Starting operonsCombined2");
                     var createEdges = {id: "", label: ""};
                     var mapEdges = new Array();
                     var createNodes = {id: "", label: ""};
@@ -1037,11 +1129,12 @@
                     var nodes;
                     var edges;
                     var container;
-
                     for (var i = 0; i < regInteractionsCombined.length; i++) {
                         //console.log("from: " + regInteractionsCombined[i].tfName);
                         //console.log("to: " + regInteractionsCombined[i].tgName);
                         //console.log("role: " + regInteractionsCombined[i].riRole);
+
+
                         if ((regInteractionsCombined[i].riRole == "R") || (regInteractionsCombined[i].riRole == "Repressor")) {
                             edgeColor = '#ff6666';
                             riRole = "Repressor";
@@ -1090,11 +1183,13 @@
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
                         //console.log("mapNode: " + mapNode);
-                        //console.log("geneInfoMap.get(mapNode):");
+                        //console.log("geneInfoMapCombined.get(mapNode):");
                         //console.log(geneInfoMapCombined.get(mapNode));
                         geneInfo = geneInfoMapCombined.get(mapNode);
                         nodeColor = "#b3b3b3";
                         //console.log("mapNode.role: " + geneInfo.role);
+
+
                         if ((geneInfo.role == "Repressor") || (geneInfo.role == "R")) {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#ff8080";
@@ -1119,32 +1214,34 @@
                     });
                     //console.log(mapNodesToNodes);
                     nodes = new vis.DataSet(mapNodesToNodes);
-
                     // create a network
                     container = document.getElementById('operons-combined');
-
                     var data = {
                         nodes: nodes,
                         edges: edges
                     };
-
                     // initialize your network!
                     network = new vis.Network(container, data, options);
-
                     var options = {
                         autoResize: true,
                         height: screenHeightString,
                         width: '100%',
                         nodes: {
-                            shape: 'ellipse'
+                            shape: 'ellipse',
+                            shapeProperties: {
+                                interpolation: false    // 'true' for intensive zooming
+                            }
                         },
                         edges: {
                             arrows: {
                                 to: {enabled: true, scaleFactor: 1, type: 'arrow'}
+                            },
+                            smooth: {
+                                enabled: false
                             }
                         },
                         physics: {
-                            enabled: true,
+                            adaptiveTimestep: true,
                             solver: 'forceAtlas2Based',
                             forceAtlas2Based: {
                                 gravitationalConstant: -50,
@@ -1153,8 +1250,9 @@
                                 springLength: 100,
                                 damping: 0.4,
                                 avoidOverlap: 0
-                            },
-                        }
+                            }
+                        },
+                        layout: {improvedLayout: false}
                     }
 
                     network.setOptions(options);
@@ -1171,14 +1269,11 @@
                         document.getElementById('text').innerHTML = '100%';
                         document.getElementById('bar').style.width = '496px';
                         document.getElementById('loadingBar').style.opacity = 0;
-                        stopLayout();
                     });
-
                     //NetWork on Zoom
                     network.on("zoom", function () {
                         pos = [];
                         pos = network.getViewPosition();
-
                         if (network.getScale() >= 2.00) {
 
                             network.moveTo({
@@ -1187,7 +1282,6 @@
                             });
                         }
                     });
-
                     network.on('click', function (properties) {
                         var ids = properties.nodes;
                         var clickedNodes = nodes.get(ids);
@@ -1197,11 +1291,9 @@
                             //console.log(clickedNodes);
 
                             var nodeAux = geneInfoMapCombined.get(clickedNodes[0].id);
-
                             var nodeInfo;
                             //console.log(nodeAux);
                             var genesToNewNetwork = [];
-
                             nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="geneInfo.htm?locusTag=' + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>'
                                     + "<br>" + "<b>Name:</b> " + nodeAux.name
                                     + "<br>" + "<b>Protein id:</b> " + '<span><a href="https://www.ncbi.nlm.nih.gov/protein/?term=' + nodeAux.proteinId + '" target="_blank">' + nodeAux.proteinId + '</a><span>';
@@ -1263,18 +1355,15 @@
 
                                 var sourceNode = geneInfoMapCombined.get(clickedEdge[0].from);
                                 var targetNode = geneInfoMapCombined.get(clickedEdge[0].to);
-
                                 var edgeInfo;
                                 if (sourceNode.locusTag != sourceNode.name) {
                                     edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>' + '(' + sourceNode.name + ")";
-
                                 } else {
                                     edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>';
                                 }
 
                                 if (targetNode.locusTag != targetNode.name) {
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
-
                                 } else {
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
                                 }
@@ -1292,6 +1381,18 @@
                         //var nodeInfo = "Name: " + d.data.name
                         //      + "<br>" + "Colname: " + d.data.colname;
                     });
+                    network.setOptions({
+                        physics: {enabled: false},
+                        edges: {
+                            smooth: {
+                                enabled: false, //setting to true enables curved lines
+                                //type: "dynamic",
+                                //roundness: 0.5
+                            },
+                        }
+                    });
+                    network.stabilize(1000); // 100 works for me, YMMV
+                    console.log("End operonsCombined2");
                 }
 
 
@@ -1299,7 +1400,7 @@
                     //console.log(document.getElementById('stop-layout-button').innerHTML);
                     if (document.getElementById('stop-layout-button').innerHTML == "Stop Layouting") {
                         stopLayout();
-                        document.getElementById('stop-layout-button').innerHTML = "Start Layouting";
+                        document.getElementById('stop-layout-button').innerHTML = "Improve Layout";
                     } else {
                         startLayout();
                         document.getElementById('stop-layout-button').innerHTML = "Stop Layouting";
@@ -1332,7 +1433,6 @@
                         }
                     });
                 }
-
             </script>
         </div>
 
@@ -1348,5 +1448,6 @@
                 document.getElementById('operons-combined').style.display = "block";
             }
         </script>
+
     </body>
 </html>

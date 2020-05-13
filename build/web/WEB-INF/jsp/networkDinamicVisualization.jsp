@@ -227,14 +227,11 @@
 
         <script>
             var screenWidth = $(window).width();
-            //console.log("screenWidth: " + screenWidth);
-            //var loaderPosition = (screenWidth / 2) -300; To be in the center of the entire screen
             if (screenWidth > 1500) {
                 var loaderPosition = (screenWidth / 2) - 600;
             } else {
                 var loaderPosition = (screenWidth / 2) - 450;
             }
-            //console.log("loaderPosition: " + loaderPosition);
             document.getElementById('loader-id').style.marginLeft = loaderPosition + "px";
         </script>
 
@@ -358,9 +355,7 @@
         </div>
 
         <div class="container-fluid font">
-            <c:if test="${empty regulationsView}">
-                <p class="centered-top">No entries found in the database.</p>
-            </c:if>
+
             <script>
                 var regInteractions = [];
                 var geneInfoMap = new Map;
