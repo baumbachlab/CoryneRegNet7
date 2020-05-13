@@ -234,7 +234,7 @@
                                     sites are used to create HMM profiles for TFs of the target organisms with hmmbuild from <a href="http://hmmer.org/" style="color: blue" target="_blank">HMMER</a> 
                                     package. The interaction p-value was obtained by applying Tippet's method. The R package Metap was used to calculate the joint p-value of the p-values obtained in 
                                     the homology and motif searches.</p></li>
-                            
+
                         </ul>
                         <p>Software used in the methodology</p>
                         <table id="homologous-table" class="table table-striped" style="width:100%">
@@ -290,6 +290,31 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseEight" style="color: blue">
+
+                            CoryneRegNet's RNA methodology
+                        </a>
+                    </div>
+                    <div id="collapseEight" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum..
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseNine" style="color: blue">
+                            CoryneRegNet's RNA transfer methodology
+                        </a>
+                    </div>
+                    <div id="collapseNine" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum..
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
                         <a class="collapsed card-link" data-toggle="collapse" href="#collapseFive" style="color: blue">
                             CoryneRegNet papers
                         </a>
@@ -325,7 +350,7 @@
                             <p>In this page the user can search regulations or see the TRN of a gene or an organism. He/she can also see a brief a statistics overview in the bottom of the page.</p>
                             <ul>
                                 <li><p>Search by organism: allows the user to search for all organisms or for a specific organism accordingly with the evidence level (See: Home Page Section).
-                                       If a gene is not provided, choosing an organism is mandatory.</p></li>
+                                        If a gene is not provided, choosing an organism is mandatory.</p></li>
                                 <li><p>Search by gene: allows the user to search for gene id (locus tag from NCBI RefSeq or GenBank version) or gene name.</p></li>
                                 <li><p>Search button: search for genomic and regulatory information based on organism and gene options and present it in a table format. If the option ALL is selected a gene is mandatory.</p></li>
                                 <li><p>Network Visualization button: selecting an organism is mandatory to activate this button. It draws a dynamic TRN of the selected organism. It is also possible to visualize the regulations of a gene of the selected organism by entering the geneId or gene name in gene option.</p></li>

@@ -5,15 +5,19 @@
  */
 package com.coryneregnet7.controller;
 
+import com.coryneregnet7.dao.GenomeDAO;
 import com.coryneregnet7.dao.OrganismDAO;
 import com.coryneregnet7.dao.PredictedRegulatoryInteractionDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
+import com.coryneregnet7.dao.SmallRnaDAO;
+import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.Organism;
 import com.coryneregnet7.model.PredictedRegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteraction;
 import com.coryneregnet7.processing.output.CytoscapeFile;
 import com.coryneregnet7.processing.output.OperonsFile;
 import com.coryneregnet7.processing.output.RegulationsFile;
+import com.coryneregnet7.processing.output.RnaFile;
 import com.coryneregnet7.processing.output.ZipFiles;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,6 +61,7 @@ public class DownloadController {
         System.out.println("organismPred: " + organismPred);
         System.out.println("searchType: " + searchType);
         List<String> regFileNames = new ArrayList<>();
+        List<String> rnaFileNames = new ArrayList<>();
         OperonsFile opFiles = new OperonsFile();
         List<String> operonsFilesNames = new ArrayList<>();
         List<String> filesToZip = new ArrayList<>();
@@ -72,16 +77,22 @@ public class DownloadController {
         PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
         ArrayList<RegulatoryInteraction> ris = new ArrayList<>();
         ArrayList<PredictedRegulatoryInteraction> pris = new ArrayList<>();
+        RnaFile rnaFileCreator = new RnaFile();
 
+        //EXPERIMENTAL
         if (searchType == 0) {
+
+            //ALL GENOMES
             if (organismExp == 0) {
                 zipFileName = "TemplateOrganismsFiles.zip";
                 zipFile += zipFileName;
+                System.out.println(zipFileName);
                 File fileToCheck = new File(zipFile);
 
                 if (!fileToCheck.exists()) {
                     regFileNames = regFiles.regulationsFileAllOrganisms("model");
                     for (String regFileName : regFileNames) {
+                        System.out.println("REG NAMES: " + regFileName);
                         regFileName += ".csv";
                         filesToZip.add(regFileName);
                     }
@@ -100,11 +111,20 @@ public class DownloadController {
                         filesToZip.add(cytoscapeFileName);
                     }
 
+                    //CREATE HERE.
+                    rnaFileNames = rnaFileCreator.bringRnaFiles("model");
+                    filesToZip.addAll(rnaFileNames);
+
                     zipFiles.zipFile(filesToZip, zipFile);
                 }
+
+                //BY GENOME
             } else {
 
                 Organism organism = orgDAO.findById(organismExp);
+                GenomeDAO genomeDAO = new GenomeDAO();
+                Genome genome = genomeDAO.findByOrganism(organismExp);
+
                 zipFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + organism.getStrain() + ".zip";
                 System.out.println("zipFileName: " + zipFileName);
                 zipFile += zipFileName;
@@ -128,13 +148,25 @@ public class DownloadController {
                     cytoscapeFileName += ".sif";
                     filesToZip.add(cytoscapeFileName);
 
+                    rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
+                    if (organism.getType().equals("model")) {
+
+                        rnaFileCreator.bringRnaFileExperimental(genome.getId());
+                    }
+                    filesToZip.addAll(rnaFileNames);
+
                     zipFiles.zipFile(filesToZip, zipFile);
                 }
                 //System.out.println("Exists");
             }
+
+            //PREDICTED+EXPERIMENTAL.        
         } else {
+            //ALL GENOMES
             if (organismPred == 0) {
                 zipFileName = "AllOrganismsFiles.zip";
+                // String rnaFile = zipFile;
+                // String rnaRegFile = zipFile;
                 zipFile += zipFileName;
                 File fileToCheck = new File(zipFile);
 
@@ -166,10 +198,18 @@ public class DownloadController {
                         filesToZip.add(cytoscapeFileName);
                     }
 
+                    rnaFileNames = rnaFileCreator.bringRnaFiles("all");
+                    filesToZip.addAll(rnaFileNames);
+
                     zipFiles.zipFile(filesToZip, zipFile);
                 }
+
+                //BY GENOME    
             } else {
                 Organism organism = orgDAO.findById(organismPred);
+                GenomeDAO genomeDAO = new GenomeDAO();
+                Genome genome = genomeDAO.findByOrganism(organismPred);
+
                 zipFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + organism.getStrain() + ".zip";
                 System.out.println("zipFileName: " + zipFileName);
                 zipFile += zipFileName;
@@ -198,6 +238,11 @@ public class DownloadController {
                         cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism.getId(), "");
                     }
 
+                    //rna files:
+                    rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
+                    rnaFileNames.add(rnaFileCreator.bringRnaRegFile(genome.getId()));
+                    filesToZip.addAll(rnaFileNames);
+
                     cytoscapeFileName += ".sif";
                     filesToZip.add(cytoscapeFileName);
 
@@ -205,7 +250,7 @@ public class DownloadController {
                 }
             }
         }
-
+        //System.out.println(zipFileName);
         model.addAttribute("zipFileName", zipFileName);
         return "download";
     }

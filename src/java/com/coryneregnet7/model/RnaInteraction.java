@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnaInteraction.findById", query = "SELECT r FROM RnaInteraction r WHERE r.id = :id")
     , @NamedQuery(name = "RnaInteraction.findByRank", query = "SELECT r FROM RnaInteraction r WHERE r.rank = :rank")
     , @NamedQuery(name = "RnaInteraction.findByMrna", query = "SELECT r FROM RnaInteraction r WHERE r.mrna = :mrna")
+    , @NamedQuery(name = "RnaInteraction.findByGenome", query = "SELECT r FROM RnaInteraction r WHERE r.mrna in (SELECT g.id FROM Gene g WHERE g.genome = :genome)")
     , @NamedQuery(name = "RnaInteraction.bringDistinctMrna", query = "SELECT count(distinct r.mrna) FROM RnaInteraction r")
     , @NamedQuery(name = "RnaInteraction.findBySrna", query = "SELECT r FROM RnaInteraction r WHERE r.srna = :srna")
     , @NamedQuery(name = "RnaInteraction.findByCopraPvalue", query = "SELECT r FROM RnaInteraction r WHERE r.copraPvalue = :copraPvalue")
@@ -261,6 +262,14 @@ public class RnaInteraction implements Serializable {
 
     public String toString2() {
         return "RnaInteraction{" + "id=" + id + ", rank=" + rank + ", copraPvalue=" + copraPvalue + ", copraFdr=" + copraFdr + ", energy=" + energy + ", intaPvalue=" + intaPvalue + ", positionMrna=" + positionMrna + ", positionNcrna=" + positionNcrna + ", positionSeedMrna=" + positionSeedMrna + ", positionSeedNcrna=" + positionSeedNcrna + ", hybridizationEnergy=" + hybridizationEnergy + ", unfoldingEnergyMrna=" + unfoldingEnergyMrna + ", unfoldingEnergyNcrna=" + unfoldingEnergyNcrna + ", srna=" + srna + ", mrna=" + mrna + '}';
+    }
+    
+    public String toFile() {
+        return   srna.getLocusTag() + "\t" + mrna.getLocusTag() + "\t" + rank + "\t" + copraPvalue + "\t" + copraFdr + "\t" + energy 
+                + "\t" + intaPvalue + "\t" + positionMrna + "\t" + positionNcrna 
+                + "\t" + interaction + "\t" + positionSeedMrna 
+                + "\t" + positionSeedNcrna + "\t" + hybridizationEnergy 
+                + "\t" + unfoldingEnergyMrna + "\t" + unfoldingEnergyNcrna;
     }
 
     /**

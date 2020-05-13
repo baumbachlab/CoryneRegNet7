@@ -483,6 +483,22 @@ public class GeneDAO extends GenericDAO {
             return null;
         }
     }
+    
+    public List<Gene> findByNoLocusTag() {
+        try {
+            Gene gene = new Gene();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Gene.findByNoLocusTag");
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 
     public List<Gene> findModels(String type) {
         try {

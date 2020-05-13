@@ -25,12 +25,19 @@ public class GeneTest {
     public static void main(String[] args) {
 
         GeneDAO geneDAO = new GeneDAO();
-        Gene gene = geneDAO.findById(1821465);
-        System.out.println(gene.toString2());
-        ///home/doglas/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/model
-        gene.setHmmProfile("/data/coryne-genus/model/CgATCC13032-hmmer-profiles/cg0012.hmm");
-           gene.setHmmLogo("");
-         geneDAO.update(gene);
+        List<Gene> genes = geneDAO.findByNoLocusTag();
+        for (Gene gene : genes) {
+            System.out.println(gene.toString());
+            geneDAO.delete(gene);
+        }
+        
+        
+////////        Gene gene = geneDAO.findById(1821465);
+////////        System.out.println(gene.toString2());
+////////        ///home/doglas/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/model
+////////        gene.setHmmProfile("/data/coryne-genus/model/CgATCC13032-hmmer-profiles/cg0012.hmm");
+////////           gene.setHmmLogo("");
+////////         geneDAO.update(gene);
          
         
 //        List<Gene> genes = geneDAO.findByGenome(1169);

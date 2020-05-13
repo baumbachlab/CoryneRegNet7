@@ -62,6 +62,8 @@ Contributor(s):
     <mapping class="com.coryneregnet7.model.GeneOperon"/>
     <mapping class="com.coryneregnet7.model.GeneOperonView"/>
     <mapping class="com.coryneregnet7.model.GeneInfoView"/>
+    <mapping class="com.coryneregnet7.model.GenesRegulatedBySrnasView"/>
+    <mapping class="com.coryneregnet7.model.GenesRegulatedByTfSrnaView"/>
     <mapping class="com.coryneregnet7.model.Genome"/>
     <mapping class="com.coryneregnet7.model.Homologous"/>
     <mapping class="com.coryneregnet7.model.Operon"/>

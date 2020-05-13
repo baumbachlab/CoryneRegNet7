@@ -35,13 +35,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findByLocusTag", query = "SELECT s FROM SmallRna s WHERE s.locusTag = :locusTag")
     , @NamedQuery(name = "SmallRna.findBySequence", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence")
     , @NamedQuery(name = "SmallRna.findByGenome", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.findByGenomeType", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome and s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringGenomes", query = "SELECT distinct s.genome FROM SmallRna s")
+    , @NamedQuery(name = "SmallRna.bringGenomesByType", query = "SELECT distinct s.genome FROM SmallRna s WHERE s.genome.organism.type = :type")
     , @NamedQuery(name = "SmallRna.findByType", query = "SELECT s FROM SmallRna s WHERE s.type = :type")
     , @NamedQuery(name = "SmallRna.bringByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
     , @NamedQuery(name = "SmallRna.bringByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type")
     , @NamedQuery(name = "SmallRna.bringFunctionalByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna")
     , @NamedQuery(name = "SmallRna.bringFunctionalByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna")
-    //functionalRna
-    
+//functionalRna
+
 })
 public class SmallRna implements Serializable {
 
@@ -195,6 +198,14 @@ public class SmallRna implements Serializable {
     @Override
     public String toString() {
         return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + '}';
+    }
+
+    public String toFile() {
+
+        return locusTag + "\t" + evidence + "\t" + srnaClass + "\t" + startPosition
+                + "\t" + endPosition + "\t" + genome.getOrganism().getGenera() + " " + genome.getOrganism().getSpecies() + " " + genome.getOrganism().getStrain()
+                + "\t" + orientation + "\t"
+                + "\t" + evidenceFunctional + "\t" + functionalRna + "\t" + sequence;
     }
 
 //    @Override
