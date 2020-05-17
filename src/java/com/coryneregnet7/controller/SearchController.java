@@ -395,7 +395,7 @@ public class SearchController {
         model.addAttribute("rnaInteractions", rnaInteractions);
         return "rnaInfo";
     }
-
+    
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
 

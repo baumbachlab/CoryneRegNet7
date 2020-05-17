@@ -11,10 +11,13 @@ import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.SmallRna;
 import com.coryneregnet7.processing.output.RnaFile;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,53 +26,158 @@ import java.util.List;
 public class SmallRnaTest {
 
     public static void main(String[] args) {
-        SmallRnaTest srTest = new SmallRnaTest();
-        //srTest.getByGenome();
-        
-        //RnaFile creator = new RnaFile();
-        //List<String> rnaFileNames = creator.bringRnaFiles("model");
-        
-        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
-                List<SmallRna> smallRnaList = sRnaDAO.findByGenomeType(1226, "experimental");
+        try {
+            SmallRnaTest srTest = new SmallRnaTest();
+            srTest.changeFiguresNamesCgHomologous();
 
-        for (SmallRna smallRna : smallRnaList) {
-            System.out.println(smallRna);
-        }
-        
-        
+            //RnaFile creator = new RnaFile();
+            //List<String> rnaFileNames = creator.bringRnaFiles("model");
+////        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+////        List<SmallRna> smallRnaList = sRnaDAO.findByGenomeType(1226, "experimental");
+////
+////        for (SmallRna smallRna : smallRnaList) {
+////            System.out.println(smallRna);
+////        }
 //        SmallRnaDAO rDAO = new SmallRnaDAO();
 //        List<Genome> genomes = rDAO.bringGenomesByType("model");
 //        for (Genome genome : genomes) {
 //            System.out.println(genome.toString());
 //        }
-
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SmallRnaTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void statisticTest(){
-          SmallRnaTest srTest = new SmallRnaTest();
+    
+    public void changeFiguresNamesBSRD(){
+        
+    }
+
+    public void changeFiguresNamesCgHomologous() throws InterruptedException {
+        // /data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas
+
+        Hashtable<String, Integer> genomes
+                = new Hashtable<String, Integer>();
+
+        genomes.put("c-efficiens", 1243);
+        genomes.put("c-diphtheriae", 1230);
+        genomes.put("c-jeikeium", 1390);
+        genomes.put("c-pseudotuberculosis", 1274);
+        genomes.put("c-ulcerans", 1288);
+        genomes.put("c-glutamicum", 1226);
+
+        File folder = new File("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas");
+        File[] listOfFiles = folder.listFiles();
+        int nullSrna = 0;
+
+        String organismName = "";
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                System.out.println(file.getName());
+                if (file.getName().startsWith("c-")) {
+                    System.out.println("--name: " + file.getName());
+                    String[] splitedName = file.getName().split("-");
+                    for (int i = 0; i < splitedName.length; i++) {
+                        System.out.println("----------------------" + splitedName[i]);
+                    }
+
+                    organismName = splitedName[0] + "-" + splitedName[1];
+                    System.out.println("organismName " + organismName);
+                    Integer genome = genomes.get(organismName);
+                    System.out.println("genome: " + genome);
+
+                    System.out.println("splitedName[3] " + splitedName[3]);
+                    String locusTag = splitedName[3].replace("_0001_dp.ps", "");
+                    locusTag = locusTag.replace("_0001_aln.ps", "");
+                    locusTag = locusTag.replace("_0001_ali.out", "");
+                    locusTag = locusTag.replace("_0001_ss.ps", "");
+                    locusTag = locusTag.replace("_0001_ss.ps", "");
+                    locusTag = locusTag.replace("_sample", "");
+                    System.out.println("locus tag: " + locusTag);
+
+                    SmallRnaDAO srnaDAO = new SmallRnaDAO();
+                    SmallRna srnaSource = srnaDAO.findByLocusTag(locusTag);
+                    System.out.println("srna " + srnaSource);
+
+                    try {
+                        System.out.println("srnaSource.getId() " + srnaSource.getId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Thread.sleep(50000);
+                    }
+
+                    SmallRna srna = srnaDAO.findByGenomeSourceRna(genome, srnaSource.getId());
+
+                    if (srna != null) {
+                        System.out.println(srna.getId());
+
+                        System.out.println("locus tag: " + locusTag);
+                        String suffix = splitedName[3].replace(locusTag, "");
+                        System.out.println("suffix " + suffix);
+                        File newFile = new File("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + srna.getLocusTag() + suffix);
+                        System.out.println("====>" + "   /data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + srna.getLocusTag() + suffix);
+//                    
+                        rename(file, newFile);
+                        //findByGenomeSourceRna
+                    } else {
+                        System.out.println("SRNA: " + srna);
+                        nullSrna++;
+                    }
+
+                } else {
+                    System.out.println("--NAO É!");
+                }
+
+            }
+        }
+
+        System.out.println("null: " + nullSrna);
+
+    }
+
+    public void rename(File file, File file2) {
+        // File (or directory) with old name
+        //File file = new File("oldname");
+
+        // File (or directory) with new name
+        //File file2 = new File("newname");
+        if (file2.exists()) {
+            System.out.println("FILE EXISTS");
+        }
+
+        // Rename file (or directory)
+        boolean success = file.renameTo(file2);
+
+        if (!success) {
+            System.out.println("DIDN'T WORKED. " + file2.getName());
+            // File was not successfully renamed
+        }
+    }
+
+    public void statisticTest() {
+        SmallRnaTest srTest = new SmallRnaTest();
         //srTest.getByGenome();
 
         SmallRnaDAO rDAO = new SmallRnaDAO();
         Long countSrnaExperimental = rDAO.bringByType("experimental");
         System.out.println("countSrnaExperimental: " + countSrnaExperimental);
-        
+
         Long countFunctionalSrnaExperimental = rDAO.bringFunctionalByType("experimental", true);
         System.out.println("countFunctionalSrnaExperimental: " + countFunctionalSrnaExperimental);
-        
+
         Long countSrnaPredicted = rDAO.bringByNotType("experimental");
         System.out.println("countSrnaPredicted: " + countSrnaPredicted);
-        
+
         Long countFunctionalSrnaPredicted = rDAO.bringFunctionalByNotType("experimental", true);
         System.out.println("countFunctionalSrnaPredicted: " + countFunctionalSrnaPredicted);
-        
-        
+
         RnaInteractionDAO rnaInteractionDAO = new RnaInteractionDAO();
         Long countRnaRegulations = rnaInteractionDAO.bringAll();
-        System.out.println("countRnaRegulations "+countRnaRegulations);
-        
+        System.out.println("countRnaRegulations " + countRnaRegulations);
+
         //bringDistinctMrna
         Long countMrnas = rnaInteractionDAO.bringDistinctMrna();
-        System.out.println("countMrnas "+countMrnas);
+        System.out.println("countMrnas " + countMrnas);
     }
 
     public void getByGenome() {

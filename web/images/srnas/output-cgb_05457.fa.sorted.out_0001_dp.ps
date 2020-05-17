@@ -1,0 +1,968 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: ViennaRNA-2.4.14
+%%CreationDate: Thu May 14 18:35:56 2020
+%%Title: RNA Dot Plot
+%%BoundingBox: 66 211 518 662
+%%DocumentFonts: Helvetica
+%%Pages: 1
+%%EndComments
+
+% Program options: 
+
+% This file contains the square roots of probabilities in the form
+% i  j  sqrt(p(i,j)) ubox
+
+/DPdict 100 dict def
+
+DPdict begin
+
+%%BeginProlog
+
+/logscale false def
+/lpmin 1e-05 log def
+/DataVisible  [ true true true true] def
+/DataTitles   [ false false false false ] def
+/min { 2 copy gt { exch } if pop } bind def
+/max { 2 copy lt { exch } if pop } bind def
+/box { %size x y box - draws box centered on x,y
+   2 index 0.5 mul sub            % x -= 0.5
+   exch 2 index 0.5 mul sub exch  % y -= 0.5
+   3 -1 roll dup rectfill
+} bind def
+/ubox {
+   logscale {
+      log dup add lpmin div 1 exch sub dup 0 lt { pop 0 } if
+   } if
+   3 1 roll
+   exch len exch sub 1 add box
+} bind def
+/lbox {
+   3 1 roll
+   len exch sub 1 add box
+} bind def
+/drawseq { % print sequence along all 4 sides
+[ [0.7 -0.3 0 ]
+  [0.7 0.7 len add 0]
+  [-0.3 len sub -0.4 -90]
+  [-0.3 len sub 0.7 len add -90]
+] {
+   gsave
+    aload pop rotate translate
+    0 1 len 1 sub {
+     dup 0 moveto
+     sequence exch 1 getinterval
+     show
+    } for
+   grestore
+  } forall
+} bind def
+/drawgrid{
+  gsave
+  0.5 dup translate
+  0.01 setlinewidth
+  len log 0.9 sub cvi 10 exch exp  % grid spacing
+  dup 1 gt {
+     dup dup 20 div dup 2 array astore exch 40 div setdash
+  } { [0.3 0.7] 0.1 setdash } ifelse
+  0 exch len {
+     dup dup
+     0 moveto
+     len lineto
+     dup
+     len exch sub 0 exch moveto
+     len exch len exch sub lineto
+     stroke
+  } for
+  [] 0 setdash
+  0.04 setlinewidth
+  currentdict /cutpoint known {
+    cutpoint 1 sub
+    dup dup -1 moveto len 1 add lineto
+    len exch sub dup
+    -1 exch moveto len 1 add exch lineto
+    stroke
+  } if
+  % draw diagonal
+  0 len moveto len 0 lineto stroke
+  grestore
+} bind def
+/drawTitle {
+  currentdict /DPtitle known {
+    % center title text
+    /Helvetica findfont 10 scalefont setfont
+    360 705 moveto DPtitle dup stringwidth pop 2 div neg 0 rmoveto show
+  } if
+} bind def
+/prepareCoords {
+  0 1 3 {
+    % check whether we want to display current data
+    dup DataVisible exch get
+    {
+      % check whether we've actually got some data
+      DataSource exch get dup currentdict exch known {
+        % data source s_j is present, so find length of array
+        currentdict exch get length 
+      } { pop 0 } ifelse
+    } if
+  } for
+  exch dup 5 -1 roll add 4 -1 roll dup 5 1 roll 4 -1 roll add max
+  len add 3 add 700 exch div dup scale
+  exch 1 add exch 1 add translate
+} bind def
+/utri{ % i j prob utri
+  gsave
+  0.5 dup translate
+  1 min 2 div
+  0.85 mul 0.15 add 0.95  0.33
+  3 1 roll % prepare hsb color
+  sethsbcolor
+  % now produce the coordinates for lines
+  exch 1 sub dup len exch sub dup 4 -1 roll dup 3 1 roll dup len exch sub
+  moveto lineto lineto closepath fill
+  grestore
+} bind def
+
+%%EndProlog
+
+/DPtitle {
+  (output-cgb_05457.fa.sorted.out_0001)
+} def
+
+/sequence { (\
+UGCGACGACUCUCACGCUCGUCUGUCCAAUGCAGCUUAAUCUGACCUGGAAGGCGUAACGGUAUGAGUUCAGUGCGUAUCGCGUCCGAGUUGAC\
+) } def
+/len { sequence length } bind def
+
+72 216 translate
+72 6 mul len 1 add div dup scale
+/Helvetica findfont 0.95 scalefont setfont
+
+drawseq
+/hsb {
+dup 0.3 mul 1 exch sub sethsbcolor
+} bind def
+
+
+%draw the grid
+drawgrid
+
+%start of base pair probability data
+0.00 1.00 hsb 1 5 0.007527 ubox
+0.00 1.00 hsb 1 7 0.002818 ubox
+0.00 1.00 hsb 1 14 0.001462 ubox
+0.00 1.00 hsb 1 28 0.004618 ubox
+0.00 1.00 hsb 1 33 0.006268 ubox
+0.00 1.00 hsb 1 71 0.004359 ubox
+0.00 1.00 hsb 1 74 0.005160 ubox
+0.00 1.00 hsb 1 76 0.053317 ubox
+0.00 1.00 hsb 1 78 0.108647 ubox
+0.00 1.00 hsb 1 81 0.005541 ubox
+0.00 1.00 hsb 1 83 0.161895 ubox
+0.00 1.00 hsb 1 87 0.020571 ubox
+0.00 1.00 hsb 1 88 0.006424 ubox
+0.00 1.00 hsb 1 89 0.002887 ubox
+0.00 1.00 hsb 1 92 0.002995 ubox
+0.00 1.00 hsb 1 93 0.014694 ubox
+0.00 1.00 hsb 2 6 0.007283 ubox
+0.00 1.00 hsb 2 9 0.001038 ubox
+0.00 1.00 hsb 2 13 0.001754 ubox
+0.00 1.00 hsb 2 15 0.001419 ubox
+0.00 1.00 hsb 2 17 0.004647 ubox
+0.00 1.00 hsb 2 21 0.003824 ubox
+0.00 1.00 hsb 2 23 0.001363 ubox
+0.00 1.00 hsb 2 25 0.007023 ubox
+0.00 1.00 hsb 2 26 0.001493 ubox
+0.00 1.00 hsb 2 27 0.005101 ubox
+0.00 1.00 hsb 2 32 0.006969 ubox
+0.00 1.00 hsb 2 35 0.002756 ubox
+0.00 1.00 hsb 2 70 0.004829 ubox
+0.00 1.00 hsb 2 73 0.023212 ubox
+0.00 1.00 hsb 2 75 0.076668 ubox
+0.00 1.00 hsb 2 77 0.122612 ubox
+0.00 1.00 hsb 2 80 0.008294 ubox
+0.00 1.00 hsb 2 82 0.305234 ubox
+0.00 1.00 hsb 2 84 0.037202 ubox
+0.00 1.00 hsb 2 85 0.006804 ubox
+0.00 1.00 hsb 2 86 0.026722 ubox
+0.00 1.00 hsb 2 90 0.007051 ubox
+0.00 1.00 hsb 2 91 0.001392 ubox
+0.00 1.00 hsb 2 94 0.059212 ubox
+0.00 1.00 hsb 3 7 0.001965 ubox
+0.00 1.00 hsb 3 16 0.004658 ubox
+0.00 1.00 hsb 3 20 0.004048 ubox
+0.00 1.00 hsb 3 24 0.007669 ubox
+0.00 1.00 hsb 3 31 0.006968 ubox
+0.00 1.00 hsb 3 34 0.002758 ubox
+0.00 1.00 hsb 3 72 0.024087 ubox
+0.00 1.00 hsb 3 74 0.076700 ubox
+0.00 1.00 hsb 3 76 0.123483 ubox
+0.00 1.00 hsb 3 81 0.305462 ubox
+0.00 1.00 hsb 3 83 0.039791 ubox
+0.00 1.00 hsb 3 87 0.012582 ubox
+0.00 1.00 hsb 3 89 0.007410 ubox
+0.00 1.00 hsb 3 92 0.060062 ubox
+0.00 1.00 hsb 4 9 0.001148 ubox
+0.00 1.00 hsb 4 11 0.002948 ubox
+0.00 1.00 hsb 4 13 0.001869 ubox
+0.00 1.00 hsb 4 15 0.004584 ubox
+0.00 1.00 hsb 4 19 0.004075 ubox
+0.00 1.00 hsb 4 22 0.015248 ubox
+0.00 1.00 hsb 4 23 0.001391 ubox
+0.00 1.00 hsb 4 26 0.006874 ubox
+0.00 1.00 hsb 4 30 0.002718 ubox
+0.00 1.00 hsb 4 70 0.010389 ubox
+0.00 1.00 hsb 4 73 0.057098 ubox
+0.00 1.00 hsb 4 75 0.123017 ubox
+0.00 1.00 hsb 4 77 0.001416 ubox
+0.00 1.00 hsb 4 79 0.007348 ubox
+0.00 1.00 hsb 4 80 0.303484 ubox
+0.00 1.00 hsb 4 82 0.039914 ubox
+0.00 1.00 hsb 4 85 0.034116 ubox
+0.00 1.00 hsb 4 86 0.010375 ubox
+0.00 1.00 hsb 4 91 0.057876 ubox
+0.00 1.00 hsb 4 94 0.244060 ubox
+0.00 1.00 hsb 5 10 0.002667 ubox
+0.00 1.00 hsb 5 12 0.001779 ubox
+0.00 1.00 hsb 5 18 0.004057 ubox
+0.00 1.00 hsb 5 21 0.015398 ubox
+0.00 1.00 hsb 5 25 0.006930 ubox
+0.00 1.00 hsb 5 69 0.008806 ubox
+0.00 1.00 hsb 5 73 0.126189 ubox
+0.00 1.00 hsb 5 77 0.188663 ubox
+0.00 1.00 hsb 5 79 0.229905 ubox
+0.00 1.00 hsb 5 84 0.034880 ubox
+0.00 1.00 hsb 5 90 0.056504 ubox
+0.00 1.00 hsb 5 91 0.004101 ubox
+0.00 1.00 hsb 6 16 0.004035 ubox
+0.00 1.00 hsb 6 20 0.015410 ubox
+0.00 1.00 hsb 6 24 0.006925 ubox
+0.00 1.00 hsb 6 72 0.131733 ubox
+0.00 1.00 hsb 6 74 0.037975 ubox
+0.00 1.00 hsb 6 76 0.295969 ubox
+0.00 1.00 hsb 6 81 0.039371 ubox
+0.00 1.00 hsb 6 83 0.034756 ubox
+0.00 1.00 hsb 6 87 0.004100 ubox
+0.00 1.00 hsb 6 89 0.055617 ubox
+0.00 1.00 hsb 6 92 0.922363 ubox
+0.00 1.00 hsb 6 92 0.8508 lbox
+0.00 1.00 hsb 7 13 0.003396 ubox
+0.00 1.00 hsb 7 15 0.004012 ubox
+0.00 1.00 hsb 7 17 0.001016 ubox
+0.00 1.00 hsb 7 19 0.015413 ubox
+0.00 1.00 hsb 7 22 0.006842 ubox
+0.00 1.00 hsb 7 23 0.001390 ubox
+0.00 1.00 hsb 7 26 0.002782 ubox
+0.00 1.00 hsb 7 68 0.002401 ubox
+0.00 1.00 hsb 7 69 0.103773 ubox
+0.00 1.00 hsb 7 70 0.086897 ubox
+0.00 1.00 hsb 7 73 0.025750 ubox
+0.00 1.00 hsb 7 75 0.297040 ubox
+0.00 1.00 hsb 7 77 0.012354 ubox
+0.00 1.00 hsb 7 80 0.039492 ubox
+0.00 1.00 hsb 7 82 0.018131 ubox
+0.00 1.00 hsb 7 85 0.013047 ubox
+0.00 1.00 hsb 7 86 0.004133 ubox
+0.00 1.00 hsb 7 90 0.003014 ubox
+0.00 1.00 hsb 7 91 0.934069 ubox
+0.00 1.00 hsb 7 91 0.8725 lbox
+0.00 1.00 hsb 7 94 0.002780 ubox
+0.00 1.00 hsb 8 12 0.002968 ubox
+0.00 1.00 hsb 8 18 0.015136 ubox
+0.00 1.00 hsb 8 21 0.006955 ubox
+0.00 1.00 hsb 8 25 0.002795 ubox
+0.00 1.00 hsb 8 68 0.126868 ubox
+0.00 1.00 hsb 8 69 0.074464 ubox
+0.00 1.00 hsb 8 73 0.298050 ubox
+0.00 1.00 hsb 8 77 0.026317 ubox
+0.00 1.00 hsb 8 79 0.039260 ubox
+0.00 1.00 hsb 8 84 0.013098 ubox
+0.00 1.00 hsb 8 90 0.936001 ubox
+0.00 1.00 hsb 8 90 0.8761 lbox
+0.00 1.00 hsb 8 91 0.003639 ubox
+0.00 1.00 hsb 9 16 0.012550 ubox
+0.00 1.00 hsb 9 20 0.006945 ubox
+0.00 1.00 hsb 9 24 0.002792 ubox
+0.00 1.00 hsb 9 67 0.135580 ubox
+0.00 1.00 hsb 9 72 0.299400 ubox
+0.00 1.00 hsb 9 74 0.017623 ubox
+0.00 1.00 hsb 9 76 0.026471 ubox
+0.00 1.00 hsb 9 81 0.004340 ubox
+0.00 1.00 hsb 9 83 0.013039 ubox
+0.00 1.00 hsb 9 87 0.003747 ubox
+0.00 1.00 hsb 9 89 0.936419 ubox
+0.00 1.00 hsb 9 89 0.8769 lbox
+0.00 1.00 hsb 9 92 0.002270 ubox
+0.00 1.00 hsb 10 16 0.002682 ubox
+0.00 1.00 hsb 10 66 0.135549 ubox
+0.00 1.00 hsb 10 67 0.001275 ubox
+0.00 1.00 hsb 10 71 0.295246 ubox
+0.00 1.00 hsb 10 72 0.006744 ubox
+0.00 1.00 hsb 10 74 0.003417 ubox
+0.00 1.00 hsb 10 78 0.003712 ubox
+0.00 1.00 hsb 10 87 0.001558 ubox
+0.00 1.00 hsb 10 88 0.936231 ubox
+0.00 1.00 hsb 10 88 0.8765 lbox
+0.00 1.00 hsb 11 16 0.004165 ubox
+0.00 1.00 hsb 11 65 0.135474 ubox
+0.00 1.00 hsb 11 67 0.317796 ubox
+0.00 1.00 hsb 11 72 0.016197 ubox
+0.00 1.00 hsb 11 74 0.010282 ubox
+0.00 1.00 hsb 11 76 0.040580 ubox
+0.00 1.00 hsb 11 81 0.001913 ubox
+0.00 1.00 hsb 11 87 0.935072 ubox
+0.00 1.00 hsb 11 87 0.8744 lbox
+0.00 1.00 hsb 11 89 0.007611 ubox
+0.00 1.00 hsb 12 16 0.001001 ubox
+0.00 1.00 hsb 12 44 0.002945 ubox
+0.00 1.00 hsb 12 57 0.001548 ubox
+0.00 1.00 hsb 12 58 0.001907 ubox
+0.00 1.00 hsb 12 61 0.004180 ubox
+0.00 1.00 hsb 12 63 0.042558 ubox
+0.00 1.00 hsb 12 66 0.320321 ubox
+0.00 1.00 hsb 12 67 0.001436 ubox
+0.00 1.00 hsb 12 71 0.015558 ubox
+0.00 1.00 hsb 12 72 0.002079 ubox
+0.00 1.00 hsb 12 76 0.001124 ubox
+0.00 1.00 hsb 12 78 0.001703 ubox
+0.00 1.00 hsb 12 87 0.004886 ubox
+0.00 1.00 hsb 12 88 0.009259 ubox
+0.00 1.00 hsb 12 93 0.006856 ubox
+0.00 1.00 hsb 13 20 0.002071 ubox
+0.00 1.00 hsb 13 24 0.001702 ubox
+0.00 1.00 hsb 13 43 0.003182 ubox
+0.00 1.00 hsb 13 60 0.004399 ubox
+0.00 1.00 hsb 13 61 0.028142 ubox
+0.00 1.00 hsb 13 65 0.320604 ubox
+0.00 1.00 hsb 13 72 0.007317 ubox
+0.00 1.00 hsb 13 74 0.047699 ubox
+0.00 1.00 hsb 13 76 0.003137 ubox
+0.00 1.00 hsb 13 83 0.007561 ubox
+0.00 1.00 hsb 13 87 0.010050 ubox
+0.00 1.00 hsb 13 92 0.007408 ubox
+0.00 1.00 hsb 14 21 0.003320 ubox
+0.00 1.00 hsb 14 23 0.001647 ubox
+0.00 1.00 hsb 14 25 0.001707 ubox
+0.00 1.00 hsb 14 42 0.003076 ubox
+0.00 1.00 hsb 14 56 0.010228 ubox
+0.00 1.00 hsb 14 62 0.087815 ubox
+0.00 1.00 hsb 14 64 0.317659 ubox
+0.00 1.00 hsb 14 68 0.001860 ubox
+0.00 1.00 hsb 14 69 0.006931 ubox
+0.00 1.00 hsb 14 73 0.047968 ubox
+0.00 1.00 hsb 14 77 0.004902 ubox
+0.00 1.00 hsb 14 84 0.918900 ubox
+0.00 1.00 hsb 14 84 0.8444 lbox
+0.00 1.00 hsb 14 91 0.007241 ubox
+0.00 1.00 hsb 15 20 0.003536 ubox
+0.00 1.00 hsb 15 24 0.002414 ubox
+0.00 1.00 hsb 15 55 0.010702 ubox
+0.00 1.00 hsb 15 60 0.123513 ubox
+0.00 1.00 hsb 15 61 0.087081 ubox
+0.00 1.00 hsb 15 67 0.001889 ubox
+0.00 1.00 hsb 15 72 0.047956 ubox
+0.00 1.00 hsb 15 74 0.003434 ubox
+0.00 1.00 hsb 15 76 0.005039 ubox
+0.00 1.00 hsb 15 81 0.003272 ubox
+0.00 1.00 hsb 15 83 0.933987 ubox
+0.00 1.00 hsb 15 83 0.8723 lbox
+0.00 1.00 hsb 15 92 0.001200 ubox
+0.00 1.00 hsb 16 23 0.001848 ubox
+0.00 1.00 hsb 16 25 0.002600 ubox
+0.00 1.00 hsb 16 35 0.004130 ubox
+0.00 1.00 hsb 16 41 0.001087 ubox
+0.00 1.00 hsb 16 54 0.010656 ubox
+0.00 1.00 hsb 16 56 0.005599 ubox
+0.00 1.00 hsb 16 59 0.124883 ubox
+0.00 1.00 hsb 16 62 0.308559 ubox
+0.00 1.00 hsb 16 68 0.057624 ubox
+0.00 1.00 hsb 16 69 0.003511 ubox
+0.00 1.00 hsb 16 70 0.004378 ubox
+0.00 1.00 hsb 16 73 0.003543 ubox
+0.00 1.00 hsb 16 75 0.005032 ubox
+0.00 1.00 hsb 16 80 0.002645 ubox
+0.00 1.00 hsb 16 82 0.933162 ubox
+0.00 1.00 hsb 16 82 0.8708 lbox
+0.00 1.00 hsb 16 84 0.011320 ubox
+0.00 1.00 hsb 16 85 0.001482 ubox
+0.00 1.00 hsb 16 86 0.001649 ubox
+0.00 1.00 hsb 16 90 0.007901 ubox
+0.00 1.00 hsb 17 24 0.003377 ubox
+0.00 1.00 hsb 17 34 0.004134 ubox
+0.00 1.00 hsb 17 53 0.010570 ubox
+0.00 1.00 hsb 17 55 0.006382 ubox
+0.00 1.00 hsb 17 60 0.015592 ubox
+0.00 1.00 hsb 17 61 0.312833 ubox
+0.00 1.00 hsb 17 67 0.058805 ubox
+0.00 1.00 hsb 17 72 0.003552 ubox
+0.00 1.00 hsb 17 74 0.005007 ubox
+0.00 1.00 hsb 17 81 0.909332 ubox
+0.00 1.00 hsb 17 81 0.8269 lbox
+0.00 1.00 hsb 17 83 0.011563 ubox
+0.00 1.00 hsb 17 89 0.008085 ubox
+0.00 1.00 hsb 18 33 0.004108 ubox
+0.00 1.00 hsb 18 51 0.001053 ubox
+0.00 1.00 hsb 18 52 0.007291 ubox
+0.00 1.00 hsb 18 55 0.012908 ubox
+0.00 1.00 hsb 18 57 0.250691 ubox
+0.00 1.00 hsb 18 58 0.045296 ubox
+0.00 1.00 hsb 18 60 0.307612 ubox
+0.00 1.00 hsb 18 61 0.005046 ubox
+0.00 1.00 hsb 18 66 0.059051 ubox
+0.00 1.00 hsb 18 71 0.003403 ubox
+0.00 1.00 hsb 18 76 0.001941 ubox
+0.00 1.00 hsb 18 78 0.009362 ubox
+0.00 1.00 hsb 18 81 0.006778 ubox
+0.00 1.00 hsb 18 88 0.008091 ubox
+0.00 1.00 hsb 19 24 0.002433 ubox
+0.00 1.00 hsb 19 31 0.003317 ubox
+0.00 1.00 hsb 19 52 0.003822 ubox
+0.00 1.00 hsb 19 53 0.001513 ubox
+0.00 1.00 hsb 19 55 0.965396 ubox
+0.00 1.00 hsb 19 55 0.9320 lbox
+0.00 1.00 hsb 19 60 0.027495 ubox
+0.00 1.00 hsb 19 65 0.058995 ubox
+0.00 1.00 hsb 19 72 0.001781 ubox
+0.00 1.00 hsb 19 76 0.010167 ubox
+0.00 1.00 hsb 19 81 0.002201 ubox
+0.00 1.00 hsb 19 87 0.008076 ubox
+0.00 1.00 hsb 20 26 0.001512 ubox
+0.00 1.00 hsb 20 27 0.001598 ubox
+0.00 1.00 hsb 20 30 0.003272 ubox
+0.00 1.00 hsb 20 32 0.002472 ubox
+0.00 1.00 hsb 20 35 0.005431 ubox
+0.00 1.00 hsb 20 36 0.001274 ubox
+0.00 1.00 hsb 20 45 0.001165 ubox
+0.00 1.00 hsb 20 54 0.996998 ubox
+0.00 1.00 hsb 20 54 0.9940 lbox
+0.00 1.00 hsb 20 56 0.001445 ubox
+0.00 1.00 hsb 20 59 0.027608 ubox
+0.00 1.00 hsb 20 64 0.058635 ubox
+0.00 1.00 hsb 20 75 0.009941 ubox
+0.00 1.00 hsb 20 79 0.005111 ubox
+0.00 1.00 hsb 20 80 0.002519 ubox
+0.00 1.00 hsb 20 86 0.007356 ubox
+0.00 1.00 hsb 21 29 0.003192 ubox
+0.00 1.00 hsb 21 31 0.002026 ubox
+0.00 1.00 hsb 21 44 0.001171 ubox
+0.00 1.00 hsb 21 49 0.002089 ubox
+0.00 1.00 hsb 21 50 0.003626 ubox
+0.00 1.00 hsb 21 51 0.002384 ubox
+0.00 1.00 hsb 21 52 0.001503 ubox
+0.00 1.00 hsb 21 53 0.994478 ubox
+0.00 1.00 hsb 21 53 0.9890 lbox
+0.00 1.00 hsb 21 55 0.001694 ubox
+0.00 1.00 hsb 21 57 0.002870 ubox
+0.00 1.00 hsb 21 58 0.026842 ubox
+0.00 1.00 hsb 21 63 0.057808 ubox
+0.00 1.00 hsb 21 66 0.001659 ubox
+0.00 1.00 hsb 21 74 0.009607 ubox
+0.00 1.00 hsb 21 78 0.005217 ubox
+0.00 1.00 hsb 22 31 0.001549 ubox
+0.00 1.00 hsb 22 34 0.008122 ubox
+0.00 1.00 hsb 22 43 0.001144 ubox
+0.00 1.00 hsb 22 48 0.002206 ubox
+0.00 1.00 hsb 22 49 0.003752 ubox
+0.00 1.00 hsb 22 52 0.994730 ubox
+0.00 1.00 hsb 22 52 0.9895 lbox
+0.00 1.00 hsb 22 53 0.071659 ubox
+0.00 1.00 hsb 22 55 0.003821 ubox
+0.00 1.00 hsb 22 61 0.058351 ubox
+0.00 1.00 hsb 22 65 0.001706 ubox
+0.00 1.00 hsb 22 67 0.001123 ubox
+0.00 1.00 hsb 22 72 0.009568 ubox
+0.00 1.00 hsb 22 76 0.002265 ubox
+0.00 1.00 hsb 23 29 0.001767 ubox
+0.00 1.00 hsb 23 33 0.009330 ubox
+0.00 1.00 hsb 23 48 0.003474 ubox
+0.00 1.00 hsb 23 50 0.004502 ubox
+0.00 1.00 hsb 23 51 0.981843 ubox
+0.00 1.00 hsb 23 51 0.9640 lbox
+0.00 1.00 hsb 23 52 0.070159 ubox
+0.00 1.00 hsb 23 53 0.002176 ubox
+0.00 1.00 hsb 23 55 0.010054 ubox
+0.00 1.00 hsb 23 57 0.002109 ubox
+0.00 1.00 hsb 23 60 0.058324 ubox
+0.00 1.00 hsb 23 63 0.002054 ubox
+0.00 1.00 hsb 23 66 0.001096 ubox
+0.00 1.00 hsb 23 71 0.009573 ubox
+0.00 1.00 hsb 23 76 0.005368 ubox
+0.00 1.00 hsb 23 78 0.001339 ubox
+0.00 1.00 hsb 23 83 0.002460 ubox
+0.00 1.00 hsb 24 32 0.009526 ubox
+0.00 1.00 hsb 24 35 0.001614 ubox
+0.00 1.00 hsb 24 45 0.006361 ubox
+0.00 1.00 hsb 24 54 0.011295 ubox
+0.00 1.00 hsb 24 56 0.002103 ubox
+0.00 1.00 hsb 24 59 0.058346 ubox
+0.00 1.00 hsb 24 62 0.003127 ubox
+0.00 1.00 hsb 24 64 0.001071 ubox
+0.00 1.00 hsb 24 70 0.009523 ubox
+0.00 1.00 hsb 24 75 0.006026 ubox
+0.00 1.00 hsb 24 77 0.001323 ubox
+0.00 1.00 hsb 24 80 0.001377 ubox
+0.00 1.00 hsb 24 82 0.002674 ubox
+0.00 1.00 hsb 24 94 0.001593 ubox
+0.00 1.00 hsb 25 31 0.009072 ubox
+0.00 1.00 hsb 25 34 0.001591 ubox
+0.00 1.00 hsb 25 44 0.006408 ubox
+0.00 1.00 hsb 25 49 0.011217 ubox
+0.00 1.00 hsb 25 50 0.950508 ubox
+0.00 1.00 hsb 25 50 0.9035 lbox
+0.00 1.00 hsb 25 51 0.006177 ubox
+0.00 1.00 hsb 25 53 0.009544 ubox
+0.00 1.00 hsb 25 57 0.001722 ubox
+0.00 1.00 hsb 25 58 0.056266 ubox
+0.00 1.00 hsb 25 63 0.001516 ubox
+0.00 1.00 hsb 25 74 0.005542 ubox
+0.00 1.00 hsb 25 81 0.002604 ubox
+0.00 1.00 hsb 25 93 0.001617 ubox
+0.00 1.00 hsb 26 31 0.001862 ubox
+0.00 1.00 hsb 26 43 0.006363 ubox
+0.00 1.00 hsb 26 48 0.013041 ubox
+0.00 1.00 hsb 26 49 0.997803 ubox
+0.00 1.00 hsb 26 49 0.9956 lbox
+0.00 1.00 hsb 26 52 0.008141 ubox
+0.00 1.00 hsb 26 53 0.012753 ubox
+0.00 1.00 hsb 26 55 0.004842 ubox
+0.00 1.00 hsb 26 61 0.006079 ubox
+0.00 1.00 hsb 26 67 0.003220 ubox
+0.00 1.00 hsb 26 74 0.001612 ubox
+0.00 1.00 hsb 26 76 0.001577 ubox
+0.00 1.00 hsb 26 92 0.001506 ubox
+0.00 1.00 hsb 27 43 0.001062 ubox
+0.00 1.00 hsb 27 48 0.997827 ubox
+0.00 1.00 hsb 27 48 0.9957 lbox
+0.00 1.00 hsb 27 49 0.003321 ubox
+0.00 1.00 hsb 27 52 0.012750 ubox
+0.00 1.00 hsb 27 53 0.005309 ubox
+0.00 1.00 hsb 27 55 0.001432 ubox
+0.00 1.00 hsb 27 60 0.006090 ubox
+0.00 1.00 hsb 27 65 0.001945 ubox
+0.00 1.00 hsb 27 67 0.003618 ubox
+0.00 1.00 hsb 27 72 0.002526 ubox
+0.00 1.00 hsb 27 74 0.002937 ubox
+0.00 1.00 hsb 27 92 0.001355 ubox
+0.00 1.00 hsb 28 42 0.001286 ubox
+0.00 1.00 hsb 28 47 0.966000 ubox
+0.00 1.00 hsb 28 47 0.9332 lbox
+0.00 1.00 hsb 28 56 0.001024 ubox
+0.00 1.00 hsb 28 64 0.001557 ubox
+0.00 1.00 hsb 28 73 0.002977 ubox
+0.00 1.00 hsb 28 91 0.001442 ubox
+0.00 1.00 hsb 29 36 0.001299 ubox
+0.00 1.00 hsb 29 37 0.001498 ubox
+0.00 1.00 hsb 29 40 0.010907 ubox
+0.00 1.00 hsb 29 42 0.001375 ubox
+0.00 1.00 hsb 29 47 0.056132 ubox
+0.00 1.00 hsb 29 56 0.019065 ubox
+0.00 1.00 hsb 29 64 0.005775 ubox
+0.00 1.00 hsb 29 73 0.001349 ubox
+0.00 1.00 hsb 29 77 0.005261 ubox
+0.00 1.00 hsb 29 90 0.001342 ubox
+0.00 1.00 hsb 30 38 0.001113 ubox
+0.00 1.00 hsb 30 39 0.011023 ubox
+0.00 1.00 hsb 30 43 0.004251 ubox
+0.00 1.00 hsb 30 44 0.071392 ubox
+0.00 1.00 hsb 30 50 0.013506 ubox
+0.00 1.00 hsb 30 55 0.019294 ubox
+0.00 1.00 hsb 30 57 0.049744 ubox
+0.00 1.00 hsb 30 58 0.001127 ubox
+0.00 1.00 hsb 30 63 0.005928 ubox
+0.00 1.00 hsb 30 71 0.006439 ubox
+0.00 1.00 hsb 30 72 0.001325 ubox
+0.00 1.00 hsb 30 76 0.005434 ubox
+0.00 1.00 hsb 30 89 0.001217 ubox
+0.00 1.00 hsb 30 93 0.001035 ubox
+0.00 1.00 hsb 31 35 0.001069 ubox
+0.00 1.00 hsb 31 37 0.001157 ubox
+0.00 1.00 hsb 31 41 0.004223 ubox
+0.00 1.00 hsb 31 42 0.003305 ubox
+0.00 1.00 hsb 31 45 0.286932 ubox
+0.00 1.00 hsb 31 46 0.034249 ubox
+0.00 1.00 hsb 31 47 0.002108 ubox
+0.00 1.00 hsb 31 54 0.019137 ubox
+0.00 1.00 hsb 31 56 0.050486 ubox
+0.00 1.00 hsb 31 62 0.005928 ubox
+0.00 1.00 hsb 31 70 0.006570 ubox
+0.00 1.00 hsb 31 75 0.005523 ubox
+0.00 1.00 hsb 31 94 0.002172 ubox
+0.00 1.00 hsb 32 43 0.996206 ubox
+0.00 1.00 hsb 32 43 0.9924 lbox
+0.00 1.00 hsb 32 48 0.017414 ubox
+0.00 1.00 hsb 32 52 0.001199 ubox
+0.00 1.00 hsb 32 53 0.018948 ubox
+0.00 1.00 hsb 32 55 0.050339 ubox
+0.00 1.00 hsb 32 61 0.005902 ubox
+0.00 1.00 hsb 32 74 0.005520 ubox
+0.00 1.00 hsb 32 92 0.008848 ubox
+0.00 1.00 hsb 33 40 0.007268 ubox
+0.00 1.00 hsb 33 42 0.996373 ubox
+0.00 1.00 hsb 33 42 0.9928 lbox
+0.00 1.00 hsb 33 47 0.018333 ubox
+0.00 1.00 hsb 33 56 0.001596 ubox
+0.00 1.00 hsb 33 69 0.008063 ubox
+0.00 1.00 hsb 33 73 0.004981 ubox
+0.00 1.00 hsb 33 91 0.008875 ubox
+0.00 1.00 hsb 34 40 0.008016 ubox
+0.00 1.00 hsb 34 41 0.982903 ubox
+0.00 1.00 hsb 34 41 0.9661 lbox
+0.00 1.00 hsb 34 42 0.006560 ubox
+0.00 1.00 hsb 34 45 0.005472 ubox
+0.00 1.00 hsb 34 46 0.018987 ubox
+0.00 1.00 hsb 34 54 0.050391 ubox
+0.00 1.00 hsb 34 59 0.003322 ubox
+0.00 1.00 hsb 34 68 0.008619 ubox
+0.00 1.00 hsb 34 73 0.002213 ubox
+0.00 1.00 hsb 34 90 0.008895 ubox
+0.00 1.00 hsb 35 43 0.014109 ubox
+0.00 1.00 hsb 35 48 0.004477 ubox
+0.00 1.00 hsb 35 49 0.006069 ubox
+0.00 1.00 hsb 35 52 0.014979 ubox
+0.00 1.00 hsb 35 53 0.050400 ubox
+0.00 1.00 hsb 35 67 0.008650 ubox
+0.00 1.00 hsb 35 72 0.003608 ubox
+0.00 1.00 hsb 35 89 0.008900 ubox
+0.00 1.00 hsb 36 43 0.002635 ubox
+0.00 1.00 hsb 36 44 0.017937 ubox
+0.00 1.00 hsb 36 48 0.005923 ubox
+0.00 1.00 hsb 36 49 0.007340 ubox
+0.00 1.00 hsb 36 50 0.001761 ubox
+0.00 1.00 hsb 36 51 0.015079 ubox
+0.00 1.00 hsb 36 52 0.050110 ubox
+0.00 1.00 hsb 36 58 0.003310 ubox
+0.00 1.00 hsb 36 66 0.008636 ubox
+0.00 1.00 hsb 36 71 0.003514 ubox
+0.00 1.00 hsb 36 88 0.008836 ubox
+0.00 1.00 hsb 37 43 0.017987 ubox
+0.00 1.00 hsb 37 44 0.001496 ubox
+0.00 1.00 hsb 37 48 0.008414 ubox
+0.00 1.00 hsb 37 49 0.001821 ubox
+0.00 1.00 hsb 37 50 0.012125 ubox
+0.00 1.00 hsb 37 51 0.042676 ubox
+0.00 1.00 hsb 37 52 0.001486 ubox
+0.00 1.00 hsb 37 57 0.003460 ubox
+0.00 1.00 hsb 37 65 0.008589 ubox
+0.00 1.00 hsb 37 87 0.007144 ubox
+0.00 1.00 hsb 38 42 0.015000 ubox
+0.00 1.00 hsb 38 47 0.008592 ubox
+0.00 1.00 hsb 38 56 0.003373 ubox
+0.00 1.00 hsb 38 64 0.008141 ubox
+0.00 1.00 hsb 38 69 0.002275 ubox
+0.00 1.00 hsb 39 47 0.001835 ubox
+0.00 1.00 hsb 39 62 0.003384 ubox
+0.00 1.00 hsb 39 64 0.001190 ubox
+0.00 1.00 hsb 39 68 0.002220 ubox
+0.00 1.00 hsb 40 48 0.002160 ubox
+0.00 1.00 hsb 40 49 0.021177 ubox
+0.00 1.00 hsb 40 50 0.044844 ubox
+0.00 1.00 hsb 40 53 0.003513 ubox
+0.00 1.00 hsb 40 61 0.003339 ubox
+0.00 1.00 hsb 40 63 0.001595 ubox
+0.00 1.00 hsb 40 66 0.004626 ubox
+0.00 1.00 hsb 40 67 0.001286 ubox
+0.00 1.00 hsb 40 93 0.006632 ubox
+0.00 1.00 hsb 41 48 0.023261 ubox
+0.00 1.00 hsb 41 49 0.046144 ubox
+0.00 1.00 hsb 41 52 0.005135 ubox
+0.00 1.00 hsb 41 55 0.001087 ubox
+0.00 1.00 hsb 41 60 0.003320 ubox
+0.00 1.00 hsb 41 61 0.007861 ubox
+0.00 1.00 hsb 41 65 0.004785 ubox
+0.00 1.00 hsb 41 72 0.002337 ubox
+0.00 1.00 hsb 41 92 0.007221 ubox
+0.00 1.00 hsb 42 48 0.045006 ubox
+0.00 1.00 hsb 42 49 0.001069 ubox
+0.00 1.00 hsb 42 51 0.005169 ubox
+0.00 1.00 hsb 42 55 0.004084 ubox
+0.00 1.00 hsb 42 58 0.001253 ubox
+0.00 1.00 hsb 42 60 0.007842 ubox
+0.00 1.00 hsb 42 71 0.002361 ubox
+0.00 1.00 hsb 42 76 0.001305 ubox
+0.00 1.00 hsb 42 92 0.006643 ubox
+0.00 1.00 hsb 43 47 0.020932 ubox
+0.00 1.00 hsb 43 54 0.004760 ubox
+0.00 1.00 hsb 43 59 0.007703 ubox
+0.00 1.00 hsb 43 70 0.002366 ubox
+0.00 1.00 hsb 43 75 0.001657 ubox
+0.00 1.00 hsb 43 85 0.001342 ubox
+0.00 1.00 hsb 43 91 0.011863 ubox
+0.00 1.00 hsb 44 56 0.006026 ubox
+0.00 1.00 hsb 44 62 0.004907 ubox
+0.00 1.00 hsb 44 69 0.002316 ubox
+0.00 1.00 hsb 44 84 0.001348 ubox
+0.00 1.00 hsb 44 90 0.012675 ubox
+0.00 1.00 hsb 45 53 0.006664 ubox
+0.00 1.00 hsb 45 55 0.006355 ubox
+0.00 1.00 hsb 45 61 0.004906 ubox
+0.00 1.00 hsb 45 74 0.001169 ubox
+0.00 1.00 hsb 45 83 0.001336 ubox
+0.00 1.00 hsb 45 89 0.012714 ubox
+0.00 1.00 hsb 46 52 0.006719 ubox
+0.00 1.00 hsb 46 53 0.006280 ubox
+0.00 1.00 hsb 46 60 0.004871 ubox
+0.00 1.00 hsb 46 67 0.002318 ubox
+0.00 1.00 hsb 46 72 0.002188 ubox
+0.00 1.00 hsb 46 87 0.002455 ubox
+0.00 1.00 hsb 46 89 0.002418 ubox
+0.00 1.00 hsb 47 51 0.006055 ubox
+0.00 1.00 hsb 47 52 0.006122 ubox
+0.00 1.00 hsb 47 55 0.003511 ubox
+0.00 1.00 hsb 47 58 0.001023 ubox
+0.00 1.00 hsb 47 60 0.001122 ubox
+0.00 1.00 hsb 47 66 0.002314 ubox
+0.00 1.00 hsb 47 71 0.002206 ubox
+0.00 1.00 hsb 47 87 0.013451 ubox
+0.00 1.00 hsb 47 88 0.002327 ubox
+0.00 1.00 hsb 48 54 0.003859 ubox
+0.00 1.00 hsb 48 56 0.001028 ubox
+0.00 1.00 hsb 48 59 0.003431 ubox
+0.00 1.00 hsb 48 70 0.002054 ubox
+0.00 1.00 hsb 48 80 0.001113 ubox
+0.00 1.00 hsb 48 86 0.016928 ubox
+0.00 1.00 hsb 49 54 0.001272 ubox
+0.00 1.00 hsb 49 64 0.001688 ubox
+0.00 1.00 hsb 49 69 0.001860 ubox
+0.00 1.00 hsb 49 70 0.001158 ubox
+0.00 1.00 hsb 49 79 0.001021 ubox
+0.00 1.00 hsb 49 80 0.002240 ubox
+0.00 1.00 hsb 49 85 0.016932 ubox
+0.00 1.00 hsb 49 86 0.001368 ubox
+0.00 1.00 hsb 50 68 0.001648 ubox
+0.00 1.00 hsb 50 69 0.001550 ubox
+0.00 1.00 hsb 50 79 0.002255 ubox
+0.00 1.00 hsb 50 84 0.013997 ubox
+0.00 1.00 hsb 51 56 0.002090 ubox
+0.00 1.00 hsb 51 68 0.001841 ubox
+0.00 1.00 hsb 51 77 0.002774 ubox
+0.00 1.00 hsb 51 79 0.001960 ubox
+0.00 1.00 hsb 51 84 0.009942 ubox
+0.00 1.00 hsb 52 59 0.004083 ubox
+0.00 1.00 hsb 52 62 0.001484 ubox
+0.00 1.00 hsb 52 69 0.001687 ubox
+0.00 1.00 hsb 52 80 0.001823 ubox
+0.00 1.00 hsb 52 82 0.001289 ubox
+0.00 1.00 hsb 52 85 0.010108 ubox
+0.00 1.00 hsb 52 86 0.004870 ubox
+0.00 1.00 hsb 53 59 0.001960 ubox
+0.00 1.00 hsb 53 62 0.004439 ubox
+0.00 1.00 hsb 53 68 0.002057 ubox
+0.00 1.00 hsb 53 73 0.001695 ubox
+0.00 1.00 hsb 53 75 0.004558 ubox
+0.00 1.00 hsb 53 77 0.020461 ubox
+0.00 1.00 hsb 53 80 0.001176 ubox
+0.00 1.00 hsb 53 82 0.018433 ubox
+0.00 1.00 hsb 53 84 0.010392 ubox
+0.00 1.00 hsb 53 85 0.004855 ubox
+0.00 1.00 hsb 54 60 0.003094 ubox
+0.00 1.00 hsb 54 61 0.004556 ubox
+0.00 1.00 hsb 54 65 0.003866 ubox
+0.00 1.00 hsb 54 67 0.002089 ubox
+0.00 1.00 hsb 54 72 0.001808 ubox
+0.00 1.00 hsb 54 74 0.004565 ubox
+0.00 1.00 hsb 54 76 0.021440 ubox
+0.00 1.00 hsb 54 81 0.018509 ubox
+0.00 1.00 hsb 54 83 0.011509 ubox
+0.00 1.00 hsb 55 59 0.018966 ubox
+0.00 1.00 hsb 55 64 0.005485 ubox
+0.00 1.00 hsb 55 70 0.007751 ubox
+0.00 1.00 hsb 55 73 0.004294 ubox
+0.00 1.00 hsb 55 75 0.026745 ubox
+0.00 1.00 hsb 55 79 0.037541 ubox
+0.00 1.00 hsb 55 80 0.055656 ubox
+0.00 1.00 hsb 55 82 0.011683 ubox
+0.00 1.00 hsb 55 85 0.003018 ubox
+0.00 1.00 hsb 55 86 0.001869 ubox
+0.00 1.00 hsb 56 60 0.004084 ubox
+0.00 1.00 hsb 56 61 0.002469 ubox
+0.00 1.00 hsb 56 63 0.006685 ubox
+0.00 1.00 hsb 56 65 0.003392 ubox
+0.00 1.00 hsb 56 71 0.004656 ubox
+0.00 1.00 hsb 56 72 0.002051 ubox
+0.00 1.00 hsb 56 74 0.026608 ubox
+0.00 1.00 hsb 56 76 0.002198 ubox
+0.00 1.00 hsb 56 78 0.059827 ubox
+0.00 1.00 hsb 56 81 0.008463 ubox
+0.00 1.00 hsb 56 83 0.001337 ubox
+0.00 1.00 hsb 57 62 0.006527 ubox
+0.00 1.00 hsb 57 64 0.003478 ubox
+0.00 1.00 hsb 57 69 0.028508 ubox
+0.00 1.00 hsb 57 73 0.021876 ubox
+0.00 1.00 hsb 57 77 0.045349 ubox
+0.00 1.00 hsb 57 79 0.024129 ubox
+0.00 1.00 hsb 57 84 0.001483 ubox
+0.00 1.00 hsb 58 62 0.001579 ubox
+0.00 1.00 hsb 58 64 0.001318 ubox
+0.00 1.00 hsb 58 68 0.033198 ubox
+0.00 1.00 hsb 58 73 0.022997 ubox
+0.00 1.00 hsb 58 77 0.343316 ubox
+0.00 1.00 hsb 58 79 0.007124 ubox
+0.00 1.00 hsb 58 84 0.015948 ubox
+0.00 1.00 hsb 59 65 0.006304 ubox
+0.00 1.00 hsb 59 67 0.033654 ubox
+0.00 1.00 hsb 59 72 0.026695 ubox
+0.00 1.00 hsb 59 74 0.010101 ubox
+0.00 1.00 hsb 59 76 0.357905 ubox
+0.00 1.00 hsb 59 81 0.212288 ubox
+0.00 1.00 hsb 59 83 0.016857 ubox
+0.00 1.00 hsb 59 87 0.001032 ubox
+0.00 1.00 hsb 60 64 0.003990 ubox
+0.00 1.00 hsb 60 68 0.001758 ubox
+0.00 1.00 hsb 60 69 0.002146 ubox
+0.00 1.00 hsb 60 70 0.020811 ubox
+0.00 1.00 hsb 60 73 0.009931 ubox
+0.00 1.00 hsb 60 75 0.336114 ubox
+0.00 1.00 hsb 60 77 0.013305 ubox
+0.00 1.00 hsb 60 79 0.004422 ubox
+0.00 1.00 hsb 60 80 0.840665 ubox
+0.00 1.00 hsb 60 80 0.7067 lbox
+0.00 1.00 hsb 60 82 0.016852 ubox
+0.00 1.00 hsb 60 86 0.002452 ubox
+0.00 1.00 hsb 61 68 0.002510 ubox
+0.00 1.00 hsb 61 69 0.020079 ubox
+0.00 1.00 hsb 61 70 0.019757 ubox
+0.00 1.00 hsb 61 73 0.011047 ubox
+0.00 1.00 hsb 61 75 0.195288 ubox
+0.00 1.00 hsb 61 79 0.844185 ubox
+0.00 1.00 hsb 61 79 0.7126 lbox
+0.00 1.00 hsb 61 80 0.055907 ubox
+0.00 1.00 hsb 61 82 0.003439 ubox
+0.00 1.00 hsb 61 85 0.002462 ubox
+0.00 1.00 hsb 62 66 0.001696 ubox
+0.00 1.00 hsb 62 67 0.001987 ubox
+0.00 1.00 hsb 62 71 0.009555 ubox
+0.00 1.00 hsb 62 72 0.010411 ubox
+0.00 1.00 hsb 62 74 0.230857 ubox
+0.00 1.00 hsb 62 78 0.845086 ubox
+0.00 1.00 hsb 62 78 0.7142 lbox
+0.00 1.00 hsb 62 81 0.003495 ubox
+0.00 1.00 hsb 63 68 0.004337 ubox
+0.00 1.00 hsb 63 69 0.006725 ubox
+0.00 1.00 hsb 63 73 0.229019 ubox
+0.00 1.00 hsb 63 77 0.844748 ubox
+0.00 1.00 hsb 63 77 0.7136 lbox
+0.00 1.00 hsb 63 79 0.067013 ubox
+0.00 1.00 hsb 63 84 0.001855 ubox
+0.00 1.00 hsb 64 71 0.319787 ubox
+0.00 1.00 hsb 64 72 0.209498 ubox
+0.00 1.00 hsb 64 74 0.002824 ubox
+0.00 1.00 hsb 64 76 0.841921 ubox
+0.00 1.00 hsb 64 76 0.7088 lbox
+0.00 1.00 hsb 64 78 0.071043 ubox
+0.00 1.00 hsb 64 81 0.001337 ubox
+0.00 1.00 hsb 64 83 0.001852 ubox
+0.00 1.00 hsb 65 69 0.006079 ubox
+0.00 1.00 hsb 65 70 0.327454 ubox
+0.00 1.00 hsb 65 73 0.006775 ubox
+0.00 1.00 hsb 65 75 0.823280 ubox
+0.00 1.00 hsb 65 75 0.6778 lbox
+0.00 1.00 hsb 65 77 0.072045 ubox
+0.00 1.00 hsb 65 80 0.016043 ubox
+0.00 1.00 hsb 65 82 0.001780 ubox
+0.00 1.00 hsb 65 85 0.001008 ubox
+0.00 1.00 hsb 66 73 0.411571 ubox
+0.00 1.00 hsb 66 77 0.003803 ubox
+0.00 1.00 hsb 66 79 0.015858 ubox
+0.00 1.00 hsb 66 84 0.001002 ubox
+0.00 1.00 hsb 67 73 0.209392 ubox
+0.00 1.00 hsb 67 75 0.174245 ubox
+0.00 1.00 hsb 67 79 0.003062 ubox
+0.00 1.00 hsb 67 80 0.003059 ubox
+0.00 1.00 hsb 67 85 0.001580 ubox
+0.00 1.00 hsb 67 86 0.002866 ubox
+0.00 1.00 hsb 68 72 0.164695 ubox
+0.00 1.00 hsb 68 74 0.182985 ubox
+0.00 1.00 hsb 68 76 0.001651 ubox
+0.00 1.00 hsb 68 78 0.003713 ubox
+0.00 1.00 hsb 68 88 0.001718 ubox
+0.00 1.00 hsb 68 89 0.006072 ubox
+0.00 1.00 hsb 69 74 0.022525 ubox
+0.00 1.00 hsb 69 76 0.003441 ubox
+0.00 1.00 hsb 69 78 0.001944 ubox
+0.00 1.00 hsb 69 87 0.002046 ubox
+0.00 1.00 hsb 69 88 0.024763 ubox
+0.00 1.00 hsb 69 93 0.005355 ubox
+0.00 1.00 hsb 70 74 0.028377 ubox
+0.00 1.00 hsb 70 76 0.009656 ubox
+0.00 1.00 hsb 70 83 0.002415 ubox
+0.00 1.00 hsb 70 87 0.031167 ubox
+0.00 1.00 hsb 70 89 0.001973 ubox
+0.00 1.00 hsb 70 92 0.007537 ubox
+0.00 1.00 hsb 71 77 0.003032 ubox
+0.00 1.00 hsb 71 79 0.001850 ubox
+0.00 1.00 hsb 71 84 0.005480 ubox
+0.00 1.00 hsb 71 91 0.007491 ubox
+0.00 1.00 hsb 72 77 0.001732 ubox
+0.00 1.00 hsb 72 79 0.004511 ubox
+0.00 1.00 hsb 72 80 0.007366 ubox
+0.00 1.00 hsb 72 82 0.011043 ubox
+0.00 1.00 hsb 72 84 0.013820 ubox
+0.00 1.00 hsb 72 85 0.037927 ubox
+0.00 1.00 hsb 72 86 0.031938 ubox
+0.00 1.00 hsb 72 90 0.006458 ubox
+0.00 1.00 hsb 72 94 0.003959 ubox
+0.00 1.00 hsb 73 78 0.004647 ubox
+0.00 1.00 hsb 73 81 0.011058 ubox
+0.00 1.00 hsb 73 83 0.051416 ubox
+0.00 1.00 hsb 73 87 0.001921 ubox
+0.00 1.00 hsb 73 88 0.001838 ubox
+0.00 1.00 hsb 73 89 0.002705 ubox
+0.00 1.00 hsb 73 93 0.003992 ubox
+0.00 1.00 hsb 74 79 0.001226 ubox
+0.00 1.00 hsb 74 80 0.011762 ubox
+0.00 1.00 hsb 74 82 0.076811 ubox
+0.00 1.00 hsb 74 84 0.042791 ubox
+0.00 1.00 hsb 74 85 0.007227 ubox
+0.00 1.00 hsb 74 86 0.002047 ubox
+0.00 1.00 hsb 74 90 0.001778 ubox
+0.00 1.00 hsb 74 94 0.002025 ubox
+0.00 1.00 hsb 75 81 0.076946 ubox
+0.00 1.00 hsb 75 83 0.045028 ubox
+0.00 1.00 hsb 75 87 0.004413 ubox
+0.00 1.00 hsb 75 89 0.001892 ubox
+0.00 1.00 hsb 75 92 0.009457 ubox
+0.00 1.00 hsb 76 80 0.073326 ubox
+0.00 1.00 hsb 76 82 0.045817 ubox
+0.00 1.00 hsb 76 85 0.002902 ubox
+0.00 1.00 hsb 76 86 0.004552 ubox
+0.00 1.00 hsb 76 90 0.002930 ubox
+0.00 1.00 hsb 76 91 0.010943 ubox
+0.00 1.00 hsb 76 94 0.008600 ubox
+0.00 1.00 hsb 77 81 0.042866 ubox
+0.00 1.00 hsb 77 89 0.002565 ubox
+0.00 1.00 hsb 77 92 0.007179 ubox
+0.00 1.00 hsb 77 93 0.008166 ubox
+0.00 1.00 hsb 78 84 0.003223 ubox
+0.00 1.00 hsb 78 90 0.005369 ubox
+0.00 1.00 hsb 78 91 0.007691 ubox
+0.00 1.00 hsb 79 83 0.003061 ubox
+0.00 1.00 hsb 79 88 0.074075 ubox
+0.00 1.00 hsb 79 89 0.003237 ubox
+0.00 1.00 hsb 79 92 0.007267 ubox
+0.00 1.00 hsb 79 93 0.057062 ubox
+0.00 1.00 hsb 80 87 0.079088 ubox
+0.00 1.00 hsb 80 89 0.010228 ubox
+0.00 1.00 hsb 80 92 0.062414 ubox
+0.00 1.00 hsb 81 85 0.003029 ubox
+0.00 1.00 hsb 81 86 0.075377 ubox
+0.00 1.00 hsb 81 90 0.058917 ubox
+0.00 1.00 hsb 81 91 0.044357 ubox
+0.00 1.00 hsb 81 94 0.003433 ubox
+0.00 1.00 hsb 82 87 0.008490 ubox
+0.00 1.00 hsb 82 89 0.074058 ubox
+0.00 1.00 hsb 82 92 0.010514 ubox
+0.00 1.00 hsb 83 90 0.003244 ubox
+0.00 1.00 hsb 83 91 0.010600 ubox
+0.00 1.00 hsb 83 94 0.217126 ubox
+0.00 1.00 hsb 84 88 0.005567 ubox
+0.00 1.00 hsb 84 89 0.003447 ubox
+0.00 1.00 hsb 84 92 0.002358 ubox
+0.00 1.00 hsb 84 93 0.221180 ubox
+0.00 1.00 hsb 85 89 0.006195 ubox
+0.00 1.00 hsb 85 92 0.220600 ubox
+0.00 1.00 hsb 86 92 0.037885 ubox
+0.00 1.00 hsb 87 91 0.025941 ubox
+0.00 1.00 hsb 87 94 0.009210 ubox
+0.00 1.00 hsb 89 94 0.007647 ubox
+showpage
+end
+%%EOF

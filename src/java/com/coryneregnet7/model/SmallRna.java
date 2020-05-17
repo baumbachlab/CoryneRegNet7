@@ -33,8 +33,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findRepeated", query = "SELECT s FROM SmallRna s WHERE s.startPosition= :startPosition and s.endPosition =:endPosition and s.orientation =:orientation and s.genome =:genome")
     , @NamedQuery(name = "SmallRna.findRepeatedPos", query = "SELECT s FROM SmallRna s WHERE s.startPosition= :startPosition and s.endPosition =:endPosition and s.genome =:genome")
     , @NamedQuery(name = "SmallRna.findByLocusTag", query = "SELECT s FROM SmallRna s WHERE s.locusTag = :locusTag")
+    , @NamedQuery(name = "SmallRna.findForRNAalifold", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence and s.evidence like :evidence and s.genome = :genome")
     , @NamedQuery(name = "SmallRna.findBySequence", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence")
     , @NamedQuery(name = "SmallRna.findByGenome", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.findByGenomeSourceRna", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome and s.sourceRna = :sourceRna")
     , @NamedQuery(name = "SmallRna.findByGenomeType", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome and s.type = :type")
     , @NamedQuery(name = "SmallRna.bringGenomes", query = "SELECT distinct s.genome FROM SmallRna s")
     , @NamedQuery(name = "SmallRna.bringGenomesByType", query = "SELECT distinct s.genome FROM SmallRna s WHERE s.genome.organism.type = :type")
@@ -87,6 +89,15 @@ public class SmallRna implements Serializable {
     private String evidenceFunctional;
     @Column(name = "functional_rna")
     private Boolean functionalRna;
+    @Size(max = 2147483647)
+    @Column(name = "aln_figure")
+    private String alnFigure;
+    @Size(max = 2147483647)
+    @Column(name = "dp_figure")
+    private String dpFigure;
+    @Size(max = 2147483647)
+    @Column(name = "ss_figure")
+    private String ssFigure;
 
     public SmallRna() {
     }
@@ -197,7 +208,7 @@ public class SmallRna implements Serializable {
 
     @Override
     public String toString() {
-        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + '}';
+        return "SmallRna{" + "id=" + id + ", locusTag=" + locusTag + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", genome=" + genome + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + ", alnFigure=" + alnFigure + ", dpFigure=" + dpFigure + ", ssFigure=" + ssFigure + '}';
     }
 
     public String toFile() {
@@ -246,6 +257,48 @@ public class SmallRna implements Serializable {
      */
     public void setEvidenceFunctional(String evidenceFunctional) {
         this.evidenceFunctional = evidenceFunctional;
+    }
+
+    /**
+     * @return the alnFigure
+     */
+    public String getAlnFigure() {
+        return alnFigure;
+    }
+
+    /**
+     * @param alnFigure the alnFigure to set
+     */
+    public void setAlnFigure(String alnFigure) {
+        this.alnFigure = alnFigure;
+    }
+
+    /**
+     * @return the dpFigure
+     */
+    public String getDpFigure() {
+        return dpFigure;
+    }
+
+    /**
+     * @param dpFigure the dpFigure to set
+     */
+    public void setDpFigure(String dpFigure) {
+        this.dpFigure = dpFigure;
+    }
+
+    /**
+     * @return the ssFigure
+     */
+    public String getSsFigure() {
+        return ssFigure;
+    }
+
+    /**
+     * @param ssFigure the ssFigure to set
+     */
+    public void setSsFigure(String ssFigure) {
+        this.ssFigure = ssFigure;
     }
 
 }

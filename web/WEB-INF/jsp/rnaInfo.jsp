@@ -22,6 +22,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <link type="text/css" rel="stylesheet" href="css/main.css">
         <link type="text/css" rel="stylesheet" href="css/geneInfo.css">
         <script type="text/javascript" src="js/mainjs.js"></script>
@@ -56,6 +57,7 @@
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
+
         </style>
     </head>
 
@@ -109,12 +111,12 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="title-size text-center">Information recovered from ${type} database</div>
+                <div class="title-size text-center">${type} database</div>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid badge badge-light go-top-row" style="opacity: 0.9; margin-top: 25px;">
+    <div class="container-fluid badge badge-light go-top-row" >
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
@@ -130,26 +132,131 @@
 
         <!-- Tab panes -->
         <div class="tab-content container-fluid">
-            <div id="gene" class="tab-pane active gene-info"><br>
-                <span>Locus tag: ${srna.locusTag}</span><br>  
-                <span>Evidence: ${srna.evidence}</span><br>  
-                <c:if test="${type eq 'predicted'}">
-                    <span>Source RNA: 
-                        <a style="color: black; " href="rnaInfo.htm?locusTag=${srna.sourceRna.locusTag}&type=${type}"><c:out value="${srna.sourceRna.locusTag}"/></a>&nbsp;
+            <div id="gene" class="tab-pane active gene-info">
 
-                    </span><br>
-                </c:if>
-                <c:if test="${type eq 'experimental'}">
-                    <span>sRNA class: ${srna.srnaClass}</span><br>  
-                </c:if>
-                <span>Position: ${srna.startPosition} - ${srna.endPosition}</span><br>  
-                <span>Orientation: ${srna.orientation}</span><br>
-                <c:if test="${type eq 'predicted'}">
-                    <span>Functional? ${srna.functionalRna}</span><br>
-                    <span>Functional evidence: ${srna.evidenceFunctional}</span><br> 
-                </c:if>
-                <span>Nucleotide sequence:</span><br> ${srna.sequence}
+                <div class="row">
+                    <div class="col-sm-3 ">
+                        <br>
+                        <%--/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Ce-YS314-sRNA-4_0001_ss.ps
+                            Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/" + pageContext.getAttribute("logoName")--%>
+                        <img class="img-fluid" src="data:image/png;base64,
+                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Cu-NCTC7910-sRNA-1_0001_ss.png"))))%>"/>
 
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
+                            <i class="fas fa-search-plus"></i>
+                            <b> Zoom structure </b>
+                        </button>
+
+                        <!-- The Modal -->
+                        <div class="modal" id="myModal">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                        <img class="img-fluid" src="data:image/png;base64,
+                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Cu-NCTC7910-sRNA-1_0001_ss.png"))))%>"/>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
+
+                    </div>
+                    <div class="col-sm-9 ">
+                        <br>
+                        <p>Locus tag: ${srna.locusTag}</p>
+                        <p>Evidence: ${srna.evidence}</p>
+                        <c:if test="${type eq 'predicted'}">
+
+                            <p>Source RNA: 
+                                <a style="color: black; " href="rnaInfo.htm?locusTag=${srna.sourceRna.locusTag}&type=${type}"><c:out value="${srna.sourceRna.locusTag}"/></a>&nbsp;
+
+                            </p><
+                        </c:if>
+                        <c:if test="${type eq 'experimental'}">
+                            <p>sRNA class: ${srna.srnaClass}</p>
+                        </c:if>
+                        <p>Position: ${srna.startPosition} - ${srna.endPosition}</p>
+                        <p>Orientation: ${srna.orientation}</p>
+                        <c:if test="${type eq 'predicted'}">
+                            <p>Functional? ${srna.functionalRna}</p>
+                            <p>Functional evidence: ${srna.evidenceFunctional}</p>
+                        </c:if>
+                        <p>Nucleotide sequence:</p> ${srna.sequence}
+                        <br >
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dpModal" style="margin-top: 15px">
+                            <b>See dot plot graph</b>
+                        </button>
+
+                        <!-- The Modal -->
+                        <div class="modal" id="dpModal">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <img class="img-fluid" src="data:image/png;base64,
+                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Cu-NCTC7910-sRNA-1_0001_dp.png"))))%>"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="downloadRnaImage.htm?fileName=Cu-NCTC7910-sRNA-1_0001_dp.ps">
+                                            <button type="button" class="btn btn-default">
+                                                <i class="fas fa-download"></i>
+                                                Download EPS
+                                            </button>
+                                        </a>
+                                        <a href="downloadRnaImage.htm?fileName=Cu-NCTC7910-sRNA-1_0001_dp.png">
+                                            <button type="button" class="btn btn-default">
+                                                <i class="fas fa-download"></i>
+                                                Download PNG
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alnModal" style="margin-top: 15px">
+                            <b>See alignment graph</b>
+                        </button>
+
+                        <!-- The Modal -->
+                        <div class="modal" id="alnModal">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                        <center>
+                                            <img class="img-fluid" src="data:image/png;base64,
+                                                 <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Cu-NCTC7910-sRNA-1_0001_aln.png"))))%>"/>
+                                        </center>
+                                        <div class="modal-footer">
+                                            <a href="downloadRnaImage.htm?fileName=Cu-NCTC7910-sRNA-1_0001_aln.ps">
+                                                <button type="button" class="btn btn-default">
+                                                    <i class="fas fa-download"></i>
+                                                    Download EPS
+                                                </button>
+                                            </a>
+                                            <a href="downloadRnaImage.htm?fileName=Cu-NCTC7910-sRNA-1_0001_aln.png">
+                                                <button type="button" class="btn btn-default">
+                                                    <i class="fas fa-download"></i>
+                                                    Download PNG
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
+                    </div>
+
+                </div>
 
             </div>
             <%--regulates: (The gene is a TF)--%>
@@ -254,7 +361,7 @@
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "order": [[3, "asc"]]
             });
-        if (${type eq 'experimental'}) {
+            if (${type eq 'experimental'}) {
                 $('#regulatedby-table').DataTable({
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[0, "asc"]]
