@@ -38,6 +38,7 @@ public class FileDownloadController {
         if (Files.exists(filePath)) {
             response.setContentType("application/zip");
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+            System.out.println("filePath "+filePath);
             try {
                 Files.copy(filePath, response.getOutputStream());
                 response.getOutputStream().flush();
@@ -76,6 +77,37 @@ public class FileDownloadController {
     public String downloadTest(Model model) {
 
         return "download-test";
+    }
+    
+    @RequestMapping("downloadRnaImage")
+    public void downloadRnaImage(HttpServletRequest request,
+            HttpServletResponse response, String fileName) {
+        //If user is not authorized - he should be thrown out from here itself
+        System.out.println("file =" + fileName);
+        
+        String imgType="";
+        
+        if(fileName.endsWith("png")){
+            imgType="png";
+        }else{
+            imgType="ps";
+        }
+
+        //Authorized user will download the file
+        System.out.println("FileName: " + fileName);
+        //File file = new File(System.getProperty("user.dir"));
+        //String dataDirectory = file.getAbsolutePath() + "/";
+        Path filePath = Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/", fileName);
+        if (Files.exists(filePath)) {
+            response.setContentType("image/"+imgType);
+            response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+            try {
+                Files.copy(filePath, response.getOutputStream());
+                response.getOutputStream().flush();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }

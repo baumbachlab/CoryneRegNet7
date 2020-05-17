@@ -108,6 +108,48 @@ public class SmallRnaDAO extends GenericDAO {
         }
     }
     
+    //findByGenomeSourceRna
+    public SmallRna findByGenomeSourceRna(Integer genome, Integer sourceRna) {
+         try {
+            SmallRna run = new SmallRna();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.findByGenomeSourceRna");
+            query.setInteger("genome", genome);
+            query.setInteger("sourceRna", sourceRna);
+            run = (SmallRna) query.uniqueResult();
+            this.tx.commit();
+            return run;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+        
+    }
+    
+    
+    
+    //findForRNAalifold
+      public List<SmallRna> findForRNAalifold(String sequence, String evidence, Integer genome) {
+        try {
+            SmallRna gene = new SmallRna();
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.findForRNAalifold");
+            query.setString("sequence", sequence);
+            query.setString("evidence", evidence);
+            query.setInteger("genome", genome);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+    
+    
     //findByGenomeType
       public List<SmallRna> findByGenomeType(Integer genome, String type) {
         try {
