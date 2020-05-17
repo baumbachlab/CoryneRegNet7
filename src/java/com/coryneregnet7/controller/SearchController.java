@@ -1836,34 +1836,6 @@ public class SearchController {
         return geneInfo;
     }
 
-    public TreeMap<String, ArrayList<String>> getOperonsObject(Integer genome) {
-        GeneOperonViewTest geneOperonView = new GeneOperonViewTest();
-        GeneOperonViewDAO geneOperonViewDAO = new GeneOperonViewDAO();
-        List<GeneOperonView> geneOperonViews = geneOperonViewDAO.findByGenome(genome);
-
-        ArraySet<GeneOperonView> geneOperonViewsSet = new ArraySet<>(geneOperonViews);
-        TreeMap<String, ArrayList<String>> operons = new TreeMap();
-
-        String geneNames = "";
-        ArrayList<String> genes = null;
-        for (GeneOperonView geneOperonViewsSet1 : geneOperonViewsSet) {
-            System.out.println(geneOperonViewsSet1);
-
-            if (operons.containsKey(geneOperonViewsSet1.getOperonName())) {
-                geneNames = geneOperonView.getGeneNames(geneOperonViewsSet1.getGeneName(), geneOperonViewsSet1.getLocusTag());
-                genes.add(geneNames);
-                operons.put(geneOperonViewsSet1.getOperonName(), genes);
-            } else {
-                genes = new ArrayList<String>();
-                geneNames = geneOperonView.getGeneNames(geneOperonViewsSet1.getGeneName(), geneOperonViewsSet1.getLocusTag());
-                genes.add(geneNames);
-                operons.put(geneOperonViewsSet1.getOperonName(), genes);
-            }
-
-        }
-        return operons;
-    }
-
 //// 
     @RequestMapping("networkDinamicVisualizationOperons")
     public String networkDinamicVisualizationOperons(Model model, Integer organism, String searchType, String[] interestGenes, String role) throws InterruptedException {
@@ -1926,6 +1898,8 @@ public class SearchController {
         GenomeDAO genomeDAO = new GenomeDAO();
         Genome genome = genomeDAO.findByOrganism(organism);
         TreeMap<String, SmallRna> srnasInfo = new TreeMap<>();
+        GeneOperonViewDAO govDAO = new GeneOperonViewDAO();
+        operons = govDAO.getOperonsTreeByGenome(genome.getId());
 
         if (role.equals("X")) {
             sRNA = srnaDAO.findByLocusTag(interestGenes[0]);
@@ -1954,6 +1928,7 @@ public class SearchController {
                 g = geneDAO.findGeneByLocusTagOrGeneName(organism, interestGene);
                 risInterestGenes = (ArrayList<RegulatoryInteraction>) riDAO.findByOrganismAndGene(organism, g.getId());
                 prisInterestGenes = (ArrayList<PredictedRegulatoryInteraction>) priDAO.findByOrganismAndGene(organism, g.getId());
+                rnaRegList = rnaRegDAO.findByTg(g.getId());
 
                 for (RegulatoryInteraction risInterestGene : risInterestGenes) {
                     //System.out.println(risInterestGene.toString());
@@ -2129,21 +2104,8 @@ public class SearchController {
                     String pos = Integer.toString(geneOperon.getPos());
                     //System.out.println("pos: " + pos);
                     opInfo.add(pos);
-                    genesOperon = (ArrayList<GeneOperon>) geneOpDAO.findByOperon(operon.getId());
-                    genesOfOp = new ArrayList<>();
-                    for (GeneOperon geneOp : genesOperon) {
-                        //System.out.println("geneOp: " + geneOp);
-                        g = geneDAO.findById(geneOp.getGeneOperonPK().getGene());
-                        if (!g.getName().equals("")) {
-                            //System.out.println("gene: " + g.getName());
-                            genesOfOp.add(g.getLocusTag() + "+" + g.getName());
-                        } else {
-                            //System.out.println("gene: " + g.getLocusTag());
-                            genesOfOp.add(g.getLocusTag() + "+" + g.getLocusTag());
-                        }
-                    }
                     //System.out.println("operon: " + operon.getName() + " " + genesOfOp);
-                    operons.put(operon.getName(), genesOfOp);
+
                     if (!actualGene.getName().equals("")) {
                         geneOpInfo.put(actualGene.getName(), opInfo);
                     } else {
@@ -2151,7 +2113,6 @@ public class SearchController {
                     }
                     posGeneOp = geneOperon.getPos();
                 }
-
                 geneInfo = new GeneInfo();
                 actualGene.setProduct("");
                 geneInfo.setGene(actualGene);
@@ -2163,6 +2124,10 @@ public class SearchController {
                 } else {
                     genesInfo.put(actualGene.getLocusTag(), geneInfo);
                 }
+            }
+
+            for (int i = 0; i < rnaRegList.size(); i++) {
+                srnasInfo.put(rnaRegList.get(i).getSrna().getLocusTag(), rnaRegList.get(i).getSrna());
             }
         }
 

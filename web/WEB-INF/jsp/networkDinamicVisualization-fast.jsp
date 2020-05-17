@@ -374,7 +374,7 @@
                 <script>
                     //console.log("operons");
                     key = '${op.key}';
-                    console.log("key: " + key);
+                    //console.log("key: " + key);
                     value = '${op.value}';
                     //console.log("value:");
                     //console.log(value);
@@ -484,12 +484,12 @@
                     if (geneObjectOpVis.operon != "") {
                         opInfos.set(key, geneObjectOpVis.operon);
                     }
-                    console.log("geneObject:");
-                    console.log(geneObjectOpVis);
+                    //console.log("geneObject:");
+                    //console.log(geneObjectOpVis);
                     if (!geneInfoMapCombined.get(geneObjectOpVis.operon)) {
                         //console.log("Não está em um operon ou é um novg.o operon:");
                         //console.log(geneInfoMapCombined.get(geneObject.operon));
-                        console.log("geneObjectOpVis.pos: " + geneObjectOpVis.pos);
+                        //console.log("geneObjectOpVis.pos: " + geneObjectOpVis.pos);
                         if (geneObjectOpVis.pos == "0") {
                             //console.log("Não está em um operon:");
                             //console.log("Key: " + key + " - value: " + geneObjectOpVis.name);
@@ -497,7 +497,7 @@
                         } else {
                             //console.log("-----------------");
                             //console.log(geneObjectOpVis);
-                            console.log(geneObjectOpVis.operon);
+                            //console.log(geneObjectOpVis.operon);
                             var belongToOperon = operons.get(geneObjectOpVis.operon);
                             //console.log(belongToOperon);
                             //for (var i = 0; i < belongToOperon.genes.length; i++) {
@@ -509,8 +509,8 @@
                             geneObjectOpVis.name = geneObjectOpVis.operon;
                             geneObjectOpVis.proteinId = "-";
                             geneObjectOpVis.operon = "operon";
-                            console.log("belongToOperon:");
-                            console.log(belongToOperon);
+                            //console.log("belongToOperon:");
+                            //console.log(belongToOperon);
                             //console.log("belongToOperon.genes: " + belongToOperon.genes)
                             //Aqui ta o erro
                             geneObjectOpVis.genes = belongToOperon.genes;
@@ -584,7 +584,7 @@
                     //console.log("genesInfo");
                     key = '${srnai.key}';
                     value = '${srnai.value}';
-                    console.log("Key: " + key);
+                    //console.log("Key: " + key);
                     //console.log("Value: " + value);
                     //console.log("<br>");
 
@@ -596,7 +596,10 @@
                     //console.log("srnaAttributes.locusTag: " + srnaAttributes.locusTag)
                     geneInfoMap.set(key, srnaAttributes);
                     //FIM gene based layout
-
+                    //Start Operon based layout
+                    var sRNAOpronAttributes = {locusTag: key, name: key, proteinId: '', role: 'X', operon: '', pos: '', genes: '-'};
+                    geneInfoMapCombined.set(key, sRNAOpronAttributes);
+                    //End Operon based layut
                 </script>
             </c:forEach>
 
@@ -623,7 +626,6 @@
 
                     }
 
-                    regInteraction.id = '${ri.id}';
                     if (tg != null) {
                         regInteraction.tgName = tg;
                         regInteraction.tgLocusTag = tg;
@@ -759,7 +761,58 @@
                     //console.log("RNA reg info:");
                     //console.log(regInteraction);
                     regInteractions.push(regInteraction);
-                </script> 
+                </script>
+
+                <script>
+                    //Take transcription factor's name or locus_tag
+                    var tg = "";
+                    if ('${rnaRL.tg.name}' != "") {
+                        tg = opInfos.get('${rnaRL.tg.name}');
+
+                    } else {
+                        tg = opInfos.get('${rnaRL.tg.locusTag}');
+
+                    }
+
+                    if (tg != null) {
+                        regInteraction.tgName = tg;
+                        regInteraction.tgLocusTag = tg;
+                    } else {
+                        if ('${rnaRL.tg.name}' != "") {
+                            regInteraction.tgName = '${rnaRL.tg.name}';
+                            regInteraction.tgLocusTag = '${rnaRL.tg.locusTag}';
+                        } else {
+                            regInteraction.tgLocusTag = '${rnaRL.tg.locusTag}';
+                            regInteraction.tgName = '${rnaRL.tg.locusTag}';
+                        }
+                    }
+
+                    //console.log("regInteraction.tfName: " + regInteraction.tfName);
+                    //console.log("geneInfoMapCombined.get(regInteraction.tfName).name: " + geneInfoMapCombined.get(regInteraction.tfName).name);
+                    regInteraction.tgProteinId = '';
+                    regInteraction.tfProteinId = '';
+                    regInteraction.tfRole = '${rnaRL.role}';
+                    //console.log('${ri.role}');
+                    regInteraction.riRole = '${rnaRL.role}';
+                    regInteraction.pValue = '${rnaRL.pvalue}';
+                    //           console.log("Save: ");
+                    //console.log(regInteraction);
+                    var repetedRegulation = false;
+                    for (var i = 0; i < regInteractionsCombined.length; i++) {
+                        if (regInteractionsCombined[i].tfName == regInteraction.tfName) {
+                            if (regInteractionsCombined[i].tgName == regInteraction.tgName) {
+                                if (regInteractionsCombined[i].riRole == regInteraction.riRole) {
+                                    repetedRegulation = true;
+                                }
+                            }
+                        }
+                    }
+                    if (!repetedRegulation) {
+                        regInteractionsCombined.push(regInteraction);
+                    }
+                    //       console.log("------------------");
+                    //     console.log();
+                </script>
             </c:forEach>
 
             <script>
@@ -818,7 +871,8 @@
 
                         //console.log("edgeColor: " + edgeColor);
 
-                        createEdges = {from: regInteractions[i].tfName, to: regInteractions[i].tgName, role: riRole, pValue: regInteractions[i].pValue, color: {color: edgeColor, highlight: edgeColor, hover: edgeColor}};
+                        createEdges = {from: regInteractions[i].tfName, to: regInteractions[i].tgName, role: riRole, pValue: regInteractions[i].pValue,
+                            color: {color: edgeColor, highlight: edgeColor, hover: edgeColor}};
                         mapEdges.push(createEdges);
                         mapNodes.add(regInteractions[i].tfName);
                     }
@@ -952,13 +1006,13 @@
                             var nodeAux = geneInfoMap.get(clickedNodes[0].id);
                             //console.log(nodeAux);
                             if (nodeAux.role == "X") {
-                                var nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="rnaInfo.htm?locusTag=' 
+                                var nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="rnaInfo.htm?locusTag='
                                         + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>';
                             } else {
-                                var nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="geneInfo.htm?locusTag=' 
+                                var nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="geneInfo.htm?locusTag='
                                         + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>'
-                                        + "<br>" + "<b>Name:</b> " + nodeAux.name + "<br>" + "<b>Protein id:</b> " 
-                                        + '<span><a href="https://www.ncbi.nlm.nih.gov/protein/?term=' + nodeAux.proteinId 
+                                        + "<br>" + "<b>Name:</b> " + nodeAux.name + "<br>" + "<b>Protein id:</b> "
+                                        + '<span><a href="https://www.ncbi.nlm.nih.gov/protein/?term=' + nodeAux.proteinId
                                         + '" target="_blank">' + nodeAux.proteinId + '</a><span>';
                             }
 
@@ -991,13 +1045,16 @@
 
                             if (nodeAux.operon != "") {
                                 //console.log(operons.get(nodeAux.operon));
-                                nodeInfo += "<br>" + "<b>Operon:</b> " + '<span><a href="operonInfo.htm?name=' + nodeAux.operon + '&type=${type}" target="_blank">' + nodeAux.operon + '</a><span>';
+                                nodeInfo += "<br>" + "<b>Operon:</b> " + '<span><a href="operonInfo.htm?name=' + nodeAux.operon + '&type=${type}" target="_blank">'
+                                        + nodeAux.operon + '</a><span>';
                                 var geneOperon = operons.get(nodeAux.operon);
                                 for (var i = 0; i < geneOperon.locusTag.length; i++) {
                                     if (geneOperon.locusTag[i] != geneOperon.genes[i]) {
-                                        nodeInfo += "<br>&nbsp;&nbsp;&nbsp;" + (i + 1) + ":</b> " + '<span><a href="geneInfo.htm?locusTag=' + geneOperon.locusTag[i] + '&type=${type}" target="_blank">' + geneOperon.locusTag[i] + '</a><span> (' + geneOperon.genes[i] + ')';
+                                        nodeInfo += "<br>&nbsp;&nbsp;&nbsp;" + (i + 1) + ":</b> " + '<span><a href="geneInfo.htm?locusTag=' + geneOperon.locusTag[i]
+                                                + '&type=${type}" target="_blank">' + geneOperon.locusTag[i] + '</a><span> (' + geneOperon.genes[i] + ')';
                                     } else {
-                                        nodeInfo += "<br>&nbsp;&nbsp;&nbsp;" + (i + 1) + ":</b> " + '<span><a href="geneInfo.htm?locusTag=' + geneOperon.locusTag[i] + '&type=${type}" target="_blank">' + geneOperon.locusTag[i] + '</a><span>';
+                                        nodeInfo += "<br>&nbsp;&nbsp;&nbsp;" + (i + 1) + ":</b> " + '<span><a href="geneInfo.htm?locusTag=' + geneOperon.locusTag[i]
+                                                + '&type=${type}" target="_blank">' + geneOperon.locusTag[i] + '</a><span>';
                                     }
                                 }
                             }
@@ -1015,18 +1072,26 @@
                                 var targetNode = geneInfoMap.get(clickedEdge[0].to);
                                 var edgeInfo;
                                 if (sourceNode.locusTag != sourceNode.name) {
-                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>' + '(' + sourceNode.name + ")";
+                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag
+                                            + '</a><span>' + '(' + sourceNode.name + ")";
                                 } else {
-                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>';
+                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag
+                                            + '</a><span>';
                                 }
 
                                 if (targetNode.locusTag != targetNode.name) {
-                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
+                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">'
+                                            + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
                                 } else {
-                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
+                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">'
+                                            + targetNode.locusTag + '</a><span>';
                                 }
 
-                                edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
+                                if (clickedEdge[0].role != "X"){
+                                    edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
+                                }else{
+                                    edgeInfo += "<br>" + "<b>Role:</b> sRNA"
+                                }
                                 if (clickedEdge[0].pValue != -1) {
                                     edgeInfo += "<br>" + "<b>P-value:</b> " + clickedEdge[0].pValue;
                                 }
@@ -1088,6 +1153,9 @@
                         } else if ((regInteractionsCombined[i].riRole == "Dual") || (regInteractionsCombined[i].riRole == "D")) {
                             edgeColor = '#0080ff';
                             riRole = "Dual";
+                        } else if (regInteractionsCombined[i].riRole == "X") {
+                            edgeColor = "#f5b042";
+                            riRole = "X";
                         }
 
                         //console.log("edgeColor: " + edgeColor);
@@ -1099,34 +1167,22 @@
                     }
 
                     for (var i = 0; i < regInteractionsCombined.length; i++) {
-                        //console.log("from: " + regInteractionsCombined[i].tfName);
-                        //console.log("to: " + regInteractionsCombined[i].tgName);
-                        //console.log("regInteractionsCombined[i].tgName: " + regInteractionsCombined[i].tgName);
                         mapNodes.add(regInteractionsCombined[i].tgName);
                     }
 
                     // create an array with edges
                     edges = new vis.DataSet(mapEdges);
-                    //console.log("edges: ");
-                    //console.log(edges);
 
                     // create an array with nodes
-                    //console.log("nodes: ");
-                    //console.log(mapNodes);
                     var mapNodesToNodes = new Array();
                     //console.log("mapNodes.size: " + mapNodes.size);
                     var count = 0;
                     var nodeColor;
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
-                        //console.log("mapNode: " + mapNode);
-                        //console.log("geneInfoMapCombined.get(mapNode):");
-                        //console.log(geneInfoMapCombined.get(mapNode));
                         geneInfo = geneInfoMapCombined.get(mapNode);
                         nodeColor = "#b3b3b3";
                         //console.log("mapNode.role: " + geneInfo.role);
-
-
                         if ((geneInfo.role == "Repressor") || (geneInfo.role == "R")) {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#ff8080";
@@ -1139,6 +1195,9 @@
                         } else if (geneInfo.role == "unknown") {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#66d9ff";
+                        } else if (geneInfo.role == "X") {
+                            //console.log("mapNode.role: " + geneInfo.role)
+                            nodeColor = "#f5b042";
                         }
 
                         if (geneInfo.operon == "operon") {
@@ -1231,9 +1290,14 @@
                             var nodeInfo;
                             //console.log(nodeAux);
                             var genesToNewNetwork = [];
-                            nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="geneInfo.htm?locusTag=' + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>'
-                                    + "<br>" + "<b>Name:</b> " + nodeAux.name
-                                    + "<br>" + "<b>Protein id:</b> " + '<span><a href="https://www.ncbi.nlm.nih.gov/protein/?term=' + nodeAux.proteinId + '" target="_blank">' + nodeAux.proteinId + '</a><span>';
+                            if (nodeAux.role == "X") {
+                                var nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="rnaInfo.htm?locusTag='
+                                        + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>';
+                            } else {
+                                nodeInfo = "<b>Locus_Tag:</b> " + '<span><a href="geneInfo.htm?locusTag=' + nodeAux.locusTag + '&type=${type}" target="_blank">' + nodeAux.locusTag + '</a><span>'
+                                        + "<br>" + "<b>Name:</b> " + nodeAux.name
+                                        + "<br>" + "<b>Protein id:</b> " + '<span><a href="https://www.ncbi.nlm.nih.gov/protein/?term=' + nodeAux.proteinId + '" target="_blank">' + nodeAux.proteinId + '</a><span>';
+                            }
                             if (nodeAux.role != "") {
                                 //console.log("nodeAux.role.length: " + nodeAux.role.length);
                                 if (nodeAux.role.length == 1) {
@@ -1243,6 +1307,8 @@
                                         nodeInfo += "<br>" + "<b>Role:</b> Repressor";
                                     } else if (nodeAux.role == "D") {
                                         nodeInfo += "<br>" + "<b>Role:</b> Dual";
+                                    } else if (nodeAux.role == "X") {
+                                        nodeInfo += "<br>" + "<b>Role:</b> sRNA";
                                     }
                                 } else {
                                     if (nodeAux.role == "unknown") {
@@ -1282,6 +1348,7 @@
                             //console.log(genesToNewNetwork);
                             $('#gene-modal-content').html(nodeInfo);
                             $('#locus-for-network').val(genesToNewNetwork);
+                            $('#role-for-network').val(nodeAux.role);
                             $('#geneModal').modal('show');
                         } else {
                             var edgeIds = properties.edges;
@@ -1294,18 +1361,26 @@
                                 var targetNode = geneInfoMapCombined.get(clickedEdge[0].to);
                                 var edgeInfo;
                                 if (sourceNode.locusTag != sourceNode.name) {
-                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>' + '(' + sourceNode.name + ")";
+                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag
+                                            + '</a><span>' + '(' + sourceNode.name + ")";
                                 } else {
-                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag + '</a><span>';
+                                    edgeInfo = "<b>Source:</b> " + '<span><a href="geneInfo.htm?locusTag=' + sourceNode.locusTag + '&type=${type}" target="_blank">' + sourceNode.locusTag
+                                            + '</a><span>';
                                 }
 
                                 if (targetNode.locusTag != targetNode.name) {
-                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
+                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">'
+                                            + targetNode.locusTag + '</a><span>' + '(' + targetNode.name + ")";
                                 } else {
-                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
+                                    edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">'
+                                            + targetNode.locusTag + '</a><span>';
                                 }
 
-                                edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
+                                if (clickedEdge[0].role != "X"){
+                                    edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
+                                }else{
+                                    edgeInfo += "<br>" + "<b>Role:</b> sRNA"
+                                }
                                 if (clickedEdge[0].pValue != -1) {
                                     edgeInfo += "<br>" + "<b>P-value:</b> " + clickedEdge[0].pValue;
                                 }
