@@ -577,6 +577,45 @@
             <c:forEach items="${regulationsView}" var="ri">
                 <script>
                     //Take transcription factor's name or locus_tag
+                    //console.log("regulationsView");
+                    var regInteraction = [];
+                    if ('${ri.targetGene.name}' != "") {
+                        regInteraction.tgName = '${ri.targetGene.name}';
+                        regInteraction.tgLocusTag = '${ri.targetGene.locusTag}';
+                    } else {
+                        regInteraction.tgLocusTag = '${ri.targetGene.locusTag}';
+                        regInteraction.tgName = '${ri.targetGene.locusTag}';
+                    }
+                    //console.log("tgLocusTag: " + regInteraction.tgLocusTag);
+                    //console.log("tgName: " + regInteraction.tgName);
+
+                    regInteraction.tgAltLocusTag = '${ri.targetGene.alternativeLocusTag}';
+                    regInteraction.tgProteinId = '${ri.targetGene.proteinId}';
+                    regInteraction.tfId = '${ri.transcriptionFactor.id}';
+                    if ('${ri.transcriptionFactor.name}' != "") {
+                        regInteraction.tfName = '${ri.transcriptionFactor.name}';
+                        regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
+                    } else {
+                        regInteraction.tfName = '${ri.transcriptionFactor.locusTag}';
+                        regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
+                    }
+                    //console.log("tfLocusTag: " + regInteraction.tfLocusTag);
+                    //console.log("tfName: " + regInteraction.tfName);
+
+                    regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
+                    regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
+                    //console.log('${ri.transcriptionFactor.role}');
+                    regInteraction.tfRole = '${ri.transcriptionFactor.role}';
+                    //console.log('${ri.role}');
+                    regInteraction.riRole = '${ri.role}';
+                    regInteraction.pValue = '${ri.pValue}';
+                    //console.log(regInteraction.tfLocusTag);
+                    //console.log(regInteraction.tgLocusTag);
+                    regInteractions.push(regInteraction);
+                    //console.log("-------------------------------------");
+                </script> 
+                <script>
+                    //Take transcription factor's name or locus_tag
                     //console.log("ricomb");
                     var regInteraction = [];
                     var tg = "";
@@ -593,7 +632,6 @@
                         tf = opInfos.get('${ri.transcriptionFactor.locusTag}');
                     }
 
-                    regInteraction.id = '${ri.id}';
                     if (tg != null) {
                         regInteraction.tgName = tg;
                         regInteraction.tgLocusTag = tg;
@@ -661,46 +699,6 @@
                     //       console.log("------------------");
                     //     console.log();
                 </script>
-
-                <script>
-                    //Take transcription factor's name or locus_tag
-                    //console.log("regulationsView");
-                    var regInteraction = [];
-                    regInteraction.id = '${ri.id}';
-                    regInteraction.tgId = '${ri.targetGene.id}';
-                    if ('${ri.targetGene.name}' != "") {
-                        regInteraction.tgName = '${ri.targetGene.name}';
-                        regInteraction.tgLocusTag = '${ri.targetGene.locusTag}';
-                    } else {
-                        regInteraction.tgLocusTag = '${ri.targetGene.locusTag}';
-                        regInteraction.tgName = '${ri.targetGene.locusTag}';
-                    }
-                    //console.log("tgLocusTag: " + regInteraction.tgLocusTag);
-                    //console.log("tgName: " + regInteraction.tgName);
-
-                    regInteraction.tgAltLocusTag = '${ri.targetGene.alternativeLocusTag}';
-                    regInteraction.tgProteinId = '${ri.targetGene.proteinId}';
-                    regInteraction.tfId = '${ri.transcriptionFactor.id}';
-                    if ('${ri.transcriptionFactor.name}' != "") {
-                        regInteraction.tfName = '${ri.transcriptionFactor.name}';
-                        regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
-                    } else {
-                        regInteraction.tfName = '${ri.transcriptionFactor.locusTag}';
-                        regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
-                    }
-                    //                    console.log("tfLocusTag: " + regInteraction.tfLocusTag);
-                    //                  console.log("tfName: " + regInteraction.tfName);
-
-                    regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
-                    regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
-                    //console.log('${ri.transcriptionFactor.role}');
-                    regInteraction.tfRole = '${ri.transcriptionFactor.role}';
-                    //console.log('${ri.role}');
-                    regInteraction.riRole = '${ri.role}';
-                    regInteraction.pValue = '${ri.pValue}';
-                    regInteractions.push(regInteraction);
-                    //console.log("-------------------------------------");
-                </script> 
             </c:forEach>
             <c:forEach items="${rnaRegList}" var="rnaRL">
                 <script>
@@ -735,6 +733,11 @@
                 <script>
                     //Take transcription factor's name or locus_tag
                     var tg = "";
+                    var tg = "";
+                    var regInteraction = [];
+                    regInteraction.tfName = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfName);
+                    regInteraction.tfLocusTag = '${rnaRL.srna.locusTag}';
                     if ('${rnaRL.tg.name}' != "") {
                         tg = opInfos.get('${rnaRL.tg.name}');
 
@@ -877,11 +880,13 @@
                     var nodeColor;
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
-                        //  console.log("geneInfoMap.get(mapNode):");
+                        // console.log("geneInfoMap.get(mapNode):");
                         //   console.log(geneInfoMap.get(mapNode));
+                        //console.log("mapNode:");
+                        //console.log(mapNode);
                         geneInfo = geneInfoMap.get(mapNode);
                         nodeColor = "#b3b3b3";
-                        //console.log("mapNode.role: " + geneInfo.role);
+                        //console.log("mapNode: " + geneInfo);
                         if ((geneInfo.role == "Repressor") || (geneInfo.role == "R")) {
                             //console.log("mapNode.role: " + geneInfo.role)
                             nodeColor = "#ff8080";
@@ -1067,9 +1072,9 @@
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
                                 }
 
-                                if (clickedEdge[0].role != "X"){
+                                if (clickedEdge[0].role != "X") {
                                     edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
-                                }else{
+                                } else {
                                     edgeInfo += "<br>" + "<b>Role:</b> sRNA"
                                 }
                                 if (clickedEdge[0].pValue != -1) {
@@ -1357,9 +1362,9 @@
                                     edgeInfo += "<br><b>Target:</b> " + '<span><a href="geneInfo.htm?locusTag=' + targetNode.locusTag + '&type=${type}" target="_blank">' + targetNode.locusTag + '</a><span>';
                                 }
 
-                                if (clickedEdge[0].role != "X"){
+                                if (clickedEdge[0].role != "X") {
                                     edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
-                                }else{
+                                } else {
                                     edgeInfo += "<br>" + "<b>Role:</b> sRNA"
                                 }
                                 if (clickedEdge[0].pValue != -1) {
