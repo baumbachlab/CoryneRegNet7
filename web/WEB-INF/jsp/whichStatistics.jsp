@@ -77,15 +77,19 @@
             <div class="row font">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-3">
-                    <a href="statistics.htm?type=experimental"><button type="button" class="btn btn-primary btn-lg">
+                    <a href="statistics.htm?type=predicted"><button type="button" class="btn btn-primary btn-lg">
                             <i class="fa fa-line-chart" aria-hidden="true"></i>
-                            Experimental</button></a>
+                            GRN statistics
+                        </button>
+                    </a>
                 </div>
                 <div class="col-sm-3">
-                    <a href="whichStatistics.htm?type=predicted"><button type="button" class="btn btn-primary btn-lg btn-small-screen">
+                    <a href="sRNAStatistics.htm?type=predicted">
+                        <button type="button" class="btn btn-primary btn-lg btn-small-screen">
                             <i class="fa fa-line-chart" aria-hidden="true"></i>
-
-                            Predicted <div class="predicted-text"><b>Experimental data plus automatically predicted data</b></div></button></a>
+                            sRNA statistics
+                        </button>
+                    </a>
                 </div>
                 <div class="col-sm-3"></div>
             </div>
