@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findRepeated", query = "SELECT s FROM SmallRna s WHERE s.startPosition= :startPosition and s.endPosition =:endPosition and s.orientation =:orientation and s.genome =:genome")
     , @NamedQuery(name = "SmallRna.findRepeatedPos", query = "SELECT s FROM SmallRna s WHERE s.startPosition= :startPosition and s.endPosition =:endPosition and s.genome =:genome")
     , @NamedQuery(name = "SmallRna.findByLocusTag", query = "SELECT s FROM SmallRna s WHERE s.locusTag = :locusTag")
+    , @NamedQuery(name = "SmallRna.findByLocusTagAndOrganism", query = "SELECT s FROM SmallRna s WHERE s.locusTag = :locusTag and s.genome.organism = :organism")
     , @NamedQuery(name = "SmallRna.findForRNAalifold", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence and s.evidence like :evidence and s.genome = :genome")
     , @NamedQuery(name = "SmallRna.findBySequence", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence")
     , @NamedQuery(name = "SmallRna.findByGenome", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome")

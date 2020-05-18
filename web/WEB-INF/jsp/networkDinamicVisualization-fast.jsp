@@ -766,6 +766,11 @@
                 <script>
                     //Take transcription factor's name or locus_tag
                     var tg = "";
+                    var regInteraction = [];
+                    regInteraction.tfName = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfName);
+                    regInteraction.tfLocusTag = '${rnaRL.srna.locusTag}';
+                    //console.log(regInteraction.tfLocusTag);
                     if ('${rnaRL.tg.name}' != "") {
                         tg = opInfos.get('${rnaRL.tg.name}');
 

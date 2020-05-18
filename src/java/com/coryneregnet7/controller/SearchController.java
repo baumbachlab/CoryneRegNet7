@@ -395,7 +395,7 @@ public class SearchController {
         model.addAttribute("rnaInteractions", rnaInteractions);
         return "rnaInfo";
     }
-    
+
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
 
@@ -1686,8 +1686,6 @@ public class SearchController {
                 regulationsView = priView.getRegulationViewList(predictedRegulatoryInteractionViews);
                 cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism, gene);
             }
-
-            operons = govDAO.getOperonsTreeByGenome(genome.getId());
             genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
 
             //srnalist = srnaDAO.findByGenome(genome.getId());
@@ -1697,9 +1695,8 @@ public class SearchController {
 ////                }
 ////            }
         } else {
-
             if (geneRna.equals("rna")) {
-                sRNA = srnaDAO.findByLocusTag(gene);
+                sRNA = srnaDAO.findByLocusTagAndOrganism(organism, gene);
 
                 System.out.println("sRNA: " + sRNA);
                 if (sRNA == null) {
@@ -1746,7 +1743,6 @@ public class SearchController {
                     cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism, gene);
                 }
 
-                operons = govDAO.getOperonsTreeByGenome(genome.getId());
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 srnalist = srnaDAO.findByGenome(genome.getId());
                 for (int i = 0; i < srnalist.size(); i++) {
@@ -1754,10 +1750,14 @@ public class SearchController {
                 }
             }
         }
+        operons = govDAO.getOperonsTreeByGenome(genome.getId());
 
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
         cytoscapeFileName += ".sif";
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
+
+        System.out.println("regulationsView: " + regulationsView);
+        System.out.println("rnaRegList: " + rnaRegList);
 
         if (regulationsView.isEmpty() && rnaRegList.isEmpty()) {
             model.addAttribute("o", o);
