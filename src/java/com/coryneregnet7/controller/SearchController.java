@@ -2554,6 +2554,12 @@ public class SearchController {
         return "databaseStatistics";
     }
 
+    @RequestMapping("whichStatistics")
+    public String whichStatistics(Model model, String type) {
+
+        return "whichStatistics";
+    }
+
     @RequestMapping("statistics")
     public String statistics(Model model, String type) {
 
@@ -2683,6 +2689,101 @@ public class SearchController {
         model.addAttribute("type", type);
         model.addAttribute("hmmProfilesLen", hmmProfilesLen);
         return "statistics";
+    }
+    
+    @RequestMapping("sRNAStatistics")
+    public String sRNAStatistics(Model model, String type) {
+
+        if (type == null) {
+            return "databaseStatistics";
+        }
+
+        GeneDAO geneDAO = new GeneDAO();
+        Integer totalNumOfTfs;
+        Integer numOfActivators;
+        Integer numOfRepressors;
+        Integer numOfDuals;
+        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
+        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
+        TreeMap<Integer, Integer> tfsRegAGene = new TreeMap<>();
+        TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
+        RegulatorsRegulations regulatorsRegulation = new RegulatorsRegulations();
+        RegulatorsRegulationsDAO rrDAO = new RegulatorsRegulationsDAO();
+        ArrayList<TfsRegulating> tfsReg = new ArrayList<>();
+        TfsRegulatingDAO tfsRegDAO = new TfsRegulatingDAO();
+        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
+        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
+
+        //Quantities
+        regulatorsRegulation = rrDAO.findByTypeAndDatabase("database", type);
+        ArrayList<RegulatorsRegulations> reTest = (ArrayList<RegulatorsRegulations>) rrDAO.listAll();
+        System.out.println(reTest.size());
+        for (int i = 0; i < reTest.size(); i++) {
+            if (reTest.get(i).getDatabase().equals("experimental") && reTest.get(i).getGenome() != null) {
+                System.out.println(reTest.get(i).getGenome().getOrganism().getGenera() + " " + reTest.get(i).getGenome().getOrganism().getSpecies() + " " + reTest.get(i).getGenome().getOrganism().getStrain());
+            }
+        }
+        System.out.println(regulatorsRegulation);
+        if (regulatorsRegulation != null) {
+            totalNumOfTfs = regulatorsRegulation.getNumActivators() + regulatorsRegulation.getNumDual() + regulatorsRegulation.getNumRepressors();
+            numOfActivators = regulatorsRegulation.getNumActivators();
+            numOfDuals = regulatorsRegulation.getNumDual();
+            numOfRepressors = regulatorsRegulation.getNumRepressors();
+        } else {
+            totalNumOfTfs = 0;
+            numOfActivators = 0;
+            numOfDuals = 0;
+            numOfRepressors = 0;
+        }
+
+        //tfsRegAGene
+        tfsReg = (ArrayList<TfsRegulating>) tfsRegDAO.findByTypeAndDatabase("database", type);
+        for (TfsRegulating tfsRegulating : tfsReg) {
+            tfsRegAGene.put(tfsRegulating.getNumTf(), tfsRegulating.getNumTg());
+        }
+
+        //coRegAGene
+        coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
+        Integer coRegRange = 0;
+        Integer numOfTFs = 0;
+        for (CoregulatorsStatistics coRAG : coRegAGene) {
+            if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
+                numOfTFs += coRAG.getNumTfs();
+            } else if (coRegRange == 7) {
+                numOfTFs += coRAG.getNumTfs();
+            } else {
+                numOfCoregulators.put(coRegRange, numOfTFs);
+                System.out.println("numOfTFs: " + numOfTFs);
+                numOfTFs = coRAG.getNumTfs();
+                if (coRAG.getNumCoregulators() < 20) {
+                    coRegRange = 1;
+                } else if (coRAG.getNumCoregulators() < 30) {
+                    coRegRange = 2;
+                } else if (coRAG.getNumCoregulators() < 40) {
+                    coRegRange = 3;
+                } else if (coRAG.getNumCoregulators() < 50) {
+                    coRegRange = 4;
+                } else if (coRAG.getNumCoregulators() < 60) {
+                    coRegRange = 5;
+                } else if (coRAG.getNumCoregulators() < 70) {
+                    coRegRange = 6;
+                } else {
+                    coRegRange = 7;
+                }
+            }
+        }
+        numOfCoregulators.put(coRegRange, numOfTFs);
+
+        ///////////////////-------------------------
+        //model.addAttribute("distancesFromStartSite", distancesFromStartSite);
+        model.addAttribute("numOfCoregulators", numOfCoregulators);
+        model.addAttribute("tfsRegAGene", tfsRegAGene);
+        model.addAttribute("numOfActivators", numOfActivators);
+        model.addAttribute("numOfRepressors", numOfRepressors);
+        model.addAttribute("numOfDuals", numOfDuals);
+        model.addAttribute("totalNumOfTfs", totalNumOfTfs);
+        model.addAttribute("type", type);
+        return "sRNAStatistics";
     }
 
     @RequestMapping("quantitiesOfRegulatorAndRegulationTypes")
