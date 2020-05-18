@@ -104,5 +104,12 @@ public class GenesRegulatedByTfSrnaView implements Serializable {
         this.srna = srna;
     }
 
+    @Override
+    public String toString() {
+        return "GenesRegulatedByTfSrnaView{" + "id=" + id + ", tf=" + tf + ", srna=" + srna + ", genome=" + genome + '}';
+    }
+    
+    
+
 
 }
