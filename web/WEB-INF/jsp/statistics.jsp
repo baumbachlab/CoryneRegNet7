@@ -23,14 +23,6 @@
         <script type="text/javascript" src="https://api.observablehq.com/@jashkenas/my-neat-notebook.js?v=3"></script>
     </head>
 
-    <script>
-        text {
-        font - family: sans - serif;
-        font - size: 15px;
-        font - weight: bold;
-        }
-    </script>
-
     <body style="background-image: url('images/background.png'); background-size: cover;" >
 
     <nav class="navbar navbar-expand-md navbar-inverse bg-dark fixed-top navbar-dark">

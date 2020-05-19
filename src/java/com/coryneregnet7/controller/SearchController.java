@@ -12,6 +12,7 @@ import com.coryneregnet7.dao.GeneDAO;
 import com.coryneregnet7.dao.GeneInfoViewDAO;
 import com.coryneregnet7.dao.GeneOperonDAO;
 import com.coryneregnet7.dao.GeneOperonViewDAO;
+import com.coryneregnet7.dao.GenesRegulatedBySrnasViewDAO;
 import com.coryneregnet7.dao.GenomeDAO;
 import com.coryneregnet7.dao.HmmProfilesLengthsDAO;
 import com.coryneregnet7.dao.HomologousDAO;
@@ -37,6 +38,7 @@ import com.coryneregnet7.model.Gene;
 import com.coryneregnet7.model.GeneInfoView;
 import com.coryneregnet7.model.GeneOperon;
 import com.coryneregnet7.model.GeneOperonView;
+import com.coryneregnet7.model.GenesRegulatedBySrnasView;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.HmmProfilesLengths;
 import com.coryneregnet7.model.Homologous;
@@ -2690,7 +2692,7 @@ public class SearchController {
         model.addAttribute("hmmProfilesLen", hmmProfilesLen);
         return "statistics";
     }
-    
+
     @RequestMapping("sRNAStatistics")
     public String sRNAStatistics(Model model, String type) {
 
@@ -2714,32 +2716,27 @@ public class SearchController {
         ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
         CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
 
-        //Quantities
-        regulatorsRegulation = rrDAO.findByTypeAndDatabase("database", type);
-        ArrayList<RegulatorsRegulations> reTest = (ArrayList<RegulatorsRegulations>) rrDAO.listAll();
-        System.out.println(reTest.size());
-        for (int i = 0; i < reTest.size(); i++) {
-            if (reTest.get(i).getDatabase().equals("experimental") && reTest.get(i).getGenome() != null) {
-                System.out.println(reTest.get(i).getGenome().getOrganism().getGenera() + " " + reTest.get(i).getGenome().getOrganism().getSpecies() + " " + reTest.get(i).getGenome().getOrganism().getStrain());
-            }
-        }
-        System.out.println(regulatorsRegulation);
-        if (regulatorsRegulation != null) {
-            totalNumOfTfs = regulatorsRegulation.getNumActivators() + regulatorsRegulation.getNumDual() + regulatorsRegulation.getNumRepressors();
-            numOfActivators = regulatorsRegulation.getNumActivators();
-            numOfDuals = regulatorsRegulation.getNumDual();
-            numOfRepressors = regulatorsRegulation.getNumRepressors();
-        } else {
-            totalNumOfTfs = 0;
-            numOfActivators = 0;
-            numOfDuals = 0;
-            numOfRepressors = 0;
-        }
+        //sRNA type
+        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+        Long ncRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", false);
+        System.out.println("ncRnaExperimental " + ncRnaExperimental);
+        Long ncRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", false);
+        System.out.println("ncRnaPredicted " + ncRnaPredicted);
 
-        //tfsRegAGene
-        tfsReg = (ArrayList<TfsRegulating>) tfsRegDAO.findByTypeAndDatabase("database", type);
-        for (TfsRegulating tfsRegulating : tfsReg) {
-            tfsRegAGene.put(tfsRegulating.getNumTf(), tfsRegulating.getNumTg());
+        Long funcRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", true);
+        System.out.println("funcRnaExperimental " + funcRnaExperimental);
+        Long funcRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", true);
+        System.out.println("funcRnaPredicted " + funcRnaPredicted);
+        Long ncRNA = ncRnaExperimental + ncRnaPredicted;
+        System.out.println("ncRNA: " + ncRNA);
+        Long funcRNA = funcRnaExperimental + funcRnaPredicted;
+        System.out.println("funcRNA: " + funcRNA);
+
+        //distribuition of smallRnas regulating a gene. 
+        GenesRegulatedBySrnasViewDAO dao = new GenesRegulatedBySrnasViewDAO();
+        List<GenesRegulatedBySrnasView> sRNARegAGene = dao.findByGenome(0);
+        for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : sRNARegAGene) {
+            System.out.println(genesRegulatedBySrnasView.toString());
         }
 
         //coRegAGene
@@ -2777,11 +2774,11 @@ public class SearchController {
         ///////////////////-------------------------
         //model.addAttribute("distancesFromStartSite", distancesFromStartSite);
         model.addAttribute("numOfCoregulators", numOfCoregulators);
-        model.addAttribute("tfsRegAGene", tfsRegAGene);
-        model.addAttribute("numOfActivators", numOfActivators);
-        model.addAttribute("numOfRepressors", numOfRepressors);
-        model.addAttribute("numOfDuals", numOfDuals);
-        model.addAttribute("totalNumOfTfs", totalNumOfTfs);
+        model.addAttribute("sRNARegAGene", sRNARegAGene);
+        model.addAttribute("ncRnaExperimental", ncRnaExperimental);
+        model.addAttribute("ncRnaPredicted", ncRnaPredicted);
+        model.addAttribute("funcRnaExperimental", funcRnaExperimental);
+        model.addAttribute("funcRnaPredicted", funcRnaPredicted);
         model.addAttribute("type", type);
         return "sRNAStatistics";
     }

@@ -19,24 +19,21 @@
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
         <script src="//d3js.org/d3.v5.min.js"></script>
         <script src="js/d3-tip.js"></script>
-        <script type="text/javascript" src="js/tfsRegAGene.js"></script>
+        <script type="text/javascript" src="js/sRNARegAGene.js"></script>
         <script type="text/javascript" src="https://api.observablehq.com/@jashkenas/my-neat-notebook.js?v=3"></script>
     </head>
-
-    <script>
-        text {
-        font - family: sans - serif;
-        font - size: 15px;
-        font - weight: bold;
-        }
-    </script>
 
     <body style="background-image: url('images/background.png'); background-size: cover;" >
 
     <nav class="navbar navbar-expand-md navbar-inverse bg-dark fixed-top navbar-dark">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="index.htm"><span class="color logo-size">Coryne</span><span class="color-reg logo-size">Reg</span><span class="color logo-size">Net</span><span class="color-reg logo-size"> 7</span></a>
+                <a class="navbar-brand" href="index.htm">
+                    <span class="color logo-size">Coryne</span>
+                    <span class="color-reg logo-size">Reg</span>
+                    <span class="color logo-size">Net</span>
+                    <span class="color-reg logo-size"> 7</span>
+                </a>
             </div>
             <div class="w-105 text-right">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -77,7 +74,12 @@
     <div class="container-fluid badge badge-light shadow space-to-footer">
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row" style="font-size: 20px">
-            <div class="col-sm-12"><p> <i class="fa fa-info" style='color:black;'></i>&nbsp;To see statistics per organism click on the graphs below.</p></div>
+            <div class="col-sm-12">
+                <p>
+                    <i class="fa fa-info" style='color:black;'></i>
+                    &nbsp;To see statistics per organism click on the graphs below.
+                </p>
+            </div>
         </div>
         <div class="row" style="font-size: 20px">
 
@@ -86,7 +88,8 @@
                     <div class="col-sm-12" style="font-weight: bold">
                         <center>
                             Quantities of regulator types
-                            <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Quantities of regulator types" data-content="This part shows the quantities of regulators i.e. activators, repressors and dual regulators, and also the quantities of regulation types i.e. activations and repressions.">
+                            <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Quantities of sRNA types"
+                               data-content="This part shows the quantities of sRNA types i.e. non coding RNA and functional non coding RNA.">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
                         </center>
@@ -95,7 +98,7 @@
                 <div class="row">
                     <div class="col-sm-12" style="padding-top: 10px">
                         <center>
-                            <div id="regulator-types" style="fill: white; font-weight: bold;"></div>
+                            <div id="sRNA-types" style="fill: white; font-weight: bold;"></div>
                         </center>
                     </div>
                 </div>
@@ -104,8 +107,9 @@
                 <div class="row">
                     <div class="col-sm-12" style="font-weight: bold;">
                         <center>
-                            Distribuition of TFs regulating a gene
-                            <a tabindex="1" role="button" data-toggle="popover" data-trigger="hover" title="Distribuition of TFs regulating a gene" data-content="This part shows the distribution of the number of transcription factors regulating a gene.">
+                            Distribuition of sRNAs regulating a gene
+                            <a tabindex="1" role="button" data-toggle="popover" data-trigger="hover" title="Distribuition of sRNAs regulating
+                               a gene" data-content="This part shows the distribution of the number of sRNAs regulating a gene.">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
 
@@ -115,7 +119,7 @@
                 <div class="row">
                     <div class="col-sm-12" style="padding-top: 10px">
                         <center>
-                            <div id="regulators0"></div>  
+                            <div id="sRNA0"></div>  
                         </center>
                     </div>
                 </div>
@@ -128,7 +132,8 @@
                     <div class="col-sm-12" style="font-weight: bold">
                         <center>
                             Distribution of co-regulating TFs
-                            <a tabindex="2" role="button" data-toggle="popover" data-trigger="hover" title="Distribution of co-regulating TFs" data-content="This part shows the distribution of the number of co-regulating transcription factors.">
+                            <a tabindex="2" role="button" data-toggle="popover" data-trigger="hover" title="Distribution of co-regulating TFs" 
+                               data-content="This part shows the distribution of the number of co-regulating transcription factors.">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
                         </center>
@@ -142,50 +147,30 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'hmmProfLenStatistics.htm?type=${type}';">
-                <div class="row">
-                    <div class="col-sm-12" style="font-weight: bold;">
-                        <center>
-                            Distribution of HMM profiles lengths
-                            <a tabindex="3" role="button" data-toggle="popover" data-trigger="hover" title="Distribution of HMM profiles lengths" data-content="This part shows the distribution of HMM profiles lengths.">
-                                <i class="fa fa-question-circle" style='color:black;'></i>
-                            </a>
-                        </center>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" style="padding-top: 10px">
-                        <center>
-                            <div id="profile-len"></div>  
-                        </center>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Pie Chart - Regulator types -->
+    <!-- Pie Chart - ncRNA types -->
     <script>
 
         //Data
-        var activators;
-        var repressors;
-        var duals;
-        activators = parseInt('${numOfActivators}');
-        repressors = parseInt('${numOfRepressors}');
-        duals = parseInt('${numOfDuals}');
-        var regulatorType = new Map;
-        regulatorType.set(repressors, "Repressors");
-        regulatorType.set(activators, "Activators");
-        regulatorType.set(duals, "Dual regulators");
-        var data = [repressors, activators, duals];
-        //var perOfActivators = ('${numOfActivators}' * 100) / '${totalNumOfTfs}';
-        //var perOfRepressors = ('${numOfRepressors}' * 100) / '${totalNumOfTfs}';
-        //var perOfDuals = ('${numOfDuals}' * 100) / '${totalNumOfTfs}';
-        //var data = [perOfActivators, perOfRepressors, perOfDuals];
+        var ncRNA;
+        var funcRNA;
+        var ncRnaExperimental = parseInt('${ncRnaExperimental}');
+        var ncRnaPredicted = parseInt('${ncRnaPredicted}');
+        ncRNA = ncRnaExperimental + ncRnaPredicted;
+        //console.log("ncRnaExperimental " + ncRnaExperimental);
+        funcRnaExperimental = parseInt('${funcRnaExperimental}');
+        funcRnaPredicted = parseInt('${funcRnaPredicted}');
+        funcRNA = funcRnaExperimental + funcRnaPredicted;
+        //console.log("funcRNA: " + funcRNA);
+        var ncRNAType = new Map;
+        ncRNAType.set(ncRNA, "ncRNA");
+        ncRNAType.set(funcRNA, "functional ncRNA");
+        var data = [ncRNA, funcRNA];
         var chart_width = 450;
         var chart_height = 300;
-        var color = d3.scaleOrdinal(['red', 'green', 'blue']);
+        var color = d3.scaleOrdinal(['red', 'blue']);
         //Pie layout
         var pie = d3.pie();
         //Arc
@@ -195,18 +180,21 @@
                 .innerRadius(inner_radius)
                 .outerRadius(outer_radius);
         //Create SVG element
-        var svg = d3.select("#regulator-types")
+        var svg = d3.select("#sRNA-types")
                 .append("svg")
                 .attr("width", chart_width)
                 .attr("height", chart_height);
         // Create Tooltips
         var tip = d3.tip().attr('class', 'd3-tip').direction('e').offset([0, 5])
                 .html(function (d) {
-                //console.log("hdhd");
-                //console.log(d);
-                //console.log(data);
-                var content = "<span style='margin-left: 2.5px;'>" + regulatorType.get(d.value) + ": " + d.value + "</span><br>";
-                return content;
+                    if (ncRNAType.get(d.value) == "ncRNA") {
+                        var content = "<span style='margin-left: 2.5px;'> ncRNA experimental: " + ncRnaExperimental + "</span><br>\n\
+                                       <span style='margin-left: 2.5px;'> ncRNA predicted: " + ncRnaPredicted + "</span><br>";
+                    } else {
+                        var content = "<span style='margin-left: 2.5px;'> Functional ncRNA experimental: " + funcRnaExperimental + "</span><br>\n\
+                                       <span style='margin-left: 2.5px;'> Functional ncRNA predicted: " + funcRnaPredicted + "</span><br>";
+                    }
+                    return content;
                 });
         svg.call(tip);
         //Groups
@@ -222,7 +210,7 @@
         //Arcs
         arcs.append('path')
                 .attr('fill', function (d, i) {
-                return color(i);
+                    return color(i);
                 })
                 .attr('d', arc)
                 .on('mouseover', tip.show)
@@ -230,103 +218,86 @@
         //Labels
         arcs.append('text')
                 .attr('transform', function (d, i) {
-                return "translate(" + arc.centroid(d) + ")";
+                    return "translate(" + arc.centroid(d) + ")";
                 })
                 .attr('text-anchor', 'text-middle')
                 .text(function (d) {
-                var total = 0;
-                //console.log("calculate");
-                //console.log(data.length);
-                var aux = data;
-                total = aux[0] + aux[1] + aux[2];
-                //console.log(total);
+                    var total = 0;
+                    //console.log("calculate");
+                    //console.log(data.length);
+                    var aux = data;
+                    total = aux[0] + aux[1];
+                    //console.log(total);
 
-                //console.log(d.value);
-                if (d.value == 0) {
-                return "";
-                }
-                return (d.value * 100 / total).toPrecision(3) + "%";
+                    //console.log(d.value);
+                    if (d.value == 0) {
+                        return "";
+                    }
+                    return (d.value * 100 / total).toPrecision(3) + "%";
                 });
         // define legend
-        var regulatorTypes = ["Activators", "Repressors", "Dual"];
+        var regulatorTypes = ["ncRNA", "func. RNA"];
         var legend = svg.append("g")
                 .attr("transform", "translate(" + (chart_width - 145) +
                         "," + (chart_height - 250) + ")");
         regulatorTypes.forEach(function (regulatorType, i) {
 
-        var legendRow = legend.append("g")
-                .attr("transform", "translate(0, " + (i * 30) + ")");
-        legendRow.append("rect")
-                .attr("x", 130)
-                .attr("y", 0)
-                .attr("width", 15)
-                .attr("height", 15)
-                .attr("fill", function () {
-                //console.log(regulatorType);
-                if (regulatorType == "Activators") {
-                return "green";
-                } else if (regulatorType == "Repressors") {
-                return "red";
-                }
-                return "blue";
-                });
-        legendRow.append("text")
-                .attr("x", 120)
-                .attr("y", 15)
-                .attr("text-anchor", "end")
-                .text(regulatorType)
-                .attr("fill", function () {
-                if (regulatorType == "Activators") {
-                return "green";
-                } else if (regulatorType == "Repressors") {
-                return "red";
-                }
-                return "blue";
-                })
-                .style("font-size", "20px");
+            var legendRow = legend.append("g")
+                    .attr("transform", "translate(0, " + (i * 30) + ")");
+            legendRow.append("rect")
+                    .attr("x", 130)
+                    .attr("y", 0)
+                    .attr("width", 15)
+                    .attr("height", 15)
+                    .attr("fill", function () {
+                        //console.log(regulatorType);
+                        if (regulatorType == "ncRNA") {
+                            return "red";
+                        }
+                        return "blue";
+                    });
+            legendRow.append("text")
+                    .attr("x", 120)
+                    .attr("y", 15)
+                    .attr("text-anchor", "end")
+                    .text(regulatorType)
+                    .attr("fill", function () {
+                        if (regulatorType == "ncRNA") {
+                            return "red";
+                        }
+                        return "blue";
+                    })
+                    .style("font-size", "20px");
         });
     </script>
 
-    <!-- Bar Chart - TFs reg a gene -->
+    <!-- Bar Chart - ncRNA reg a gene -->
     <script>
-        var tfsRegAGeneShow = [];
-        var atLeastSixTFs = 0;
+        var sRNARegAGeneShow = [];
+        var atLeastEightsRNAs = 0;
     </script>
-
-    <c:forEach items="${tfsRegAGene}" var="tfsRegGene">
+    <c:forEach items="${sRNARegAGene}" var="sRNA">
         <script>
-            //console.log("inicio")
-            //console.log('${tfsRegGene}');
             var coregulators = [];
-            var aux = '${tfsRegGene}'.split("=");
-            //console.log(aux)
-            if (aux[0] < 6) {
-            if (aux[1].length == 1) {
-            coregulators.genes = "0000" + aux[1];
-            } else if (aux[1].length == 2) {
-            coregulators.genes = "000" + aux[1];
-            } else if (aux[1].length == 3) {
-            coregulators.genes = "00" + aux[1];
-            } else if (aux[1].length == 4) {
-            coregulators.genes = "0" + aux[1];
-            } else {
-            coregulators.genes = aux[1];
-            }
-            coregulators.tfs = aux[0];
-            //console.log(coregulators);
-            tfsRegAGeneShow.push(coregulators);
-            //console.log(tfsRegAGeneShow);
+            if ('${sRNA.numSrnas}' < 8) {
+                if ('${sRNA.numGenes}'.length == 1) {
+                    coregulators.genes = "000" + '${sRNA.numGenes}';
+                } else if ('${sRNA.numGenes}'.length == 2) {
+                    coregulators.genes = "00" + '${sRNA.numGenes}';
+                } else if ('${sRNA.numGenes}'.length == 3) {
+                    coregulators.genes = "0" + '${sRNA.numGenes}';
+                } else {
+                    coregulators.genes = '${sRNA.numGenes}';
+                }
+                coregulators.tfs = '${sRNA.numSrnas}';
+                sRNARegAGeneShow.push(coregulators);
             } else {
 
-            //console.log("--------------------------");
-            //console.log("atLeastSixTFs: " + atLeastSixTFs + " + aux[1]:" + aux[1]);
-            if (atLeastSixTFs == 0) {
-            atLeastSixTFs = aux[1];
-            } else {
-            atLeastSixTFs = parseInt(atLeastSixTFs) + parseInt(aux[1]);
-            }
-            //console.log("atLeastSixTFs: " + atLeastSixTFs);
-            //console.log("--------------------------");
+                if (atLeastEightsRNAs == 0) {
+                    atLeastEightsRNAs = '${sRNA.numSrnas}';
+                } else {
+                    atLeastEightsRNAs = parseInt(atLeastEightsRNAs) + parseInt('${sRNA.numSrnas}');
+                }
             }
 
         </script>
@@ -334,66 +305,33 @@
     </c:forEach>
     <script>
         coregulators = [];
-        if (atLeastSixTFs.length == 1) {
-        coregulators.genes = "0000" + atLeastSixTFs;
-        } else if (atLeastSixTFs.length == 2) {
-        coregulators.genes = "000" + atLeastSixTFs;
-        } else if (atLeastSixTFs.length == 3) {
-        coregulators.genes = "00" + atLeastSixTFs;
-        } else if (atLeastSixTFs.length == 4) {
-        coregulators.genes = "0" + atLeastSixTFs;
+        if (atLeastEightsRNAs.length == 1) {
+            coregulators.genes = "0000" + atLeastEightsRNAs;
+        } else if (atLeastEightsRNAs.length == 2) {
+            coregulators.genes = "000" + atLeastEightsRNAs;
+        } else if (atLeastEightsRNAs.length == 3) {
+            coregulators.genes = "00" + atLeastEightsRNAs;
+        } else if (atLeastEightsRNAs.length == 4) {
+            coregulators.genes = "0" + atLeastEightsRNAs;
         } else {
-        coregulators.genes = atLeastSixTFs;
+            coregulators.genes = atLeastEightsRNAs;
         }
-        //coregulators.genes = atLeastSixTFs;
-        coregulators.tfs = ">=6";
-        tfsRegAGeneShow.push(coregulators);
-        //console.log(tfsRegAGeneShow);
-        //console.log(":)");
-        //console.log(tfsRegAGeneShow);
+        coregulators.tfs = ">=8";
+        sRNARegAGeneShow.push(coregulators);
+        console.log(sRNARegAGeneShow);
         var count = 0;
-        //console.log("count: " + count);
-        // console.log("Bar chart start!!!!!!");
-        // console.log(tfsRegAGeneShow.get(organisms[i]));
-
         var maxValue;
-        //var tfsRegAGene2 = [];
-        //console.log(tfsRegAGeneShow.length);
-        for (var k = 0; k < tfsRegAGeneShow.length; k++) {
-        //console.log("k: " + k);
-        //console.log("tfsRegAGeneShow[" + k + "].genes: " + tfsRegAGeneShow[k].genes);
-        //console.log("tfsRegAGeneShow[" + k + "].tfs: " + tfsRegAGeneShow[k].tfs);
-        //var tfsRegAGeneAux = [];
-
-        if (k == 0) {
-        maxValue = tfsRegAGeneShow[k].genes;
-        //console.log("maxValue: " + maxValue);
-        } else {
-        var aux = tfsRegAGeneShow[k].genes;
-        //console.log("maxValue < aux? " + maxValue + " < " + aux);
-        maxValue = Math.max(maxValue, aux);
-        //console.log("new maxValue: " + maxValue);
+        for (var k = 0; k < sRNARegAGeneShow.length; k++) {
+            if (k == 0) {
+                maxValue = sRNARegAGeneShow[k].genes;
+            } else {
+                var aux = sRNARegAGeneShow[k].genes;
+                maxValue = Math.max(maxValue, aux);
+            }
         }
-        //tfsRegAGeneAux.genes = tfsRegAGeneShow[k].genes;
-        //tfsRegAGeneAux.tfs = tfsRegAGeneShow[k].tfs;
-        //console.log(tfsRegAGeneAux);
-        //tfsRegAGene2.push(tfsRegAGeneAux);
-        //console.log(tfsRegAGene2);
-        }
-
-        //console.log("maxValue: " + maxValue);
-
-        //var data = tfsRegAGeneShow;
-
-        //for (var k = 0; k < tfsRegAGeneShow.length; k++) {
-        // console.log("k: " + k);
-        //console.log("tfsRegAGeneShow[" + k + "].genes: " + tfsRegAGeneShow[k].genes);
-        //  console.log("tfsRegAGeneShow[" + k + "].tfs: " + tfsRegAGeneShow[k].tfs);
-        //}
-
 
         //console.log(data);
-        tfsRegAGene(tfsRegAGeneShow, count, maxValue);
+        tfsRegAGene(sRNARegAGeneShow, count, maxValue);
         // Create Tooltips
     </script>
 
@@ -404,39 +342,34 @@
 
     <c:forEach items="${numOfCoregulators}" var="numOfGeneCoregulators">
         <script>
-            //  console.log("inicio")
-            //console.log('${numOfGeneCoregulators}');
             var coregulators = [];
             var aux = '${numOfGeneCoregulators}'.split("=");
-            console.log(aux);
+            //console.log(aux);
             if (aux[0] == 0) {
-            coregulators.coregulators = "0-9";
+                coregulators.coregulators = "0-9";
             } else if (aux[0] == 1) {
-            coregulators.coregulators = "10-19";
+                coregulators.coregulators = "10-19";
             } else if (aux[0] == 2) {
-            coregulators.coregulators = "20-29";
+                coregulators.coregulators = "20-29";
             } else if (aux[0] == 3) {
-            coregulators.coregulators = "30-39";
+                coregulators.coregulators = "30-39";
             } else if (aux[0] == 4) {
-            coregulators.coregulators = "40-49";
+                coregulators.coregulators = "40-49";
             } else if (aux[0] == 5) {
-            coregulators.coregulators = "50-59";
+                coregulators.coregulators = "50-59";
             } else if (aux[0] == 6) {
-            coregulators.coregulators = "60-69";
+                coregulators.coregulators = "60-69";
             } else {
-            coregulators.coregulators = ">=70"
+                coregulators.coregulators = ">=70"
             }
 
             if (aux[1].length == 1) {
-            coregulators.tfs = "00" + aux[1];
+                coregulators.tfs = "00" + aux[1];
             } else if (aux[1].length == 2) {
-            coregulators.tfs = "0" + aux[1];
+                coregulators.tfs = "0" + aux[1];
             } else {
-            coregulators.tfs = aux[1];
+                coregulators.tfs = aux[1];
             }
-            //coregulators.tfs = aux[1];
-
-            //console.log(coregulators);
             numOfCoregulatorsShow.push(coregulators);
             //console.log(numOfCoregulatorsShow);
         </script>
@@ -460,14 +393,15 @@
         // Create Tooltips
         var tip = d3.tip().attr('class', 'd3-tip').direction('e').offset([0, 5])
                 .html(function (d) {
-                var tfs = Number(d.tfs);
-                var content = "<span style='margin-left: 2.5px;'>" + "Number of transcription factors: " + tfs + "<br>" + "Number of co-regulators: " + d.coregulators + "</span><br>";
-                return content;
+                    var tfs = Number(d.tfs);
+                    var content = "<span style='margin-left: 2.5px;'>" + "Number of transcription factors: " + tfs + "<br>" +
+                            "Number of co-regulators: " + d.coregulators + "</span><br>";
+                    return content;
                 });
         g.call(tip);
         var x = d3.scaleBand()
                 .domain(data.map(function (d) {
-                return d.coregulators;
+                    return d.coregulators;
                 }
                 ))
                 .range([0, width])
@@ -475,8 +409,8 @@
                 .paddingOuter(0.2);
         var y = d3.scaleLinear()
                 .domain([0, d3.max(data, function (d) {
-                return d.tfs;
-                })])
+                        return d.tfs;
+                    })])
                 .range([height, 0]);
         var xAxisCall = d3.axisBottom(x);
         g.append("g")
@@ -487,7 +421,7 @@
         var yAxisCall = d3.axisLeft(y)
                 .ticks(5)
                 .tickFormat(function (d) {
-                return d;
+                    return d;
                 });
         g.append("g")
                 .attr("class", "y-axis")
@@ -503,8 +437,8 @@
         //y label
         g.append("text")
                 .attr("class", "y axis-label")
-                .attr("x", - (height / 2))
-                .attr("y", - 65)
+                .attr("x", -(height / 2))
+                .attr("y", -65)
                 .attr("font-size", "20px")
                 .attr("text-anchor", "middle")
                 .attr("transform", "rotate(-90)")
@@ -514,14 +448,14 @@
         rectangle.enter()
                 .append("rect")
                 .attr("y", function (d) {
-                return y(d.tfs);
+                    return y(d.tfs);
                 })
                 .attr("x", function (d) {
-                return x(d.coregulators);
+                    return x(d.coregulators);
                 })
                 .attr("width", x.bandwidth)
                 .attr("height", function (d) {
-                return height - y(d.tfs);
+                    return height - y(d.tfs);
                 })
                 .attr("fill", "grey")
                 .on('mouseover', tip.show)

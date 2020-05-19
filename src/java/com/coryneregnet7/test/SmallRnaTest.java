@@ -29,20 +29,6 @@ public class SmallRnaTest {
         try {
             SmallRnaTest srTest = new SmallRnaTest();
             srTest.changeFiguresNamesCgHomologous();
-
-            //RnaFile creator = new RnaFile();
-            //List<String> rnaFileNames = creator.bringRnaFiles("model");
-////        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
-////        List<SmallRna> smallRnaList = sRnaDAO.findByGenomeType(1226, "experimental");
-////
-////        for (SmallRna smallRna : smallRnaList) {
-////            System.out.println(smallRna);
-////        }
-//        SmallRnaDAO rDAO = new SmallRnaDAO();
-//        List<Genome> genomes = rDAO.bringGenomesByType("model");
-//        for (Genome genome : genomes) {
-//            System.out.println(genome.toString());
-//        }
         } catch (InterruptedException ex) {
             Logger.getLogger(SmallRnaTest.class.getName()).log(Level.SEVERE, null, ex);
         }
