@@ -230,7 +230,7 @@
                                 <center>
                                     <input type="hidden" name="goBackTo" value="experimental">
                                     <div class="tooltip">
-                                        <input id="dinamic-network-caller" formaction="whichNetwork.htm?layoutType=fast" type="submit" class="btn btn-primary btn-block btn-normal font" value="Network Visualization" onclick="showLoader()" disabled>
+                                        <input id="dinamic-network-caller" formaction="whichNetwork.htm?layoutType=fast" type="submit" class="btn btn-primary btn-block btn-normal font" value="Visualize Gene Regulatory Network" onclick="showLoader()" disabled>
                                         <span class="tooltiptext">Searches the database content and presents a dynamic network visualization of the TRN of selected organism</span>
                                     </div>
                                 </center>

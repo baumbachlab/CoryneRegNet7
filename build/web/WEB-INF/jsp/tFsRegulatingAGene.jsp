@@ -121,7 +121,7 @@
                         var atLeastSixTFs = 0;
                         for (var i = 0; i < aux.length; i++) {
                             var attributes = aux[i].split("=");
-                            console.log(attributes[0]);
+                            //console.log(attributes[0]);
                             var numberOfTFs = [];
                             numberOfTFs[0] = 0;
                             if (attributes[0].includes("{")) {
@@ -131,9 +131,6 @@
                                 //tfs.push(attributes[0]);
                                 numberOfTFs[1] = attributes[0];
                             }
-
-                            console.log("numberOfTFs[1]: " + numberOfTFs[1]);
-                            console.log(attributes[1]);
 
                             var numberOfGenes = [];
                             if (attributes[1].includes("}")) {
