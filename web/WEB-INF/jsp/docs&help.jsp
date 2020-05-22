@@ -1,7 +1,7 @@
 <%--
     Document   : tutorials
     Created on : Dec 1, 2019, 10:29:30 AM
-    Author     : doglas
+    Author     : doglas & mariana
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -107,7 +107,7 @@
             <div class="card">
                 <div class="card-header">
                     <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo" style="color: blue">
-                        CoryneRegNet's experimental TRNs literature
+                        CoryneRegNet's experimental TRNs/SRNs literature
                     </a>
                 </div>
                 <div id="collapseTwo" class="collapse" data-parent="#accordion">
@@ -117,6 +117,7 @@
                         <ul>
                             <li><p>Pauling, J., Röttger, R., Tauch, A., Azevedo, V. and Baumbach, J., 2011. <a href="https://academic.oup.com/nar/article/40/D1/D610/2903480" style="color: blue" target="_blank">CoryneRegNet 6.0—Updated database content, new analysis methods and novel features focusing on community demands.</a>  Nucleic acids research, 40(D1), pp.D610-D614.</p></li>
                             <li><p>Freyre-González, J.A. and Tauch, A., 2017. <a href="https://www.sciencedirect.com/science/article/pii/S0168165616315887" style="color: blue" target="_blank">Functional architecture and global properties of the Corynebacterium glutamicum regulatory network: Novel insights from a dataset with a high genomic coverage.</a> Journal of biotechnology, 257, pp.199-210.</p></li>
+                            <li><p>Mentz A, Neshat A, Pfeifer-Sancar K, Pühler A, Rückert C, Kalinowski J., 2013. <a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-14-714" style="color: blue" target="_blank">Comprehensive discovery and characterization of small RNAs in Corynebacterium glutamicum ATCC 13032.</a> BMC Genomics. 2013;14(1):714. </p></li>
                         </ul>
                         <p><i>Ecoli coli</i> K-12:</p>
                         <ul>
@@ -292,24 +293,158 @@
                     <div class="card-header">
                         <a class="collapsed card-link" data-toggle="collapse" href="#collapseEight" style="color: blue">
 
-                            CoryneRegNet's RNA methodology
+                            CoryneRegNet's sRNA methodology
                         </a>
                     </div>
                     <div id="collapseEight" class="collapse" data-parent="#accordion">
                         <div class="card-body">
-                            Lorem ipsum..
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseNine" style="color: blue">
-                            CoryneRegNet's RNA transfer methodology
-                        </a>
-                    </div>
-                    <div id="collapseNine" class="collapse" data-parent="#accordion">
-                        <div class="card-body">
-                            Lorem ipsum..
+                            <div class="row" style="padding-bottom: 30px">
+
+                                <p>CoryneRegNet's small RNA methodology is based on seven 
+                                    steps: sRNA detection, homology detection, alignment
+                                    , sRNA classification, filter, structure prediction 
+                                    and target prediction. 
+
+                                    The following paragraphs summarize these steps:</p>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            sRNA detection: We recovered 805 experimentally
+                                            verified small RNAs from (Mentz et al., 2013) 
+                                            and 70 predicted small RNAS from BSRD (Li et al.,2013). 
+                                            We ran cmsearch with the genomes of C. 
+                                            efficiens, C. jeikeium, C. pseudotuberculosis, 
+                                            C. ulcerans and C. diphtheriae.
+
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Homology detection: We detected homologous 
+                                            small RNAs for every gene in the analysis. 
+                                            Homologous sRNAs belonging to the genomes 
+                                            of interest were considered as potential 
+                                            functional sRNAs and, thus, added to the analysis.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Alignment: we aligned each sRNA with 
+                                            two selected homologous with more than 
+                                            80% of similarity.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            sRNA classification: the aligned 
+                                            sequences were given to both RNAz 
+                                            and RNAdetect, which classified the
+                                            sRNAs as functional RNAs or other.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Filter: Predicted sRNAs classified 
+                                            that were not classified as functional 
+                                            RNAs were removed from the analysis. 
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Structure prediction: secondary 
+                                            structure was predicted using RNAalifold 
+                                            for every sRNA in the analysis.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Target prediction: sRNA targets are 
+                                            predicted with CopraRNA using default 
+                                            settings. We selected the best 15 
+                                            predictions with pvalue < 0.01 as 
+                                            suggested in (Wright and Georg, 2018). 
+                                        </p>
+                                    </li>
+
+
+                                </ul>
+
+                                <div class="row workflow-logo" style="padding-bottom: 50px">
+                                    <div class="col-sm-12">
+                                        <img id="phmm1" class="img-fluid img-responsive" src="images/srna-workflow.png" alt="sRNA workflow">
+                                    </div>
+                                </div>
+                                <p>Software used in the methodology</p>
+                                <table id="homologous-table" class="table table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Software</th>
+                                            <th>Description</th>
+                                            <th>Publication</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span><a href="http://eddylab.org/infernal/" style="color: blue" target="_blank">cmsearch</a></span></td>
+                                            <td><span>"Infernal (INFERence of RNA ALignment) uses an implementation of a special case of profile stochastic context-free grammars called covariance models (CMs). for searching DNA sequence databases for RNA structure and sequence similarities."</span></td>
+                                            <td><span>S. R. Eddy, <a href="https://pubmed.ncbi.nlm.nih.gov/24008419/" style="color: blue" target="_blank">Infernal 1.1: 100-fold faster RNA homology searches</a>, Bioinformatics 29:2933-2935 (2013).</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="http://rna.informatik.uni-freiburg.de/GLASSgo/Input.jsp" style="color: blue" target="_blank">GLASSgo</a></span></td>
+                                            <td><span>"GLASSgo (GLobal Automated sRNA Search go) combines iterative BLAST     searches, pairwise identity filtering, and structure based clustering in an automated prediction pipeline to find sRNA homologs from scratch."</span></td>
+                                            <td><span>Steffen C. Lott, Richard A Schäfer, Martin Mann, Rolf Backofen, Wolfgang R Hess, Bjoern Voss, Jens Georg <a href="https://www.frontiersin.org/articles/10.3389/fgene.2018.00124/full" style="color: blue" target="_blank">GLASSgo - Automated and reliable detection of sRNA homologs from a single input sequences</a> Frontiers in Genetics, 9, 124, 2018.</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="http://www.clustal.org/omega/" style="color: blue" target="_blank">clustalo</a> </span></td>
+                                            <td><span>"Clustal Omega is a new multiple sequence alignment program that uses seeded guide trees and HMM profile-profile techniques to generate alignments between three or more sequences."</span></td>
+                                            <td><span>Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R, McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG. <a href="https://pubmed.ncbi.nlm.nih.gov/21988835/" style="color: blue" target="_blank">Fast, Scalable Generation of High-Quality Protein Multiple Sequence Alignments Using Clustal Omega.</a> Mol Syst Biol. 2011 Oct 11;7:539</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="https://github.com/bjyoontamu/RNAdetect" style="color: blue" target="_blank">RNAdetect</a></span></td>
+                                            <td><span>"RNAdetect can accurately detect the presence of functional ncRNAs by incorporating novel predictive features based on the concept of generalized ensemble defect (GED), which assesses the degree of structure conservation across multiple related sequences and the conformation of the individual folding structures to a common consensus structure."</span></td>
+                                            <td><span>Chen CC, Qian X, Yoon BJ. <a href="https://pubmed.ncbi.nlm.nih.gov/30169792/" style="color: blue" target="_blank">RNAdetect: efficient computational detection of novel non-coding RNAs.</a> Bioinformatics. 2019;35(7):1133‐1141. </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="https://www.tbi.univie.ac.at/RNA/RNAalifold.1.html" style="color: blue" target="_blank">RNAalifold</a></span></td>
+                                            <td><span>"RNAalifold calculates secondary structures for a set of aligned RNAs taking into account both thermodynamic stability and sequence covariation. It calculates their minimum free energy (mfe) structure, partition function (pf) and base pairing probability matrix."</span></td>
+                                            <td><span>Bernhart SH, Hofacker IL, Will S, Gruber AR, & Stadler PF <a href="https://link.springer.com/article/10.1186/1471-2105-9-474" style="color: blue" target="_blank"> RNAalifold: Improved consensus structure prediction for RNA alignments </a>  BMC Bioinformatics: 9, pp 474, 2008.</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="https://www.tbi.univie.ac.at/software/RNAz/" style="color: blue" target="_blank">RNAz</a></span></td>
+                                            <td><span>"RNAz is a program for predicting structurally conserved and thermodynamically stable RNA secondary structures in multiple sequence alignments. It can be used in genome wide screens to detect functional RNA structures, as found in noncoding RNAs and cis-acting regulatory elements of mRNAs."</span></td>
+                                            <td><span>Gruber AR, Findeiß S, Washietl S, Hofacker IL, Stadler PF.  <a href="https://pubmed.ncbi.nlm.nih.gov/19908359/" style="color: blue" target="_blank"> RNAz 2.0: Improved noncoding RNA detection </a> Pac Symp Biocomput. 15:69-79, 2010.</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span><a href="http://rna.informatik.uni-freiburg.de/CopraRNA/Input.jsp" style="color: blue" target="_blank">CopraRNA</a></span></td>
+                                            <td><span>"CopraRNA is a tool for sRNA target prediction. It computes whole genome predictions by combination of distinct whole genome IntaRNA predictions."</span></td>
+                                            <td><span>Wright PR, Richter AS, Papenfort K, Mann M, Vogel J, Hess WR, Backofen R, Georg J.  <a href="https://www.pnas.org/content/110/37/E3487" style="color: blue" target="_blank"> Comparative genomics boosts target prediction for bacterial small RNAs </a> Proceedings of the National Academy of Sciences, 110(37):E3487-96, 2013. </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p>Further information about sRNA and target prediction: </p>
+                                <ul>
+                                    <li>
+                                        <p>Backofen R, Gorodkin J, Hofacker IL, Stadler PF.
+                                            <a href="https://link.springer.com/protocol/10.1007/978-1-4939-7463-4_14" style="color: blue" target="_blank">
+                                                Comparative RNA Genomics. 
+                                            </a> 
+                                            Mol Biol. 2018;1704:363‐400.
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>Wright PR, Georg J, Mann M, et al.
+                                            <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4086077/" style="color: blue" target="_blank">
+                                                CopraRNA and IntaRNA: predicting small RNA targets, networks and interaction domains.
+                                            </a> 
+                                            Nucleic Acids Res. 2014;42(Web Server issue):W119‐W123.
+                                        </p>
+                                    </li>
+
+                                </ul>
+
+
+
+                            </div>
                         </div>
                     </div>
                 </div>

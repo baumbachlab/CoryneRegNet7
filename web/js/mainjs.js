@@ -8,12 +8,39 @@ $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 });
 
+function getGeneList(id) {
+    $.ajax({
+        url: 'ajaxGeneList.htm?id='+id,
+        success: function (data) {
+            $('#resultList').html(data);
+            var geneList = data.split(",");
+
+            var geneListHtml = "";
+            $('#genesList').html(geneListHtml);
+            var i;
+            geneListHtml += '<select class="form-control space-after-input" id="geneList-select" name="geneListSelect">';
+            for (i = 0; i < geneList.length; i++) {
+                geneListHtml += '<option value="' + geneList[i] + '">' + geneList[i] + '</option>';
+            }
+            geneListHtml += '</select>';
+            //geneListHtml
+            var value = document.getElementById("organism-search").value;
+
+            $('#resultList').html(geneListHtml);
+            alert(value);
+
+
+        }
+    });
+}
+
 function enableNetworkButton() {
     var value = document.getElementById("organism-search").value;
     if (value == 0) {
         document.getElementById("dinamic-network-caller").disabled = true;
     } else {
         document.getElementById("dinamic-network-caller").disabled = false;
+        getGeneList(value);
     }
 }
 
@@ -71,7 +98,7 @@ function hmmLogo() {
     $("#hmm-logo").show();
 }
 
-function hmmLogoError(){
+function hmmLogoError() {
     $("#hmm-logo-loader").hide();
     $("#hmm-logo-error").show();
 }

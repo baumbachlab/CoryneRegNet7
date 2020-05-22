@@ -5,7 +5,9 @@
  */
 package com.coryneregnet7.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
  
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +38,34 @@ public class CrunchifySpringAjaxJQuery {
         String result = "<br>Next Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
         System.out.println("Debug Message from CrunchifySpringAjaxJQuery Controller.." + new Date().toString());
         return result;
+    }
+    
+    @RequestMapping(value = "/ajaxList", method = RequestMethod.GET)
+    public @ResponseBody
+    String getList() {
+        System.out.println("CREATING LIST! ");
+        List list = new ArrayList();
+        list.add(1);
+        list.add(33);
+        list.add(74);
+        list.add(92);
+        String str = list.toString();
+        return str;
+    }
+    
+    @RequestMapping(value = "/ajaxGeneList", method = RequestMethod.GET)
+    public @ResponseBody
+    String getGeneList(String id) {
+        System.out.println("CREATING LIST! "+id);
+        
+        List list = new ArrayList();
+        list.add("cg0001 (adhX)");
+        list.add("cg0002 (adhZ)");
+        list.add("cg0012 (clsX)");
+        list.add("cg0350 (dtxR)");
+        list.add("cg0400 (dnaD)");
+        String str = list.toString().replace("[", "");
+        str = str.toString().replace("]", "");
+        return str;
     }
 }
