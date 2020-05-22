@@ -83,11 +83,11 @@
         </div>
         <div class="row" style="font-size: 20px">
 
-            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'quantitiesOfRegulatorAndRegulationTypes.htm?type=${type}';">
+            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'quantitiesOfsRNATypes.htm?type=${type}';">
                 <div class="row">
                     <div class="col-sm-12" style="font-weight: bold">
                         <center>
-                            Quantities of regulator types
+                            Quantities of sRNA types
                             <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Quantities of sRNA types"
                                data-content="This part shows the quantities of sRNA types i.e. non coding RNA and functional non coding RNA.">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'tFsRegulatingAGene.htm?type=${type}';">
+            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'sRNAsRegulatingAGene.htm?type=${type}';">
                 <div class="row">
                     <div class="col-sm-12" style="font-weight: bold;">
                         <center>
@@ -318,7 +318,7 @@
         }
         coregulators.tfs = ">=8";
         sRNARegAGeneShow.push(coregulators);
-        console.log(sRNARegAGeneShow);
+        //console.log(sRNARegAGeneShow);
         var count = 0;
         var maxValue;
         for (var k = 0; k < sRNARegAGeneShow.length; k++) {

@@ -6,9 +6,9 @@
 
 function tfsRegAGene(data, count, maxValue) {
 
-    console.log(data);
-    console.log(count);
-    console.log(maxValue);
+    //console.log(data);
+    //console.log(count);
+    //console.log(maxValue);
     
     var margin = {left: 80, right: 4.17, top: 6.17, bottom: 60};
     var width = 500;

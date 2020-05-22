@@ -20,7 +20,7 @@
         <link type="text/css" rel="stylesheet" href="css/statistics.css">
         <link type="text/css" rel="stylesheet" href="css/qRRT.css">
         <script type="text/javascript" src="js/mainjs.js"></script>
-        <script type="text/javascript" src="js/tfsRegAGene.js"></script>
+        <script type="text/javascript" src="js/sRNARegAGene.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
         <script src="//d3js.org/d3.v5.min.js"></script>
         <script src="js/d3-tip.js"></script>
@@ -70,24 +70,24 @@
 
         <script>
             var count = -1;
-            var tfsRegAGeneShow = new Map;
+            var sRNAsRegAGeneShow = new Map;
             var organisms = [];
         </script>
 
         <div class="container-fluid badge badge-light shadow space-to-footer">
             <hr style="color: #eee; margin-bottom: 30px">
             <c:set var="count" value="-1" scope="page"/>
-            <c:forEach items="${tfsRegAGene}" var="tfsRegGene">
+            <c:forEach items="${sRNAsRegAGene}" var="sRNAsRegGene">
                 <c:set var="count" value="${count + 1}" scope="page"/>
-                <c:set var="divName" value="regulators${count}" scope="page"/>
+                <c:set var="divName" value="sRNA${count}" scope="page"/>
                 <div class="container-fluid" style="margin-bottom: 80px;">
                     <div class="row font">
                         <c:choose>
                             <c:when test="${count==0}">
-                                <div class="col-sm-12"><p class="dist-info">Distribution of the number of transcription factors regulating a gene (${type} database)</p></div>
+                                <div class="col-sm-12"><p class="dist-info">Distribution of the number of sRNAs regulating a gene (${type} database)</p></div>
                             </c:when>
                             <c:otherwise>
-                                <div class="col-sm-12"><center><span class="dist-info">Distribution of the number of transcription factors regulating a gene for <a href="organismInfo.htm?id=${organismsId.get(tfsRegGene.key)}&type=${type}">${tfsRegGene.key}</a></span></center></div>
+                                <div class="col-sm-12"><center><span class="dist-info">Distribution of the number of sRNAs regulating a gene for <a href="organismInfo.htm?id=${organismsId.get(sRNAsRegGene.key)}&type=${type}">${sRNAsRegGene.key}</a></span></center></div>
                                         </c:otherwise>
                                     </c:choose>
                     </div>
@@ -99,38 +99,37 @@
                 </div>
 
                 <script>
-                    var key = '${tfsRegGene.key}';
-                    var value = '${tfsRegGene.value}';
-                    var tfsRegAGeneObject = {};
+                    var key = '${sRNAsRegGene.key}';
+                    var value = '${sRNAsRegGene.value}';
+                    var sRNAsRegAGeneObject = {};
                     organisms.push(key);
-                    //console.log(organisms);
-                    //console.log("Regulators---------------------------------");
-                    //console.log(value);
-                    tfsRegAGeneObject = tfsRegAGeneObjectFunction(value);
+                    sRNAsRegAGeneObject = sRNAsRegAGeneObjectFunction(value);
                     //console.log(tfsRegAGeneObject);
-                    tfsRegAGeneShow.set(key, tfsRegAGeneObject);
+                    sRNAsRegAGeneShow.set(key, sRNAsRegAGeneObject);
                     var auxRetriver = {};
-                    auxRetriver = tfsRegAGeneShow.get(key);
+                    auxRetriver = sRNAsRegAGeneShow.get(key);
                     //console.log(auxRetriver);
-                    function tfsRegAGeneObjectFunction(value) {
-                        var tfsRegAGeneAttributes = {};
+                    function sRNAsRegAGeneObjectFunction(value) {
+                        var sRNAsRegAGeneAttributes = {};
                         var aux = [];
                         var tfs = [];
                         var genes = [];
                         aux = value.split(", ");
-                        var atLeastSixTFs = 0;
                         for (var i = 0; i < aux.length; i++) {
                             var attributes = aux[i].split("=");
                             //console.log(attributes[0]);
-                            var numberOfTFs = [];
-                            numberOfTFs[0] = 0;
+                            var numberOfsRNAs = [];
+                            numberOfsRNAs[0] = 0;
                             if (attributes[0].includes("{")) {
-                                numberOfTFs = attributes[0].split("{");
+                                numberOfsRNAs = attributes[0].split("{");
                                 //tfs.push(attributesAux[1]);
                             } else {
                                 //tfs.push(attributes[0]);
-                                numberOfTFs[1] = attributes[0];
+                                numberOfsRNAs[1] = attributes[0];
                             }
+
+                            //console.log("numberOfsRNAs[1]: " + numberOfsRNAs[1]);
+                            //console.log(attributes[1]);
 
                             var numberOfGenes = [];
                             if (attributes[1].includes("}")) {
@@ -139,117 +138,29 @@
                                 numberOfGenes[0] = attributes[1];
                             }
 
-                            if (numberOfTFs[1] < 6) {
-                                if (numberOfGenes[0].length == 1) {
-                                    genes.push("0000" + numberOfGenes[0]);
-                                } else if (numberOfGenes[0].length == 2) {
-                                    genes.push("000" + numberOfGenes[0]);
-                                } else if (numberOfGenes[0].length == 3) {
-                                    genes.push("00" + numberOfGenes[0]);
-                                } else if (numberOfGenes[0].length == 4) {
-                                    genes.push("0" + numberOfGenes[0]);
-                                } else {
-                                    genes.push(numberOfGenes[0]);
-                                }
-
-                                tfs.push(numberOfTFs[1]);
+                            if (numberOfGenes[0].length == 1) {
+                                genes.push("0000" + numberOfGenes[0]);
+                            } else if (numberOfGenes[0].length == 2) {
+                                genes.push("000" + numberOfGenes[0]);
+                            } else if (numberOfGenes[0].length == 3) {
+                                genes.push("00" + numberOfGenes[0]);
+                            } else if (numberOfGenes[0].length == 4) {
+                                genes.push("0" + numberOfGenes[0]);
                             } else {
-
-                                if (atLeastSixTFs == 0) {
-                                    atLeastSixTFs = numberOfGenes[0];
-                                } else {
-                                    atLeastSixTFs = parseInt(atLeastSixTFs) + parseInt(numberOfGenes[0]);
-                                }
-
+                                genes.push(numberOfGenes[0]);
                             }
-//                            if (attributes[1].includes("}")) {
-                            //                              attributesAux = attributes[1].split("}");
-                            //                            console.log("attributesAux[0].length: " + attributesAux[0].length);
-                            //                          console.log("attributesAux[0]: " + attributesAux[0]);
-                            //                        if (attributesAux[0].length == 1) {
-                            //                          genes.push("0000" + attributesAux[0]);
-                            //                    } else if (attributesAux[0].length == 2) {
-                            //                      genes.push("000" + attributesAux[0]);
-                            //                } else if (attributesAux[0].length == 3) {
-                            //                  genes.push("00" + attributesAux[0]);
-                            //            } else if (attributesAux[0].length == 2) {
-                            //              genes.push("0" + attributesAux[0]);
-                            //        } else {
-                            //          genes.push(attributesAux[0]);
-                            //    }
 
-//
-
-//
-                            //                              if (aux[0] < 6) {
-                            //                                if (aux[1].length == 1) {
-                            //                                  coregulators.genes = "0000" + aux[1];
-                            //                            } else if (aux[1].length == 2) {
-                            //                              coregulators.genes = "000" + aux[1];
-                            //                        } else if (aux[1].length == 3) {
-                            //                          coregulators.genes = "00" + aux[1];
-                            //                    } else if (aux[1].length == 4) {
-                            //                      coregulators.genes = "0" + aux[1];
-                            //                } else {
-                            //                  coregulators.genes = aux[1];
-                            //            }
-                            //          coregulators.tfs = aux[0];
-                            //        //console.log(coregulators);
-                            //      tfsRegAGeneShow.push(coregulators);
-                            //    //console.log(tfsRegAGeneShow);
-                            //} else {
-
-                            //  //console.log("--------------------------");
-                            ////console.log("atLeastSixTFs: " + atLeastSixTFs + " + aux[1]:" + aux[1]);
-                            //if (atLeastSixTFs == 0) {
-                            //  atLeastSixTFs = aux[1];
-                            //} else {
-                            //  atLeastSixTFs = parseInt(atLeastSixTFs) + parseInt(aux[1]);
-                            //}
-                            //}
-
-//
-
-                            //               } else {
-                            //                 console.log("attributes[1].length: " + attributes[1].length);
-                            //               console.log("attributes[1]: " + attributes[1]);
-                            //             if (attributes[1].length == 1) {
-                            //               //  console.log()
-                            //             genes.push("00" + attributes[1]);
-                            //       } else if (attributes[1].length == 2) {
-                            //         genes.push("0" + attributes[1]);
-                            //   } else {
-                            //     genes.push(attributes[1]);
-                            //}
-                            //}
+                            tfs.push(numberOfsRNAs[1]);
                         }
-                        //console.log("tfs:");
-                        //console.log(tfs);
-                        //console.log("genes:");
-                        // console.log(genes);
-
-                        if (atLeastSixTFs.length == 1) {
-                            genes.push("0000" + atLeastSixTFs);
-                        } else if (atLeastSixTFs.length == 2) {
-                            genes.push("000" + atLeastSixTFs);
-                        } else if (atLeastSixTFs.length == 3) {
-                            genes.push("00" + atLeastSixTFs);
-                        } else if (atLeastSixTFs.length == 4) {
-                            genes.push("0" + atLeastSixTFs);
-                        } else {
-                            genes.push(atLeastSixTFs);
-                        }
-
-                        tfs.push(">=6");
-                        tfsRegAGeneAttributes.tfs = tfs;
-                        tfsRegAGeneAttributes.genes = genes;
-                        return tfsRegAGeneAttributes;
+                        sRNAsRegAGeneAttributes.tfs = tfs;
+                        sRNAsRegAGeneAttributes.genes = genes;
+                        return sRNAsRegAGeneAttributes;
                     }
                 </script>
             </c:forEach>
 
             <script>
-                for (var i = 0; i < tfsRegAGeneShow.size; i++) {
+                for (var i = 0; i < sRNAsRegAGeneShow.size; i++) {
                     count++;
                     //console.log("count: " + count);
                     // console.log("Bar chart start!!!!!!");
@@ -257,21 +168,21 @@
 
                     var maxValue;
                     var tfsRegAGene2 = [];
-                    for (var k = 0; k < tfsRegAGeneShow.get(organisms[i]).genes.length; k++) {
+                    for (var k = 0; k < sRNAsRegAGeneShow.get(organisms[i]).genes.length; k++) {
                         // console.log("tfsRegAGeneShow.get(organisms[i]).genes[k]: " + tfsRegAGeneShow.get(organisms[i]).genes[k]);
                         // console.log("tfsRegAGeneShow.get(organisms[i]).tfs[k]: " + tfsRegAGeneShow.get(organisms[i]).tfs[k]);
                         var tfsRegAGeneAux = [];
 
                         if (k == 0) {
-                            maxValue = tfsRegAGeneShow.get(organisms[i]).genes[k];
+                            maxValue = sRNAsRegAGeneShow.get(organisms[i]).genes[k];
                         } else {
-                            var aux = tfsRegAGeneShow.get(organisms[i]).genes[k];
+                            var aux = sRNAsRegAGeneShow.get(organisms[i]).genes[k];
                             // console.log("maxValue < aux? " + maxValue + " < " + aux);
                             maxValue = Math.max(maxValue, aux);
                             //  console.log("new maxValue: " + maxValue);
                         }
-                        tfsRegAGeneAux.genes = tfsRegAGeneShow.get(organisms[i]).genes[k];
-                        tfsRegAGeneAux.tfs = tfsRegAGeneShow.get(organisms[i]).tfs[k];
+                        tfsRegAGeneAux.genes = sRNAsRegAGeneShow.get(organisms[i]).genes[k];
+                        tfsRegAGeneAux.tfs = sRNAsRegAGeneShow.get(organisms[i]).tfs[k];
                         // console.log(tfsRegAGeneAux);
                         tfsRegAGene2.push(tfsRegAGeneAux);
                         //console.log(tfsRegAGene2);
@@ -295,7 +206,7 @@
                 }
             </script>
 
-            <c:if test="${empty tfsRegAGene}">
+            <c:if test="${empty sRNAsRegAGene}">
                 <span>No entries found.</span>
             </c:if>
         </div>
