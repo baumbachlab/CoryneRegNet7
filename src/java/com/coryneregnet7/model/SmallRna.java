@@ -45,7 +45,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.bringByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
     , @NamedQuery(name = "SmallRna.bringByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type")
     , @NamedQuery(name = "SmallRna.bringFunctionalByType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna")
+    , @NamedQuery(name = "SmallRna.bringFunctionalByTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna and s.genome = :genome")
     , @NamedQuery(name = "SmallRna.bringFunctionalByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna")
+    , @NamedQuery(name = "SmallRna.bringFunctionalByNotTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna and s.genome = :genome")
 //functionalRna
 
 })

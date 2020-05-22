@@ -305,7 +305,25 @@ public class SmallRnaDAO extends GenericDAO {
         }
     }
 
-    //bringFunctionalByNotType
+    //bringFunctionalByTypeGenome
+    public Long bringFunctionalByTypeGenome(String type, Boolean functionalRna, Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringFunctionalByTypeGenome");
+            query.setString("type", type);
+            query.setBoolean("functionalRna", functionalRna);
+            query.setInteger("genome", genome);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringFunctionalByNotTypeGenome
     public Long bringFunctionalByNotType(String type, Boolean functionalRna) {
         try {
             this.session = getSession();
@@ -313,6 +331,24 @@ public class SmallRnaDAO extends GenericDAO {
             Query query = session.getNamedQuery("SmallRna.bringFunctionalByNotType");
             query.setString("type", type);
             query.setBoolean("functionalRna", functionalRna);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringFunctionalByNotTypeGenome
+    public Long bringFunctionalByNotTypeGenome(String type, Boolean functionalRna, Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringFunctionalByNotTypeGenome");
+            query.setString("type", type);
+            query.setBoolean("functionalRna", functionalRna);
+            query.setInteger("genome", genome);
             Long num = (Long) query.uniqueResult();
             this.tx.commit();
             return num;

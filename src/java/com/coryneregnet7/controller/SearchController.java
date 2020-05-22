@@ -2699,23 +2699,6 @@ public class SearchController {
         if (type == null) {
             return "databaseStatistics";
         }
-
-        GeneDAO geneDAO = new GeneDAO();
-        Integer totalNumOfTfs;
-        Integer numOfActivators;
-        Integer numOfRepressors;
-        Integer numOfDuals;
-        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
-        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
-        TreeMap<Integer, Integer> tfsRegAGene = new TreeMap<>();
-        TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
-        RegulatorsRegulations regulatorsRegulation = new RegulatorsRegulations();
-        RegulatorsRegulationsDAO rrDAO = new RegulatorsRegulationsDAO();
-        ArrayList<TfsRegulating> tfsReg = new ArrayList<>();
-        TfsRegulatingDAO tfsRegDAO = new TfsRegulatingDAO();
-        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
-        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
-
         //sRNA type
         SmallRnaDAO sRnaDAO = new SmallRnaDAO();
         Long ncRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", false);
@@ -2735,11 +2718,14 @@ public class SearchController {
         //distribuition of smallRnas regulating a gene. 
         GenesRegulatedBySrnasViewDAO dao = new GenesRegulatedBySrnasViewDAO();
         List<GenesRegulatedBySrnasView> sRNARegAGene = dao.findByGenome(0);
-        for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : sRNARegAGene) {
-            System.out.println(genesRegulatedBySrnasView.toString());
-        }
+//        for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : sRNARegAGene) {
+//            System.out.println(genesRegulatedBySrnasView.toString());
+//        }
 
         //coRegAGene
+        TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
+        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
+        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
         coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
         Integer coRegRange = 0;
         Integer numOfTFs = 0;
@@ -2790,11 +2776,6 @@ public class SearchController {
             return "databaseStatistics";
         }
 
-//        Integer numOfActivators;
-//        Integer numOfRepressors;
-//        Integer numOfDuals;
-//        Integer activations;
-//        Integer repressions;
         Integer numOfTfs;
         Integer numOfRis;
         LinkedHashMap<String, ArrayList<Integer>> organismsRegulators = new LinkedHashMap<>();
@@ -2830,12 +2811,6 @@ public class SearchController {
             regulatorsArray.add(regulatorsRegulation.getNumRepressions());
             regulatorsArray.add(numOfRis);
             organismsRegulations.put("all", regulatorsArray);
-            //            numOfRis = regulatorsRegulation.getNumActivations() + regulatorsRegulation.getNumRepressions();
-            //            regulatorsArray.add(regulatorsRegulation.getNumActivations());
-            //            regulatorsArray.add(regulatorsRegulation.getNumRepressions());
-            //            regulatorsArray.add(numOfRis);
-            //            organismsRegulations.put("all", regulatorsArray);
-            //            regulatorsArray = new ArrayList<>();
         }
 
         //Retrive the role of each TF
@@ -2873,6 +2848,79 @@ public class SearchController {
         model.addAttribute("organismsId", organismsId);
         model.addAttribute("type", type);
         return "quantitiesOfRegulatorAndRegulationTypes";
+    }
+
+    @RequestMapping("quantitiesOfsRNATypes")
+    public String quantitiesOfsRNATypes(Model model, String type) {
+
+        if (type == null) {
+            return "databaseStatistics";
+        }
+
+        LinkedHashMap<String, ArrayList<Long>> organismsRegulators = new LinkedHashMap<>();
+        ArrayList<Long> sRNAsArray = new ArrayList<>();
+        ArrayList<Genome> genomes = new ArrayList<>();
+        LinkedHashMap<String, Integer> organismsId = new LinkedHashMap<>();
+        GenomeDAO genomeDAO = new GenomeDAO();
+
+        //sRNA type
+        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+        Long ncRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", false);
+        System.out.println("ncRnaExperimental " + ncRnaExperimental);
+        Long ncRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", false);
+        System.out.println("ncRnaPredicted " + ncRnaPredicted);
+
+        Long funcRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", true);
+        System.out.println("funcRnaExperimental " + funcRnaExperimental);
+        Long funcRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", true);
+        System.out.println("funcRnaPredicted " + funcRnaPredicted);
+        Long ncRNA = ncRnaExperimental + ncRnaPredicted;
+        System.out.println("ncRNA: " + ncRNA);
+        Long funcRNA = funcRnaExperimental + funcRnaPredicted;
+        System.out.println("funcRNA: " + funcRNA);
+
+        sRNAsArray.add(ncRnaExperimental);
+        sRNAsArray.add(ncRnaPredicted);
+        sRNAsArray.add(ncRNA);
+        sRNAsArray.add(funcRnaExperimental);
+        sRNAsArray.add(funcRnaPredicted);
+        sRNAsArray.add(funcRNA);
+        organismsRegulators.put("all", sRNAsArray);
+
+        genomes = (ArrayList<Genome>) genomeDAO.listAll();
+        //Retrive the sRNA types
+        if (genomes != null) {
+            for (int i = 0; i < genomes.size(); i++) {
+                sRNAsArray = new ArrayList<>();
+
+                ncRnaExperimental = sRnaDAO.bringFunctionalByTypeGenome("experimental", false, genomes.get(i).getId());
+                ncRnaPredicted = sRnaDAO.bringFunctionalByNotTypeGenome("experimental", false, genomes.get(i).getId());
+                funcRnaExperimental = sRnaDAO.bringFunctionalByTypeGenome("experimental", true, genomes.get(i).getId());
+                funcRnaPredicted = sRnaDAO.bringFunctionalByNotTypeGenome("experimental", true, genomes.get(i).getId());
+                ncRNA = ncRnaExperimental + ncRnaPredicted;
+                funcRNA = funcRnaExperimental + funcRnaPredicted;
+                if (funcRNA > 0) {
+                    sRNAsArray.add(ncRnaExperimental);
+                    sRNAsArray.add(ncRnaPredicted);
+                    sRNAsArray.add(ncRNA);
+                    sRNAsArray.add(funcRnaExperimental);
+                    sRNAsArray.add(funcRnaPredicted);
+                    sRNAsArray.add(funcRNA);
+                    organismsId.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), genomes.get(i).getOrganism().getId());
+                    organismsRegulators.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), sRNAsArray);
+                }
+            }
+        }
+
+//        System.out.println(organismsRegulators);
+//        System.out.println(organismsRegulations);
+//  model.addAttribute("testString", "blablabla");
+        model.addAttribute("organismsRegulators", organismsRegulators);
+        model.addAttribute("organismsId", organismsId);
+        model.addAttribute("type", type);
+        return "quantitiesOfsRNATypes";
     }
 
     @RequestMapping("tFsRegulatingAGene")
@@ -2941,6 +2989,54 @@ public class SearchController {
         model.addAttribute("organismsId", organismsId);
         model.addAttribute("type", type);
         return "tFsRegulatingAGene";
+    }
+
+    @RequestMapping("sRNAsRegulatingAGene")
+    public String sRNAsRegulatingAGene(Model model, String type) throws InterruptedException {
+
+        if (type == null) {
+            return "databaseStatistics";
+        }
+
+        LinkedHashMap<String, TreeMap<Integer, Integer>> sRNAsRegAGene = new LinkedHashMap<>();
+        TreeMap<Integer, Integer> sRNAsRegAGeneAux = new TreeMap<>();
+        ArrayList<Genome> genomes = new ArrayList<>();
+        LinkedHashMap<String, Integer> organismsId = new LinkedHashMap<>();
+        GenomeDAO genomeDAO = new GenomeDAO();
+        Long numTfs = new Long(0);
+        Integer numTgs = 0;
+        GenesRegulatedBySrnasViewDAO dao = new GenesRegulatedBySrnasViewDAO();
+        ArrayList<GenesRegulatedBySrnasView> sRNARegAGene = new ArrayList<>();
+        TfsRegulatingDAO tfsRegDAO = new TfsRegulatingDAO();
+
+        genomes = (ArrayList<Genome>) genomeDAO.listAll();
+        sRNARegAGene = (ArrayList<GenesRegulatedBySrnasView>) dao.findByGenome(0);
+        for (GenesRegulatedBySrnasView sRNARegulating : sRNARegAGene) {
+            sRNAsRegAGeneAux.put(sRNARegulating.getNumSrnas(), sRNARegulating.getNumGenes());
+        }
+        sRNAsRegAGene.put("all", sRNAsRegAGeneAux);
+
+        if (genomes != null) {
+            for (int i = 0; i < genomes.size(); i++) {
+                sRNAsRegAGeneAux = new TreeMap<>();
+
+                sRNARegAGene = new ArrayList<>();
+                sRNARegAGene = (ArrayList<GenesRegulatedBySrnasView>) dao.findByGenome(genomes.get(i).getId());
+                if (!sRNARegAGene.isEmpty()) {
+                    organismsId.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), genomes.get(i).getOrganism().getId());
+                    for (GenesRegulatedBySrnasView sRNARegulating : sRNARegAGene) {
+                        sRNAsRegAGeneAux.put(sRNARegulating.getNumSrnas(), sRNARegulating.getNumGenes());
+                    }
+                    sRNAsRegAGene.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), sRNAsRegAGeneAux);
+                }
+            }
+        }
+        model.addAttribute("sRNAsRegAGene", sRNAsRegAGene);
+        model.addAttribute("organismsId", organismsId);
+        model.addAttribute("type", type);
+        return "sRNAsRegulatingAGene";
     }
 
     @RequestMapping("coregulatorsStatistics")
