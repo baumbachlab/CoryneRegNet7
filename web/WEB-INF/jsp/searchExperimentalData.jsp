@@ -8,6 +8,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CoryneRegNet 7.0</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -82,6 +84,19 @@
             }
 
         </style>
+
+
+
+        <script type="text/javascript">
+            
+        </script>    
+
+        <script type="text/javascript">
+            var intervalId = 0;
+            //intervalId = setInterval(operonStatus, 3000);
+        </script>
+
+
     </head>
 
     <body style="background-image: url('images/background.png'); background-size: cover;" >
@@ -175,17 +190,27 @@
                             <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
-                            
+
                             <span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0;document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
+                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0; document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
                             </span>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
+
                 </div>
                 <div class="col-sm-3"></div>
             </div>
+            <div class="row">
+                <div class="col-sm-3" id="genesList"></div>
+                <div class="col-sm-6">
+                    Results list: 
+                    <div id="resultList"></div>
 
+                </div>
+                <div class="col-sm-3"></div>
+
+            </div>
             <div id="search-loader" style="display:none; margin-top: 50px;">
                 <center><span ><div class="loader" ></div> Loading data</span></center>
                 <br><br>
@@ -274,7 +299,7 @@
                                 <td>Transcription factors</td>
                                 <td>${totalNumberOfRegulators}</td>
                             </tr>
-                              <tr>
+                            <tr>
                                 <td>Genomes</td>
                                 <td>${numberOfGenomes}</td>
                             </tr>
@@ -371,5 +396,6 @@
     window.addEventListener('beforeunload', (event) => {
         showButtonsSearch();
     });
+
 </script>
 </html>

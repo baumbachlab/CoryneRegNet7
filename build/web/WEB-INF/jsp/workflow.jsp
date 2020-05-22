@@ -12,6 +12,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <link type="text/css" rel="stylesheet" href="css/main.css">
         <script type="text/javascript" src="js/mainjs.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
@@ -40,8 +41,8 @@
                         <a class="nav-link menu-item link-color flex-nowrap" href="processToDownalod.htm">Download</a>
                     </li>
                     <li class="nav-item">
-                            <a class="nav-link menu-item link-color" href="docs&help.htm">Docs & Help</a>
-                        </li>
+                        <a class="nav-link menu-item link-color" href="docs&help.htm">Docs & Help</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link menu-item link-color flex-nowrap" href="#">Workflow</a>
                     </li>
@@ -65,17 +66,84 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid badge badge-light shadow space-to-footer">
-        <hr style="color: #eee; margin-bottom: 30px">
-        <div class="row workflow-logo">
-            <div class="col-sm-12">
-                <center>
-                    <a target="_blank" class="center-block">
-                        <img id="img-workflow" class="img-fluid img-responsive" src="images/workflow-final.png" alt="Lights">
-                    </a>
-                </center>
+    <div class="container-fluid" style="margin-top: 50px">
+
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary btn-lg btn-small-screen font" data-toggle="modal" data-target="#myModal">
+                    <i class="fas fa-stream"></i>
+                    GRN workflow
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Gene Regulatory Network workflow</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <a target="_blank" class="center-block">
+                                    <img id="img-workflow" class="img-fluid img-responsive" src="images/workflow-final.png" alt="Lights">
+                                </a>
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <a  href="docs&help.htm" class="btn-block">
+                                    <button type="button" class="btn btn-primary btn-block" >See documentation</button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary btn-lg btn-small-screen font" data-toggle="modal" data-target="#modalSRN">
+                    <i class="fas fa-stream"></i>
+                    SRN workflow
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="modalSRN">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Small RNA Regulatory Network workflow</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <a target="_blank" class="center-block">
+                                    <img id="img-workflow" class="img-fluid img-responsive" src="images/srna-workflow.png" alt="Lights">
+                                </a>
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <a  href="docs&help.htm" class="btn-block">
+                                    <button type="button" class="btn btn-primary btn-block" >See documentation</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
+            <!-- Button to Open the Modal -->
+
+
         </div>
+
+
+
+
     </div>
     <div id="second-div" style="height: 50px;"></div>
     <div class="container-fluid font">
