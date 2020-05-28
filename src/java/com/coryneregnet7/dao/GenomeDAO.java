@@ -90,7 +90,6 @@ public class GenomeDAO extends GenericDAO {
     }
 
     //findByOrganismTypeHash
-    
     public List<Object[]> findByOrganismTypeHash(String type) {
         try {
             List lista = new ArrayList<Object[]>();
@@ -107,6 +106,38 @@ public class GenomeDAO extends GenericDAO {
         }
     }
 
+    public List<Object[]> findByOrganismTypeHashRna(String type) {
+        try {
+            List lista = new ArrayList<Object[]>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Genome.findByOrganismTypeHashRna");
+            query.setString("type", type);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //findByOrganismNotTypeHashRna    
+    public List<Object[]> findByOrganismNotTypeHashRna(String type) {
+        try {
+            List lista = new ArrayList<Object[]>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Genome.findByOrganismNotTypeHashRna");
+            query.setString("type", type);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
     
     public List<Genome> findByOrgnismType(String type) {
         try {
@@ -155,7 +186,7 @@ public class GenomeDAO extends GenericDAO {
             return null;
         }
     }
-    
+
     //findAllHash
     public List<Object[]> findAllHash() {
         try {

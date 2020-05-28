@@ -75,6 +75,7 @@ Contributor(s):
     <mapping class="com.coryneregnet7.model.RegulatoryInteraction"/>
     <mapping class="com.coryneregnet7.model.RegulatoryInteractionView"/>
     <mapping class="com.coryneregnet7.model.RnaRegulationView"/>
+    <mapping class="com.coryneregnet7.model.RnaCoregulatingView"/>
     <mapping class="com.coryneregnet7.model.PredictedRegulatoryInteractionView"/>
     <mapping class="com.coryneregnet7.model.RegulatorsRegulations"/>
     <mapping class="com.coryneregnet7.model.RefStatistics"/>
