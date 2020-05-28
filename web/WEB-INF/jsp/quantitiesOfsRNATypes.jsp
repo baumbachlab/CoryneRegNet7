@@ -21,6 +21,7 @@
         <link type="text/css" rel="stylesheet" href="css/qRRT.css">
         <script type="text/javascript" src="js/mainjs.js"></script>
         <script type="text/javascript" src="js/quantitiesOfsRNATypes.js"></script>
+        <script type="text/javascript" src="js/quantitiesOfsRNAAllTypes.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
         <script src="//d3js.org/d3.v5.min.js"></script>
         <script src="js/d3-tip.js"></script>
@@ -115,7 +116,7 @@
                 <script>
                     var key = '${regulators.key}';
                     var value = '${regulators.value}';
-                    console.log(value);
+                    //console.log(value);
                     var regulatorsObject = {};
                     organisms.push(key);
                     //console.log(organisms);
@@ -134,12 +135,11 @@
                         var genesAux = [];
                         attributes = aux[0].split("[");
                         regulatorsAttributes.ncRnaExperimental = attributes[1];
-                        regulatorsAttributes.ncRnaPredicted = aux[1];
-                        regulatorsAttributes.ncRNA = aux[2];
-                        regulatorsAttributes.funcRnaExperimental = aux[3];
-                        regulatorsAttributes.funcRnaPredicted = aux[4];
-                        attributes = aux[5].split("]");
-                        regulatorsAttributes.funcRNA = attributes[0];
+                        regulatorsAttributes.ncRnaBsrd = aux[1];
+                        regulatorsAttributes.ncRnaCmsearch = aux[2];
+                        regulatorsAttributes.ncRnaGLASSgo = aux[3];
+                        attributes = aux[4].split("]");
+                        regulatorsAttributes.ncRNATypes = attributes[0];
                         return regulatorsAttributes;
                     }
                 </script>
@@ -151,17 +151,18 @@
                 var count;
                 for (var i = 0; i < regulatorsMap.size; i++) {
                     var ncRnaExperimental = parseInt(regulatorsMap.get(organisms[i]).ncRnaExperimental);
-                    var ncRnaPredicted = parseInt(regulatorsMap.get(organisms[i]).ncRnaPredicted);
-                    var ncRNA = parseInt(regulatorsMap.get(organisms[i]).ncRNA);
-                    //console.log("ncRnaExperimental " + ncRnaExperimental);
-                    var funcRnaExperimental = parseInt(regulatorsMap.get(organisms[i]).funcRnaExperimental);
-                    var funcRnaPredicted = parseInt(regulatorsMap.get(organisms[i]).funcRnaPredicted);
-                    var funcRNA = parseInt(regulatorsMap.get(organisms[i]).funcRNA);
-                    
-                    //console.log("ncRNA: " + ncRNA);
-                    //console.log("funcRNA: " + funcRNA);
+                    var ncRnaBsrd = parseInt(regulatorsMap.get(organisms[i]).ncRnaBsrd);
+                    var ncRnaCmsearch = parseInt(regulatorsMap.get(organisms[i]).ncRnaCmsearch);
+                    var ncRnaGLASSgo = parseInt(regulatorsMap.get(organisms[i]).ncRnaGLASSgo);
+                    var ncRNATypes = parseInt(regulatorsMap.get(organisms[i]).ncRNATypes);
                     count = i;
-                    quantitiesOfsRNATypes(ncRnaExperimental, ncRnaPredicted, ncRNA, funcRnaExperimental, funcRnaPredicted, funcRNA, count);
+                    if (i == 0) {
+                        quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
+                                ncRnaGLASSgo, ncRNATypes, count);
+                    } else {
+                        quantitiesOfsRNATypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
+                                ncRnaGLASSgo, ncRNATypes, count);
+                    }
                 }
             </script>
         </div>

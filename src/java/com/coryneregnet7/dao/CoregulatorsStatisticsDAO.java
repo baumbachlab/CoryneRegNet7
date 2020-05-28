@@ -6,12 +6,7 @@
 package com.coryneregnet7.dao;
 
 import com.coryneregnet7.model.CoregulatorsStatistics;
-import java.util.ArrayList;
-import java.util.List;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 
