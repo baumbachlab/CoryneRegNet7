@@ -46,12 +46,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Genome.bringNamesByOrganismType", query = "SELECT g.gbffFile FROM Genome g WHERE g.organism in (SELECT o FROM Organism o WHERE o.type =:type)")
     , @NamedQuery(name = "Genome.findByOrganismType", query = "SELECT g FROM Genome g WHERE g.organism in (SELECT o FROM Organism o WHERE o.type =:type)")
     , @NamedQuery(name = "Genome.findByOrganismTypeHash", query = "SELECT g.organism.id, g.ncbiAccessionNumber, g.organism.genera, g.organism.species, g.organism.strain FROM Genome g WHERE g.organism in (SELECT o FROM Organism o WHERE o.type =:type) ORDER BY g.organism.genera, g.organism.species, g.organism.strain")
+    , @NamedQuery(name = "Genome.findByOrganismTypeHashRna", query = "SELECT g.organism.id, g.ncbiAccessionNumber, g.organism.genera, g.organism.species, g.organism.strain FROM Genome g WHERE g.id in (SELECT distinct s.genome FROM SmallRna s WHERE s.type =:type) ORDER BY g.organism.genera, g.organism.species, g.organism.strain")
+    , @NamedQuery(name = "Genome.findByOrganismNotTypeHashRna", query = "SELECT g.organism.id, g.ncbiAccessionNumber, g.organism.genera, g.organism.species, g.organism.strain FROM Genome g WHERE g.id in (SELECT distinct s.genome FROM SmallRna s WHERE s.type !=:type) ORDER BY g.organism.genera, g.organism.species, g.organism.strain")
     , @NamedQuery(name = "Genome.findByOrganism", query = "SELECT g FROM Genome g WHERE g.organism = :organism")})
 //select * from genome where genome.organism in (select organism.id from organism where organism.type='model');
 public class Genome implements Serializable {
-
-    @OneToMany(mappedBy = "genome")
-    private List<RefStatistics> refStatisticsList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -195,15 +194,6 @@ public class Genome implements Serializable {
 
     public void setGenomeName(String genomeName) {
         this.genomeName = genomeName;
-    }
-
-    @XmlTransient
-    public List<RefStatistics> getRefStatisticsList() {
-        return refStatisticsList;
-    }
-
-    public void setRefStatisticsList(List<RefStatistics> refStatisticsList) {
-        this.refStatisticsList = refStatisticsList;
     }
 
 }

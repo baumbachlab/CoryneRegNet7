@@ -108,6 +108,23 @@ public class GeneDAO extends GenericDAO {
         }
 
     }
+    
+    //bringLocusTagsByGenome
+        public List<String> bringLocusTagsByGenome(Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("Gene.bringLocusTagsByGenome");
+            query.setInteger("genome", genome);
+            List<String> genes = query.list();
+            this.tx.commit();
+            return genes;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+
+    }
 
     public List<Gene> findByGenomeLocusTagProteinIdMultiple(Integer genome, String geneId) {
         try {
@@ -869,4 +886,6 @@ public class GeneDAO extends GenericDAO {
             return null;
         }
     }
+    
+    
 }

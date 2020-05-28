@@ -5,6 +5,10 @@
  */
 package com.coryneregnet7.controller;
 
+import com.coryneregnet7.dao.GeneDAO;
+import com.coryneregnet7.dao.GenomeDAO;
+import com.coryneregnet7.dao.SmallRnaDAO;
+import com.coryneregnet7.model.Genome;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,15 +61,27 @@ public class CrunchifySpringAjaxJQuery {
     public @ResponseBody
     String getGeneList(String id) {
         System.out.println("CREATING LIST! "+id);
-        
-        List list = new ArrayList();
-        list.add("cg0001 (adhX)");
-        list.add("cg0002 (adhZ)");
-        list.add("cg0012 (clsX)");
-        list.add("cg0350 (dtxR)");
-        list.add("cg0400 (dnaD)");
-        String str = list.toString().replace("[", "");
-        str = str.toString().replace("]", "");
+        GenomeDAO genomeDAO = new GenomeDAO();
+        Genome genome = genomeDAO.findByOrganism(Integer.parseInt(id));
+        GeneDAO geneDAO = new GeneDAO();
+        List<String> genes = geneDAO.bringLocusTagsByGenome(genome.getId());
+       
+        String str = genes.toString().replace("[", "");
+        str = str.replace("]", "");
+        return str;
+    }
+    
+     @RequestMapping(value = "/ajaxRnaList", method = RequestMethod.GET)
+    public @ResponseBody
+    String getRnaList(String id) {
+        System.out.println("CREATING LIST! "+id);
+        GenomeDAO genomeDAO = new GenomeDAO();
+        Genome genome = genomeDAO.findByOrganism(Integer.parseInt(id));
+        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+        List<String> rnas = srnaDAO.bringLocusByGenome(genome.getId());
+       
+        String str = rnas.toString().replace("[", "");
+        str = str.replace("]", "");
         return str;
     }
 }

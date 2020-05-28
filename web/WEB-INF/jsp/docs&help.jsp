@@ -534,32 +534,44 @@
                 </div>
                 <div id="collapseSeven" class="collapse" data-parent="#accordion">
                     <div class="card-body">
-                        <p><b>If I have a genome of interest, how can I see genomic and regulatory information? And then check information of a specific regulator? E.g. <i>Corynebacterium glutamicum</i> ATCC 13032 and gene cg2502 (fur).</b></p>
+                        <p><b>If I have a genome of interest, how can I see genomic and regulatory information? How can I later check for information of a specific regulator? E.g. <i>Corynebacterium glutamicum</i> ATCC 13032 and gene cg2502 (fur).</b></p>
                         <div class="row" style="padding-bottom: 30px">
                             <img class="img-fluid img-responsive" src="images/TF_of_interest.png" alt="TF_of_interest">
                         </div>
-                        <p>1. Go to CoryneRegNet home page and click on "Experimental" button (this example), to search for organisms in experimental database, or "Predicted button", to search for organisms in predicted database.
-                            If you do not know which one choose, please click on "Predicted" button (experimental + predicted).</p>
-                        <p>2. In "Search by organism" choose <i>Corynebacterium glutamicum</i> DSM 20300 = ATCC 13032 and click on "Search" button.</p>
-                        <p>3. In the results table, you can see genomic and regulatory information of the selected genome. Scroll down to find cg2502 (fur) in the "Gene ID" column or in the "Regulation" column and click on it.</p>
-                        <p>4. The next page will present genomic and regulatory information of the selected gene. The first tab present gene information.</p>
+                        <p>1. Go to the CoryneRegNet home page and click on the "Experimental" button to search for 
+                            organisms in the experimental database or on the "Predicted button" to search for 
+                            organisms in the predicted database. In case you do not know which button to choose, 
+                            please click on the "Predicted" button. It will show experimental and predicted 
+                            databases.</p>
+                        <p>2. In the "Search by organism" dropdown menu choose Corynebacterium glutamicum DSM 20300 = ATCC 13032 and click on the "Search" button.</p>
+                        <p>3. In the results table, you will see genomic and regulatory information of the selected genome. Scroll down to find cg2502 (fur) in the "Gene ID" column or in the "Regulation" column and click on it.</p>
+                        <p>4. The next page will present genomic and regulatory information of the selected gene. The first tab will present gene information.</p>
                         <p>5. If you click on "Homologous proteins", it will present found homologous candidates of the selected gene.</p>
-                        <p>6. Clicking on "Regulated by" tab it will present the transcription factors that regulates (if any) the selected gene.</p>
-                        <p>7. The "Regulates" tab presents all genes that are regulated (if any) by the selected gene.</p>
-                        <p>8. The "Gene position and HMM logo" tab presents start and end position of the gene and if the selected gene is a transcription factor it show if it is an auto-regulator, presents the the HMM logo and a
-                            button to download the profile HMM.</p>
+                        <p>6. Clicking on the "Regulated by" tab will present the transcription factors that regulate the selected gene. This tab will only appear if the gene of interest is regulated by a transcription factor.</p>
+                        <p>7. The "Regulates" tab presents all genes that are regulated by the selected gene. This tab will only appear if the gene of interest regulates at least one gene. </p>
+                        <p>8. The "Gene position and HMM logo" tab presents the start and end positions of the gene. In case the selected gene is a transcription factor, it will show if it is an auto-regulator or not, and will present the HMM logo, as well as a button to download the profile HMM.</p>
 
-                        <p><b>If I have a genome of interest, how can I visualize its network in a graph based layout? Can I select a gene of interest from the network and visualize the gene information of it? Or the genes regulated and that regulates this gene in a graph based layout ? E.g. <i>Corynebacterium diphtheriae</i> 31A and gene CD31A_RS034300.</b></p>
+                        <p><b>If I have a genome of interest, how can I visualize its network in a graph-based layout? 
+                                Can I select a gene of interest from the network and visualize its gene information of it? 
+                                Furthermore, can I visualize its regulated and regulating genes in a graph based layout ? 
+                                E.g. <i>Corynebacterium diphtheriae</i> 31A and gene CD31A_RS034300.</b></p>
                         <div class="row" style="padding-bottom: 30px">
                             <img class="img-fluid img-responsive" src="images/organism_of_interest.png" alt="organism_of_interest">
                         </div>
-                        <p>1. Go to CoryneRegNet home page and click on "Predicted" button.</p>
-                        <p>2. In search by organism choose <i>Corynebacterium diphtheriae</i> 31A and click on "Network Visualization" button.</p>
-                        <p>3. It will automatically draw a dynamic network in a new page. To understand the options of the network visualization page go to "How to navigate" in CoryneRegNet and then to the "Network Visualization" section.</p>
-                        <p>4. In the network, scrolling up the mouse makes a zoom in. Zoom in and go to gene (node) CD31A_RS034300 and click on it.</p>
-                        <p>5. It opens a modal with some information about the gene and some links.</p>
-                        <p>6. Clicking on CD31A_RS034300 opens the gene information page of CD31A_RS034300 in a new tab.</p>
-                        <p>7. Clicking on Network Visualization button opens the network with the genes that are regulated by gene CD31A_RS034300 in a new tab. If the selected gene is regulated by other genes it will also appear in the new network.</p>
+                        <p>1. Go to CoryneRegNet home page and click on the "Predicted" button.</p>
+                        <p>2. In "Search by organism", choose <i>Corynebacterium diphtheriae</i> 
+                            31A and click on the "Network Visualization" button.</p>
+                        <p>3. It will automatically draw a dynamic network in a new page. 
+                            Before you continue following these instructions, read 
+                            "How to navigate in CoryneRegNet" in the above section to 
+                            understand the options of the network visualization.</p>
+                        <p>4. Once you are in the network, scroll up the mouse to zoom in, 
+                            go to gene (node) CD31A_RS034300 and click on it.</p>
+                        <p>5. Now, you will see a modal with some information about the gene and some links.</p>
+                        <p>6. Click on CD31A_RS034300 in order to open its gene information page in a new tab.</p>
+                        <p>7. Click on the "Network Visualization" button to open the network with the regulated 
+                            and regulating genes of gene CD31A_RS034300 in a new tab - if the selected gene is 
+                            regulated by other genes, it will also appear in the new network.</p>
 
                     </div>
                 </div>
