@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        <!-- Bar Chart - co-regulating TFs -->
+        <!-- Bar Chart - co-regulating sRNAs -->
         <script>
             var numOfsRnaCoregulatorsShow = new Map;
             var count = -1;
@@ -134,24 +134,7 @@
                             }
 
                             //coregulators
-                            if (numOfCoregulators == 0) {
-                                coregulators.push("0-9");
-                            } else if (numOfCoregulators == 1) {
-                                coregulators.push("10-19");
-                            } else if (numOfCoregulators == 2) {
-                                coregulators.push("20-29");
-                            } else if (numOfCoregulators == 3) {
-                                coregulators.push("30-39");
-                            } else if (numOfCoregulators == 4) {
-                                coregulators.push("40-49");
-                            } else if (numOfCoregulators == 5) {
-                                coregulators.push("50-59");
-                            } else if (numOfCoregulators == 6) {
-                                coregulators.push("60-69");
-                            } else {
-                                coregulators.push(">=70");
-                            }
-
+                            coregulators.push(numOfCoregulators);
                             //tfs
                             if (numOfTfs.length == 1) {
                                 tfs.push("00" + numOfTfs);
@@ -245,7 +228,7 @@
                             .attr("font-size", "20px")
                             .attr("text-anchor", "middle")
                             .attr("transform", "rotate(-90)")
-                            .text("Number of TFs");
+                            .text("Number of sRNAs");
                     var rectangle = g.selectAll("rect")
                             .data(data);
                     //Enter the elements present on the data

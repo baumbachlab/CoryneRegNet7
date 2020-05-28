@@ -24,6 +24,7 @@ import com.coryneregnet7.dao.PredictedRegulatoryInteractionViewDAO;
 import com.coryneregnet7.dao.RegulatorsRegulationsDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionViewDAO;
+import com.coryneregnet7.dao.RnaCoregulatingViewDAO;
 import com.coryneregnet7.dao.RnaInteractionDAO;
 import com.coryneregnet7.dao.RnaRegulationViewDAO;
 import com.coryneregnet7.dao.RnaTableViewDAO;
@@ -50,6 +51,7 @@ import com.coryneregnet7.model.PredictedRegulatoryInteractionView;
 import com.coryneregnet7.model.RegulatorsRegulations;
 import com.coryneregnet7.model.RegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteractionView;
+import com.coryneregnet7.model.RnaCoregulatingView;
 import com.coryneregnet7.model.RnaInteraction;
 import com.coryneregnet7.model.RnaRegulationView;
 import com.coryneregnet7.model.RnaTableView;
@@ -60,12 +62,9 @@ import com.coryneregnet7.model.TfsRegulating;
 import com.coryneregnet7.processing.GetHmmLogo;
 import com.coryneregnet7.processing.SearchBindingSites;
 import com.coryneregnet7.processing.output.CytoscapeFile;
-import com.coryneregnet7.test.GeneOperonViewTest;
-import com.coryneregnet7.test.RnaTableViewTest;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -73,7 +72,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import org.jboss.weld.util.collections.ArraySet;
@@ -82,7 +80,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -150,7 +147,7 @@ public class SearchController {
         }
 
         ///itemsRna
-            model.addAttribute("numberOfHmmProfiles", numberOfHmmProfiles);
+        model.addAttribute("numberOfHmmProfiles", numberOfHmmProfiles);
         model.addAttribute("numberOfBindingSites", numberOfBindingSites);
         model.addAttribute("totalNumberOfRegulatedGenes", numberOfRegulatedGenes);
         model.addAttribute("totalNumberOfRegulators", numberOfRegulators);
@@ -315,7 +312,7 @@ public class SearchController {
         model.addAttribute("numberOfProteins", numberOfProteins);
         model.addAttribute("numberOfGenes", numberOfGenes);
         model.addAttribute("numberOfGenomes", numberOfGenomes);
-       // model.addAttribute("organisms", organisms);
+        // model.addAttribute("organisms", organisms);
         model.addAttribute("items", items);
         model.addAttribute("itemsRna", itemsRna);
         model.addAttribute("numberOfSmallRnas", numberOfSmallRnas);
@@ -434,8 +431,8 @@ public class SearchController {
             int position = gene.indexOf(" ");
             gene = gene.substring(0, position);
         }
-        
-        if(gene.equals("all")){
+
+        if (gene.equals("all")) {
             gene = "";
         }
 
@@ -2796,38 +2793,11 @@ public class SearchController {
 
         //coRegAGene
         TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
-        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
-        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
-        coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
-        Integer coRegRange = 0;
-        Integer numOfTFs = 0;
-        for (CoregulatorsStatistics coRAG : coRegAGene) {
-            if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
-                numOfTFs += coRAG.getNumTfs();
-            } else if (coRegRange == 7) {
-                numOfTFs += coRAG.getNumTfs();
-            } else {
-                numOfCoregulators.put(coRegRange, numOfTFs);
-                System.out.println("numOfTFs: " + numOfTFs);
-                numOfTFs = coRAG.getNumTfs();
-                if (coRAG.getNumCoregulators() < 20) {
-                    coRegRange = 1;
-                } else if (coRAG.getNumCoregulators() < 30) {
-                    coRegRange = 2;
-                } else if (coRAG.getNumCoregulators() < 40) {
-                    coRegRange = 3;
-                } else if (coRAG.getNumCoregulators() < 50) {
-                    coRegRange = 4;
-                } else if (coRAG.getNumCoregulators() < 60) {
-                    coRegRange = 5;
-                } else if (coRAG.getNumCoregulators() < 70) {
-                    coRegRange = 6;
-                } else {
-                    coRegRange = 7;
-                }
-            }
+        RnaCoregulatingViewDAO rnaCoregulatingDAO = new RnaCoregulatingViewDAO();
+        List<RnaCoregulatingView> lisCoregRna = rnaCoregulatingDAO.findByGenome(0);
+        for (RnaCoregulatingView coRAG : lisCoregRna) {
+            numOfCoregulators.put(coRAG.getCoRegRnas(), coRAG.getCount());
         }
-        numOfCoregulators.put(coRegRange, numOfTFs);
 
         ///////////////////-------------------------
         //model.addAttribute("distancesFromStartSite", distancesFromStartSite);
@@ -3298,97 +3268,46 @@ public class SearchController {
             return "databaseStatistics";
         }
 
-        ArrayList<Organism> organisms = new ArrayList<>();
+        ArrayList<Genome> genomes = new ArrayList<>();
         LinkedHashMap<String, Integer> organismsId = new LinkedHashMap<>();
-        OrganismDAO organismDAO = new OrganismDAO();
+        GenomeDAO genomeDAO = new GenomeDAO();
         LinkedHashMap<String, TreeMap<Integer, Integer>> numOfsRnaCoregulators = new LinkedHashMap<>();
         Long numOfGeneCoregulators = new Long(0);
         RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
         PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
         TreeMap<Integer, Integer> allCoregulatorsOfOrganism = new TreeMap<>();
-        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
-        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
 
         if (type.equals("experimental")) {
-            organisms = (ArrayList<Organism>) organismDAO.findByType("model");
+            genomes = (ArrayList<Genome>) genomeDAO.findByOrgnismType("model");
         } else {
-            organisms = (ArrayList<Organism>) organismDAO.listAll();
+            genomes = (ArrayList<Genome>) genomeDAO.listAll();
         }
-        coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
-        Integer coRegRange = 0;
-        Integer numOfTFs = 0;
-        for (CoregulatorsStatistics coRAG : coRegAGene) {
 
-            if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
-                numOfTFs += coRAG.getNumTfs();
-            } else if (coRegRange == 7) {
-                numOfTFs += coRAG.getNumTfs();
-            } else {
-                allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
-                //System.out.println("numOfTFs: " + numOfTFs);
-                numOfTFs = coRAG.getNumTfs();
-                if (coRAG.getNumCoregulators() < 20) {
-                    coRegRange = 1;
-                } else if (coRAG.getNumCoregulators() < 30) {
-                    coRegRange = 2;
-                } else if (coRAG.getNumCoregulators() < 40) {
-                    coRegRange = 3;
-                } else if (coRAG.getNumCoregulators() < 50) {
-                    coRegRange = 4;
-                } else if (coRAG.getNumCoregulators() < 60) {
-                    coRegRange = 5;
-                } else if (coRAG.getNumCoregulators() < 70) {
-                    coRegRange = 6;
-                } else {
-                    coRegRange = 7;
-                }
-            }
+        RnaCoregulatingViewDAO rnaCoregulatingDAO = new RnaCoregulatingViewDAO();
+        List<RnaCoregulatingView> lisCoregRna = rnaCoregulatingDAO.findByGenome(0);
+        for (RnaCoregulatingView coRAG : lisCoregRna) {
+            allCoregulatorsOfOrganism.put(coRAG.getCoRegRnas(), coRAG.getCount());
         }
         //numOfCoregulators.put(coRAG.getNumCoregulators(), coRAG.getNumTfs());
-        allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
-
         numOfsRnaCoregulators.put("all", allCoregulatorsOfOrganism);
 
-        if (organisms != null) {
-            for (int i = 0; i < organisms.size(); i++) {
+        if (genomes != null) {
+            for (int i = 0; i < genomes.size(); i++) {
                 allCoregulatorsOfOrganism = new TreeMap<>();
-                coRegAGene = new ArrayList<>();
-                coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByOrganism(organisms.get(i).getId());
-                coRegRange = 0;
-                if (!coRegAGene.isEmpty()) {
+                lisCoregRna = new ArrayList<>();
+                lisCoregRna = rnaCoregulatingDAO.findByGenome(genomes.get(i).getId());
+                if (!lisCoregRna.isEmpty()) {
                     //System.out.println("coRegAGene is not empty");
-                    organismsId.put(organisms.get(i).getGenera() + " " + organisms.get(i).getSpecies() + " " + organisms.get(i).getStrain(), organisms.get(i).getId());
-                    for (CoregulatorsStatistics coRAG : coRegAGene) {
-                        //System.out.println("coRAG: " + coRAG);
-                        if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
-                            numOfTFs += coRAG.getNumTfs();
-                        } else if (coRegRange == 7) {
-                            numOfTFs += coRAG.getNumTfs();
-                        } else {
-                            allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
-                            //System.out.println("numOfTFs: " + numOfTFs);
-                            numOfTFs = coRAG.getNumTfs();
-                            if (coRAG.getNumCoregulators() < 20) {
-                                coRegRange = 1;
-                            } else if (coRAG.getNumCoregulators() < 30) {
-                                coRegRange = 2;
-                            } else if (coRAG.getNumCoregulators() < 40) {
-                                coRegRange = 3;
-                            } else if (coRAG.getNumCoregulators() < 50) {
-                                coRegRange = 4;
-                            } else if (coRAG.getNumCoregulators() < 60) {
-                                coRegRange = 5;
-                            } else if (coRAG.getNumCoregulators() < 70) {
-                                coRegRange = 6;
-                            } else {
-                                coRegRange = 7;
-                            }
-                        }
+                    organismsId.put(genomes.get(i).getOrganism().getGenera() + " "
+                            + genomes.get(i).getOrganism().getSpecies() + " "
+                            + genomes.get(i).getOrganism().getStrain(), genomes.get(i).getId());
+                    for (RnaCoregulatingView coRAG : lisCoregRna) {
+                        allCoregulatorsOfOrganism.put(coRAG.getCoRegRnas(), coRAG.getCount());
                     }
+                    numOfsRnaCoregulators.put(genomes.get(i).getOrganism().getGenera() + " " 
+                            + genomes.get(i).getOrganism().getSpecies() + " " 
+                            + genomes.get(i).getOrganism().getStrain(), allCoregulatorsOfOrganism);
                 }
-                allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
-                numOfsRnaCoregulators.put(organisms.get(i).getGenera() + " " + organisms.get(i).getSpecies()
-                        + " " + organisms.get(i).getStrain(), allCoregulatorsOfOrganism);
             }
         }
         //System.out.println(numOfCoregulators);

@@ -15,7 +15,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
     var data = [ncRnaExperimental, ncRnaBsrd, ncRnaGLASSgo, ncRnaCmsearch];
     var chart_width = 450;
     var chart_height = 300;
-    var color = d3.scaleOrdinal(['#bc5a45', 'blue', 'grey', 'green']);
+    var color = d3.scaleOrdinal(['red', 'blue', 'grey', 'green']);
     //Pie layout
     var pie = d3.pie();
     //Arc
@@ -100,7 +100,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 .attr("fill", function () {
                     //console.log(regulatorType);
                     if (regulatorType == "Experimental") {
-                        return "#bc5a45";
+                        return "red";
                     } else if (regulatorType == "BSRD") {
                         return "blue";
                     } else if (regulatorType == "CMsearch") {
@@ -115,7 +115,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 .text(regulatorType)
                 .attr("fill", function () {
                     if (regulatorType == "Experimental") {
-                        return "#bc5a45";
+                        return "red";
                     } else if (regulatorType == "BSRD") {
                         return "blue";
                     } else if (regulatorType == "CMsearch") {
