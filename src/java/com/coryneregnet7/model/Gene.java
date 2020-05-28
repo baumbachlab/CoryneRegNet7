@@ -65,6 +65,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Gene.findByGenomeOldLocusTag", query = "SELECT g FROM Gene g WHERE g.genome = :genome and g.alternativeLocusTag = :altLocusTag")
     , @NamedQuery(name = "Gene.bringNumberOfProteins", query = "SELECT count(g) FROM Gene g WHERE g.proteinId !=''")
     , @NamedQuery(name = "Gene.findByNoLocusTag", query = "SELECT g FROM Gene g WHERE g.locusTag = null")
+    , @NamedQuery(name = "Gene.bringLocusTagsByGenome", query = "SELECT concat(g.locusTag,' (', g.name,') ') FROM Gene g WHERE g.genome = :genome order by g.locusTag")
 
     , @NamedQuery(name = "Gene.bringNumberOfModelProteins", query = "SELECT count(g) FROM Gene g WHERE g.proteinId !='' and g.genome.organism.type = :type")
     , @NamedQuery(name = "Gene.bringNumberOfProteinsOfOrganism", query = "SELECT count(g) FROM Gene g WHERE g.proteinId !='' and g.genome.organism.id = :id")

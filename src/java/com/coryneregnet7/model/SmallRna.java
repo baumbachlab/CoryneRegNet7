@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.findForRNAalifold", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence and s.evidence like :evidence and s.genome = :genome")
     , @NamedQuery(name = "SmallRna.findBySequence", query = "SELECT s FROM SmallRna s WHERE s.sequence = :sequence")
     , @NamedQuery(name = "SmallRna.findByGenome", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.bringLocusByGenome", query = "SELECT s.locusTag FROM SmallRna s WHERE s.genome = :genome")
     , @NamedQuery(name = "SmallRna.findByGenomeSourceRna", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome and s.sourceRna = :sourceRna")
     , @NamedQuery(name = "SmallRna.findByGenomeType", query = "SELECT s FROM SmallRna s WHERE s.genome = :genome and s.type = :type")
     , @NamedQuery(name = "SmallRna.bringGenomes", query = "SELECT distinct s.genome FROM SmallRna s")
