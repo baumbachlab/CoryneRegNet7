@@ -48,8 +48,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SmallRna.bringFunctionalByTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.functionalRna = :functionalRna and s.genome = :genome")
     , @NamedQuery(name = "SmallRna.bringFunctionalByNotType", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna")
     , @NamedQuery(name = "SmallRna.bringFunctionalByNotTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type != :type and s.functionalRna = :functionalRna and s.genome = :genome")
-//functionalRna
-
+    , @NamedQuery(name = "SmallRna.bringByExperimentalType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByExperimentalTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.bringByBsrdType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByBsrdTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.bringByCmsearchType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByCmsearchTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.genome = :genome")
+    , @NamedQuery(name = "SmallRna.bringByGLASSgoType", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type")
+    , @NamedQuery(name = "SmallRna.bringByGLASSgoTypeGenome", query = "SELECT count(s) FROM SmallRna s WHERE s.type = :type and s.genome = :genome")
+//functional
 })
 public class SmallRna implements Serializable {
 

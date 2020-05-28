@@ -72,6 +72,7 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
@@ -2655,9 +2656,6 @@ public class SearchController {
                 } else {
                     coRegRange = 7;
                 }
-//                System.out.println("");
-//                System.out.println("-----");
-//                System.out.println("coRegRange: " + coRegRange);
             }
             //numOfCoregulators.put(coRAG.getNumCoregulators(), coRAG.getNumTfs());
         }
@@ -2702,25 +2700,22 @@ public class SearchController {
         //sRNA type
         SmallRnaDAO sRnaDAO = new SmallRnaDAO();
         Long ncRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", false);
-        System.out.println("ncRnaExperimental " + ncRnaExperimental);
+        //System.out.println("ncRnaExperimental " + ncRnaExperimental);
         Long ncRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", false);
-        System.out.println("ncRnaPredicted " + ncRnaPredicted);
+        //System.out.println("ncRnaPredicted " + ncRnaPredicted);
 
         Long funcRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", true);
-        System.out.println("funcRnaExperimental " + funcRnaExperimental);
+        //System.out.println("funcRnaExperimental " + funcRnaExperimental);
         Long funcRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", true);
-        System.out.println("funcRnaPredicted " + funcRnaPredicted);
+        //System.out.println("funcRnaPredicted " + funcRnaPredicted);
         Long ncRNA = ncRnaExperimental + ncRnaPredicted;
-        System.out.println("ncRNA: " + ncRNA);
+        //System.out.println("ncRNA: " + ncRNA);
         Long funcRNA = funcRnaExperimental + funcRnaPredicted;
-        System.out.println("funcRNA: " + funcRNA);
+        //System.out.println("funcRNA: " + funcRNA);
 
         //distribuition of smallRnas regulating a gene. 
         GenesRegulatedBySrnasViewDAO dao = new GenesRegulatedBySrnasViewDAO();
         List<GenesRegulatedBySrnasView> sRNARegAGene = dao.findByGenome(0);
-//        for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : sRNARegAGene) {
-//            System.out.println(genesRegulatedBySrnasView.toString());
-//        }
 
         //coRegAGene
         TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
@@ -2865,26 +2860,17 @@ public class SearchController {
 
         //sRNA type
         SmallRnaDAO sRnaDAO = new SmallRnaDAO();
-        Long ncRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", false);
-        System.out.println("ncRnaExperimental " + ncRnaExperimental);
-        Long ncRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", false);
-        System.out.println("ncRnaPredicted " + ncRnaPredicted);
-
-        Long funcRnaExperimental = sRnaDAO.bringFunctionalByType("experimental", true);
-        System.out.println("funcRnaExperimental " + funcRnaExperimental);
-        Long funcRnaPredicted = sRnaDAO.bringFunctionalByNotType("experimental", true);
-        System.out.println("funcRnaPredicted " + funcRnaPredicted);
-        Long ncRNA = ncRnaExperimental + ncRnaPredicted;
-        System.out.println("ncRNA: " + ncRNA);
-        Long funcRNA = funcRnaExperimental + funcRnaPredicted;
-        System.out.println("funcRNA: " + funcRNA);
+        Long ncRnaExperimental = sRnaDAO.bringByExperimentalType();
+        Long ncRnaBsrd = sRnaDAO.bringByBsrdType();
+        Long ncRnaCmsearch = sRnaDAO.bringByCmsearchType();
+        Long ncRnaGLASSgo = sRnaDAO.bringByGLASSgoType();
+        Long ncRNATypes = ncRnaBsrd + ncRnaCmsearch + ncRnaExperimental + ncRnaGLASSgo;
 
         sRNAsArray.add(ncRnaExperimental);
-        sRNAsArray.add(ncRnaPredicted);
-        sRNAsArray.add(ncRNA);
-        sRNAsArray.add(funcRnaExperimental);
-        sRNAsArray.add(funcRnaPredicted);
-        sRNAsArray.add(funcRNA);
+        sRNAsArray.add(ncRnaBsrd);
+        sRNAsArray.add(ncRnaCmsearch);
+        sRNAsArray.add(ncRnaGLASSgo);
+        sRNAsArray.add(ncRNATypes);
         organismsRegulators.put("all", sRNAsArray);
 
         genomes = (ArrayList<Genome>) genomeDAO.listAll();
@@ -2893,19 +2879,19 @@ public class SearchController {
             for (int i = 0; i < genomes.size(); i++) {
                 sRNAsArray = new ArrayList<>();
 
-                ncRnaExperimental = sRnaDAO.bringFunctionalByTypeGenome("experimental", false, genomes.get(i).getId());
-                ncRnaPredicted = sRnaDAO.bringFunctionalByNotTypeGenome("experimental", false, genomes.get(i).getId());
-                funcRnaExperimental = sRnaDAO.bringFunctionalByTypeGenome("experimental", true, genomes.get(i).getId());
-                funcRnaPredicted = sRnaDAO.bringFunctionalByNotTypeGenome("experimental", true, genomes.get(i).getId());
-                ncRNA = ncRnaExperimental + ncRnaPredicted;
-                funcRNA = funcRnaExperimental + funcRnaPredicted;
-                if (funcRNA > 0) {
+                //sRNA type
+                ncRnaExperimental = sRnaDAO.bringByExperimentalTypeGenome(genomes.get(i).getId());
+                ncRnaBsrd = sRnaDAO.bringByBsrdTypeGenome(genomes.get(i).getId());
+                ncRnaCmsearch = sRnaDAO.bringByCmsearchTypeGenome(genomes.get(i).getId());
+                ncRnaGLASSgo = sRnaDAO.bringByGLASSgoTypeGenome(genomes.get(i).getId());
+                ncRNATypes = ncRnaBsrd + ncRnaCmsearch + ncRnaExperimental + ncRnaGLASSgo;
+
+                if (ncRNATypes > 0) {
                     sRNAsArray.add(ncRnaExperimental);
-                    sRNAsArray.add(ncRnaPredicted);
-                    sRNAsArray.add(ncRNA);
-                    sRNAsArray.add(funcRnaExperimental);
-                    sRNAsArray.add(funcRnaPredicted);
-                    sRNAsArray.add(funcRNA);
+                    sRNAsArray.add(ncRnaBsrd);
+                    sRNAsArray.add(ncRnaCmsearch);
+                    sRNAsArray.add(ncRnaGLASSgo);
+                    sRNAsArray.add(ncRNATypes);
                     organismsId.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
                             + " " + genomes.get(i).getOrganism().getStrain(), genomes.get(i).getOrganism().getId());
                     organismsRegulators.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
@@ -2914,13 +2900,95 @@ public class SearchController {
             }
         }
 
-//        System.out.println(organismsRegulators);
-//        System.out.println(organismsRegulations);
-//  model.addAttribute("testString", "blablabla");
+        for (Map.Entry<String, Integer> entry : organismsId.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println(key + ": " + value);
+        }
+
+        for (Map.Entry<String, ArrayList<Long>> entry : organismsRegulators.entrySet()) {
+            String key = entry.getKey();
+            ArrayList<Long> value = entry.getValue();
+            System.out.println(key + ": " + value);
+        }
+
         model.addAttribute("organismsRegulators", organismsRegulators);
         model.addAttribute("organismsId", organismsId);
         model.addAttribute("type", type);
         return "quantitiesOfsRNATypes";
+    }
+
+    @RequestMapping("quantitiesOfsRNATypesTest")
+    public String quantitiesOfsRNATypesTest(Model model, String type) {
+
+        if (type == null) {
+            return "databaseStatistics";
+        }
+
+        LinkedHashMap<String, ArrayList<Long>> organismsRegulators = new LinkedHashMap<>();
+        ArrayList<Long> sRNAsArray = new ArrayList<>();
+        ArrayList<Genome> genomes = new ArrayList<>();
+        LinkedHashMap<String, Integer> organismsId = new LinkedHashMap<>();
+        GenomeDAO genomeDAO = new GenomeDAO();
+
+        //sRNA type
+        SmallRnaDAO sRnaDAO = new SmallRnaDAO();
+        Long ncRnaExperimental = sRnaDAO.bringByExperimentalType();
+        Long ncRnaBsrd = sRnaDAO.bringByBsrdType();
+        Long ncRnaCmsearch = sRnaDAO.bringByCmsearchType();
+        Long ncRnaGLASSgo = sRnaDAO.bringByGLASSgoType();
+        Long ncRNATypes = ncRnaBsrd + ncRnaCmsearch + ncRnaExperimental + ncRnaGLASSgo;
+
+        sRNAsArray.add(ncRnaExperimental);
+        sRNAsArray.add(ncRnaBsrd);
+        sRNAsArray.add(ncRnaCmsearch);
+        sRNAsArray.add(ncRnaGLASSgo);
+        sRNAsArray.add(ncRNATypes);
+        organismsRegulators.put("all", sRNAsArray);
+
+        genomes = (ArrayList<Genome>) genomeDAO.listAll();
+        //Retrive the sRNA types
+        if (genomes != null) {
+            for (int i = 0; i < genomes.size(); i++) {
+                sRNAsArray = new ArrayList<>();
+
+                //sRNA type
+                ncRnaExperimental = sRnaDAO.bringByExperimentalTypeGenome(genomes.get(i).getId());
+                ncRnaBsrd = sRnaDAO.bringByBsrdTypeGenome(genomes.get(i).getId());
+                ncRnaCmsearch = sRnaDAO.bringByCmsearchTypeGenome(genomes.get(i).getId());
+                ncRnaGLASSgo = sRnaDAO.bringByGLASSgoTypeGenome(genomes.get(i).getId());
+                ncRNATypes = ncRnaBsrd + ncRnaCmsearch + ncRnaExperimental + ncRnaGLASSgo;
+
+                if (ncRNATypes > 0) {
+                    sRNAsArray.add(ncRnaExperimental);
+                    sRNAsArray.add(ncRnaBsrd);
+                    sRNAsArray.add(ncRnaCmsearch);
+                    sRNAsArray.add(ncRnaGLASSgo);
+                    sRNAsArray.add(ncRNATypes);
+                    organismsId.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), genomes.get(i).getOrganism().getId());
+                    organismsRegulators.put(genomes.get(i).getOrganism().getGenera() + " " + genomes.get(i).getOrganism().getSpecies()
+                            + " " + genomes.get(i).getOrganism().getStrain(), sRNAsArray);
+                }
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : organismsId.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println(key + ": " + value);
+        }
+
+        for (Map.Entry<String, ArrayList<Long>> entry : organismsRegulators.entrySet()) {
+            String key = entry.getKey();
+            ArrayList<Long> value = entry.getValue();
+            System.out.println(key + ": " + value);
+        }
+
+        model.addAttribute("organismsRegulators", organismsRegulators);
+        model.addAttribute("organismsId", organismsId);
+        model.addAttribute("type", type);
+        return "quantitiesOfsRNATypesTest";
     }
 
     @RequestMapping("tFsRegulatingAGene")
@@ -3053,25 +3121,12 @@ public class SearchController {
         Long numOfGeneCoregulators = new Long(0);
         RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
         PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
-//        List<Gene> genes = riDAO.findByDistinctTG();
-//        List<Gene> pGenes = priDAO.findByDistinctTG();
-//        List<Gene> tfGenes = new ArrayList<>();
-//        List<Gene> coregulators = new ArrayList<>();
-//        List<Gene> coregulatorsOfTF = new ArrayList<>();
         TreeMap<Integer, Integer> allCoregulatorsOfOrganism = new TreeMap<>();
         ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
         CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
 
         if (type.equals("experimental")) {
             organisms = (ArrayList<Organism>) organismDAO.findByType("model");
-//            System.out.println("Before search");
-//            coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
-//            System.out.println("After search");
-//            System.out.println(coRegAGene);
-//            for (CoregulatorsStatistics coRAG : coRegAGene) {
-//                allCoregulatorsOfOrganism.put(coRAG.getNumCoregulators(), coRAG.getNumTfs());
-//            }
-//            numOfCoregulators.put("all", allCoregulatorsOfOrganism);
         } else {
             organisms = (ArrayList<Organism>) organismDAO.listAll();
         }
@@ -3103,9 +3158,6 @@ public class SearchController {
                 } else {
                     coRegRange = 7;
                 }
-//                System.out.println("");
-//                System.out.println("-----");
-//                System.out.println("coRegRange: " + coRegRange);
             }
         }
         //numOfCoregulators.put(coRAG.getNumCoregulators(), coRAG.getNumTfs());
@@ -3160,6 +3212,113 @@ public class SearchController {
         model.addAttribute("organismsId", organismsId);
         model.addAttribute("type", type);
         return "coregulatorsStatistics";
+    }
+
+    @RequestMapping("sRnaCoregulatorsStatistics")
+    public String sRnaCoregulatorsStatistics(Model model, String type) {
+
+        if (type == null) {
+            return "databaseStatistics";
+        }
+
+        ArrayList<Organism> organisms = new ArrayList<>();
+        LinkedHashMap<String, Integer> organismsId = new LinkedHashMap<>();
+        OrganismDAO organismDAO = new OrganismDAO();
+        LinkedHashMap<String, TreeMap<Integer, Integer>> numOfsRnaCoregulators = new LinkedHashMap<>();
+        Long numOfGeneCoregulators = new Long(0);
+        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
+        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
+        TreeMap<Integer, Integer> allCoregulatorsOfOrganism = new TreeMap<>();
+        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
+        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
+
+        if (type.equals("experimental")) {
+            organisms = (ArrayList<Organism>) organismDAO.findByType("model");
+        } else {
+            organisms = (ArrayList<Organism>) organismDAO.listAll();
+        }
+        coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
+        Integer coRegRange = 0;
+        Integer numOfTFs = 0;
+        for (CoregulatorsStatistics coRAG : coRegAGene) {
+
+            if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
+                numOfTFs += coRAG.getNumTfs();
+            } else if (coRegRange == 7) {
+                numOfTFs += coRAG.getNumTfs();
+            } else {
+                allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
+                //System.out.println("numOfTFs: " + numOfTFs);
+                numOfTFs = coRAG.getNumTfs();
+                if (coRAG.getNumCoregulators() < 20) {
+                    coRegRange = 1;
+                } else if (coRAG.getNumCoregulators() < 30) {
+                    coRegRange = 2;
+                } else if (coRAG.getNumCoregulators() < 40) {
+                    coRegRange = 3;
+                } else if (coRAG.getNumCoregulators() < 50) {
+                    coRegRange = 4;
+                } else if (coRAG.getNumCoregulators() < 60) {
+                    coRegRange = 5;
+                } else if (coRAG.getNumCoregulators() < 70) {
+                    coRegRange = 6;
+                } else {
+                    coRegRange = 7;
+                }
+            }
+        }
+        //numOfCoregulators.put(coRAG.getNumCoregulators(), coRAG.getNumTfs());
+        allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
+
+        numOfsRnaCoregulators.put("all", allCoregulatorsOfOrganism);
+
+        if (organisms != null) {
+            for (int i = 0; i < organisms.size(); i++) {
+                allCoregulatorsOfOrganism = new TreeMap<>();
+                coRegAGene = new ArrayList<>();
+                coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByOrganism(organisms.get(i).getId());
+                coRegRange = 0;
+                if (!coRegAGene.isEmpty()) {
+                    //System.out.println("coRegAGene is not empty");
+                    organismsId.put(organisms.get(i).getGenera() + " " + organisms.get(i).getSpecies() + " " + organisms.get(i).getStrain(), organisms.get(i).getId());
+                    for (CoregulatorsStatistics coRAG : coRegAGene) {
+                        //System.out.println("coRAG: " + coRAG);
+                        if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
+                            numOfTFs += coRAG.getNumTfs();
+                        } else if (coRegRange == 7) {
+                            numOfTFs += coRAG.getNumTfs();
+                        } else {
+                            allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
+                            //System.out.println("numOfTFs: " + numOfTFs);
+                            numOfTFs = coRAG.getNumTfs();
+                            if (coRAG.getNumCoregulators() < 20) {
+                                coRegRange = 1;
+                            } else if (coRAG.getNumCoregulators() < 30) {
+                                coRegRange = 2;
+                            } else if (coRAG.getNumCoregulators() < 40) {
+                                coRegRange = 3;
+                            } else if (coRAG.getNumCoregulators() < 50) {
+                                coRegRange = 4;
+                            } else if (coRAG.getNumCoregulators() < 60) {
+                                coRegRange = 5;
+                            } else if (coRAG.getNumCoregulators() < 70) {
+                                coRegRange = 6;
+                            } else {
+                                coRegRange = 7;
+                            }
+                        }
+                    }
+                }
+                allCoregulatorsOfOrganism.put(coRegRange, numOfTFs);
+                numOfsRnaCoregulators.put(organisms.get(i).getGenera() + " " + organisms.get(i).getSpecies()
+                        + " " + organisms.get(i).getStrain(), allCoregulatorsOfOrganism);
+            }
+        }
+        //System.out.println(numOfCoregulators);
+        model.addAttribute("numOfsRnaCoregulators", numOfsRnaCoregulators);
+        model.addAttribute("organismsId", organismsId);
+        model.addAttribute("type", type);
+        return "sRnaCoregulatorsStatistics";
     }
 
     public TreeMap distanceFromStartSite(TreeMap<Integer, Integer> distancesFromStartSite, Integer distance) {
@@ -3217,8 +3376,6 @@ public class SearchController {
             range = 5;
         } else {
             range = 6;
-            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            //System.out.println("This is bigger (hmmLength): " + hmmLength);
         }
 
         if (!hmmProfilesLenOrganism.isEmpty() && hmmProfilesLenOrganism.containsKey(range)) {
@@ -3253,14 +3410,6 @@ public class SearchController {
 
         if (type.equals("experimental")) {
             organisms = (ArrayList<Organism>) organismDAO.findByType("model");
-//            System.out.println("Before search");
-//            hmmLens = (ArrayList<HmmProfilesLengths>) hmmDAO.findByTypeAndDatabase("database", type);
-//            System.out.println("After search");
-//            System.out.println(hmmLens);
-//            for (HmmProfilesLengths hmmLen : hmmLens) {
-//                hmmProfilesLenOrganism.put(hmmLen.getProfileLengthRange(), hmmLen.getFrequency());
-//            }
-//            hmmProfilesLen.put("all", hmmProfilesLenOrganism);
         } else {
             organisms = (ArrayList<Organism>) organismDAO.listAll();
         }

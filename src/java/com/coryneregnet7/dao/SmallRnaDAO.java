@@ -357,4 +357,136 @@ public class SmallRnaDAO extends GenericDAO {
             return null;
         }
     }
+
+    //bringByExperimentalType
+    public Long bringByExperimentalType() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByExperimentalType");
+            query.setString("type", "experimental");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByExperimentalTypeGenome
+    public Long bringByExperimentalTypeGenome(Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByExperimentalTypeGenome");
+            query.setString("type", "experimental");
+            query.setInteger("genome", genome);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByBsrdType
+    public Long bringByBsrdType() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByBsrdType");
+            query.setString("type", "bsrd");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByBsrdTypeGenome
+    public Long bringByBsrdTypeGenome(Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByBsrdTypeGenome");
+            query.setString("type", "bsrd");
+            query.setInteger("genome", genome);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByCmsearchType
+    public Long bringByCmsearchType() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByCmsearchType");
+            query.setString("type", "cmsearch");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByCmsearchTypeGenome
+    public Long bringByCmsearchTypeGenome(Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByCmsearchTypeGenome");
+            query.setString("type", "cmsearch");
+            query.setInteger("genome", genome);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByGLASSgoType
+    public Long bringByGLASSgoType() {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByGLASSgoType");
+            query.setString("type", "GLASSgo");
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+
+    //bringByGLASSgoTypeGenome
+    public Long bringByGLASSgoTypeGenome(Integer genome) {
+        try {
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("SmallRna.bringByGLASSgoTypeGenome");
+            query.setString("type", "GLASSgo");
+            query.setInteger("genome", genome);
+            Long num = (Long) query.uniqueResult();
+            this.tx.commit();
+            return num;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
 }

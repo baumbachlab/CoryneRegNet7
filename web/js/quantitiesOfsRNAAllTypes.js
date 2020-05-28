@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-function quantitiesOfsRNATypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
+function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
         ncRnaGLASSgo, ncRNATypes, count) {
 
     var ncRNAType = new Map;
@@ -29,8 +29,8 @@ function quantitiesOfsRNATypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
             .append("svg")
             .attr("width", chart_width)
             .attr("height", chart_height);
-    
-    
+
+
     // Create Tooltips
     var tip = d3.tip().attr('class', 'd3-tip').direction('e').offset([0, 5])
             .html(function (d) {
@@ -59,15 +59,29 @@ function quantitiesOfsRNATypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
     //Labels
     arcs.append('text')
             .attr('transform', function (d, i) {
-                return "translate(" + arc.centroid(d) + ")";
+                //console.log(d.value);
+                var _d = arc.centroid(d);
+                if (d.value == 7) {
+                    _d[0] *= 3;	//multiply by a constant factor
+                    _d[1] *= 1;	//multiply by a constant factor
+                } else if (d.value == 40) {
+                    _d[0] *= 3;	//multiply by a constant factor
+                    _d[1] *= 1.6;	//multiply by a constant factor
+                } else if (d.value == 70) {
+                    _d[0] *= 2.2;	//multiply by a constant factor
+                    _d[1] *= 1.5;	//multiply by a constant factor
+                } else {
+                    _d[0] *= 1;	//multiply by a constant factor
+                    _d[1] *= 1;	//multiply by a constant factor
+                }
+                return "translate(" + _d + ")";
             })
             .attr('text-anchor', 'text-middle')
             .text(function (d) {
-                var total = ncRNATypes;
                 if (d.value == 0) {
                     return "";
                 }
-                return (d.value * 100 / total).toPrecision(3) + "%";
+                return (d.value * 100 / ncRNATypes).toPrecision(2) + "%";
             });
     // define legend
     var regulatorTypes = ["Experimental", "BSRD", "CMsearch", "GLASSgo"];
@@ -112,5 +126,3 @@ function quantitiesOfsRNATypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 .style("font-size", "20px");
     });
 }
-
-

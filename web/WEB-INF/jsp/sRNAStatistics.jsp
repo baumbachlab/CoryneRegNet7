@@ -127,7 +127,7 @@
         </div>
 
         <div class="row" style="font-size: 20px; margin: 50px 0px 50px 0px">
-            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'coregulatorsStatistics.htm?type=${type}';">
+            <div class="col-sm-6" style="cursor: pointer;" onclick="window.location = 'sRnaCoregulatorsStatistics.htm?type=${type}';">
                 <div class="row">
                     <div class="col-sm-12" style="font-weight: bold">
                         <center>
@@ -394,7 +394,7 @@
         var tip = d3.tip().attr('class', 'd3-tip').direction('e').offset([0, 5])
                 .html(function (d) {
                     var tfs = Number(d.tfs);
-                    var content = "<span style='margin-left: 2.5px;'>" + "Number of transcription factors: " + tfs + "<br>" +
+                    var content = "<span style='margin-left: 2.5px;'>" + "Number of sRNAs: " + tfs + "<br>" +
                             "Number of co-regulators: " + d.coregulators + "</span><br>";
                     return content;
                 });
@@ -442,7 +442,7 @@
                 .attr("font-size", "20px")
                 .attr("text-anchor", "middle")
                 .attr("transform", "rotate(-90)")
-                .text("Number of TFs");
+                .text("Number of sRNAs");
         var rectangle = g.selectAll("rect")
                 .data(data);
         rectangle.enter()
