@@ -7,9 +7,11 @@ package com.coryneregnet7.test;
 
 import com.coryneregnet7.dao.GenesRegulatedBySrnasViewDAO;
 import com.coryneregnet7.dao.GenesRegulatedByTfSrnaViewDAO;
+import com.coryneregnet7.dao.RnaCoregulatingViewDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.GenesRegulatedBySrnasView;
 import com.coryneregnet7.model.GenesRegulatedByTfSrnaView;
+import com.coryneregnet7.model.RnaCoregulatingView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,14 @@ public class RnaStatisticsTest {
         List<GenesRegulatedBySrnasView> list = dao.findByGenome(0);
         for (GenesRegulatedBySrnasView genesRegulatedBySrnasView : list) {
             System.out.println(genesRegulatedBySrnasView.toString());
+        }
+        
+        //coregulating srnas
+        System.out.println("\n\n--------------------------");
+        RnaCoregulatingViewDAO rnaCoregulatingDAO = new RnaCoregulatingViewDAO();
+        List<RnaCoregulatingView> lisCoregRna = rnaCoregulatingDAO.findByGenome(0);
+        for (RnaCoregulatingView rnaCoregulatingView : lisCoregRna) {
+            System.out.println(rnaCoregulatingView);
         }
     }
     

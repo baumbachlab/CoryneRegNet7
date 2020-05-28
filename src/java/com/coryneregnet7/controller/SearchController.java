@@ -101,8 +101,11 @@ public class SearchController {
         GenomeDAO genomeDAO = new GenomeDAO();
         //List<Organism> organisms = organismDAO.findByType("model");
         List<Object[]> genomes = genomeDAO.findByOrganismTypeHash("model");
+        List<Object[]> genomesRna = genomeDAO.findByOrganismTypeHashRna("experimental");
+        //findByOrganismTypeHashRna
 
         List<OrganismItem> items = bringItems(genomes);
+        List<OrganismItem> itemsRna = bringItems(genomesRna);
 
         StatisticsOverviewDAO soDAO = new StatisticsOverviewDAO();
         StatisticsOverview so = soDAO.findByTypeAndDatabase("database", "experimental");
@@ -146,17 +149,18 @@ public class SearchController {
             numberOfRegulationsSrna = so.getRegulationsSrna();
         }
 
-        ///
-        model.addAttribute("numberOfHmmProfiles", numberOfHmmProfiles);
+        ///itemsRna
+            model.addAttribute("numberOfHmmProfiles", numberOfHmmProfiles);
         model.addAttribute("numberOfBindingSites", numberOfBindingSites);
-        model.addAttribute("numberOfRegulatedGenes", numberOfRegulatedGenes);
-        model.addAttribute("numberOfRegulators", numberOfRegulators);
-        model.addAttribute("numberOfRegulatoryInteractions", numberOfRegulatoryInteractions);
+        model.addAttribute("totalNumberOfRegulatedGenes", numberOfRegulatedGenes);
+        model.addAttribute("totalNumberOfRegulators", numberOfRegulators);
+        model.addAttribute("totalNumberOfRegulatoryInteractions", numberOfRegulatoryInteractions);
         model.addAttribute("numberOfProteins", numberOfProteins);
         model.addAttribute("numberOfGenes", numberOfGenes);
         model.addAttribute("numberOfGenomes", numberOfGenomes);
         //   model.addAttribute("organisms", organisms);
         model.addAttribute("items", items);
+        model.addAttribute("itemsRna", itemsRna);
         model.addAttribute("numberOfSmallRnas", numberOfSmallRnas);
         model.addAttribute("numberOfGenesByRna", numberOfGenesByRna);
         model.addAttribute("numberOfRegulatoryRnas", numberOfRegulatoryRnas);
@@ -184,8 +188,12 @@ public class SearchController {
         GenomeDAO genomeDAO = new GenomeDAO();
         BindingSiteDAO bindingSiteDAO = new BindingSiteDAO();
         List<Object[]> genomes = genomeDAO.findByOrganismTypeHash("model");
+        List<Object[]> genomesRna = genomeDAO.findByOrganismTypeHashRna("experimental");
+        //findByOrganismTypeHashRna
 
         List<OrganismItem> items = bringItems(genomes);
+        List<OrganismItem> itemsRna = bringItems(genomesRna);
+
 //        for (Organism organism : organisms) {
 //            System.out.println("-------------->>" + organism.toString());
 //        }
@@ -234,7 +242,7 @@ public class SearchController {
 
         Object[] returnObj = {numberOfHmmProfiles, numberOfBindingSites, numberOfRegulatedGenes, numberOfRegulators,
             numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items, numberOfSmallRnas,
-            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna};
+            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna, itemsRna};
 
         return returnObj;
     }
@@ -246,11 +254,13 @@ public class SearchController {
         System.out.println("==================================================================================================");
 
         OrganismDAO organismDAO = new OrganismDAO();
-        List<Organism> organisms = organismDAO.listAll();
         GenomeDAO genomeDAO = new GenomeDAO();
         List<Object[]> genomes = genomeDAO.findAllHash();
+        List<Object[]> genomesRna = genomeDAO.findByOrganismNotTypeHashRna("experimental");
+        //findByOrganismTypeHashRna
 
         List<OrganismItem> items = bringItems(genomes);
+        List<OrganismItem> itemsRna = bringItems(genomesRna);
 
         StatisticsOverviewDAO soDAO = new StatisticsOverviewDAO();
         StatisticsOverview so = soDAO.findByTypeAndDatabase("database", "predicted");
@@ -305,8 +315,9 @@ public class SearchController {
         model.addAttribute("numberOfProteins", numberOfProteins);
         model.addAttribute("numberOfGenes", numberOfGenes);
         model.addAttribute("numberOfGenomes", numberOfGenomes);
-        model.addAttribute("organisms", organisms);
+       // model.addAttribute("organisms", organisms);
         model.addAttribute("items", items);
+        model.addAttribute("itemsRna", itemsRna);
         model.addAttribute("numberOfSmallRnas", numberOfSmallRnas);
         model.addAttribute("numberOfGenesByRna", numberOfGenesByRna);
         model.addAttribute("numberOfRegulatoryRnas", numberOfRegulatoryRnas);
@@ -325,8 +336,12 @@ public class SearchController {
 
         GenomeDAO genomeDAO = new GenomeDAO();
         List<Object[]> genomes = genomeDAO.findAllHash();
+        List<Object[]> genomesRna = genomeDAO.findByOrganismNotTypeHashRna("experimental");
+        //findByOrganismTypeHashRna
 
         List<OrganismItem> items = bringItems(genomes);
+        List<OrganismItem> itemsRna = bringItems(genomesRna);
+
 //        for (Organism organism : organisms) {
 //            System.out.println("-------------->>" + organism.toString());
 //        }
@@ -375,7 +390,7 @@ public class SearchController {
 
         Object[] returnObj = {numberOfHmmProfiles, numberOfBindingSites, numberOfRegulatedGenes, numberOfRegulators,
             numberOfRegulatoryInteractions, numberOfProteins, numberOfGenes, numberOfGenomes, items, numberOfSmallRnas,
-            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna};
+            numberOfGenesByRna, numberOfRegulatoryRnas, numberOfRegulationsSrna, itemsRna};
 
         return returnObj;
     }
@@ -400,7 +415,29 @@ public class SearchController {
     }
 
     @RequestMapping("dataSearch")
-    public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna) throws InterruptedException {
+    public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna,
+            String geneListSelect, String rnaListSelect) throws InterruptedException {
+
+        System.out.println("geneListSelect " + geneListSelect);
+        System.out.println("rnaListSelect " + rnaListSelect);
+
+        if (geneListSelect != null && !geneListSelect.equals("wildcards")) {
+            gene = geneListSelect;
+        }
+
+        if (rnaListSelect != null && !rnaListSelect.equals("wildcards")) {
+            gene = rnaListSelect;
+
+        }
+        gene = gene.trim();
+        if (gene.contains(" ")) {
+            int position = gene.indexOf(" ");
+            gene = gene.substring(0, position);
+        }
+        
+        if(gene.equals("all")){
+            gene = "";
+        }
 
         System.out.println("TF-RNA: " + geneRna);
         if (searchType == null) {
@@ -498,6 +535,7 @@ public class SearchController {
                     model.addAttribute("numberOfSmallRnas", features[11]);
 
                     model.addAttribute("numberOfSmallRnas", features[12]);
+                    model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
 
                     model.addAttribute("message", "Please, choose a gene or an organism!");
                     return "searchExperimentalData";
@@ -511,7 +549,7 @@ public class SearchController {
 
                     //System.out.println("genes: " + genes);
                     if (tableViews.isEmpty()) {
-                        //  System.out.println("Genes is null!!!!!!!!!!!!!");
+                        System.out.println("Genes is null!!!!!!!!!!!!!");
 
                         Object[] features = bringSearchExperimentalFeatures();
                         //searchExperimentalData(model, "Gene not found! Please try again!");
@@ -524,6 +562,13 @@ public class SearchController {
                         model.addAttribute("numberOfGenes", features[6]);
                         model.addAttribute("numberOfGenomes", features[7]);
                         model.addAttribute("items", (List<OrganismItem>) features[8]);
+
+                        model.addAttribute("numberOfSmallRnas", features[9]);
+                        model.addAttribute("numberOfSmallRnas", features[10]);
+                        model.addAttribute("numberOfSmallRnas", features[11]);
+                        model.addAttribute("numberOfSmallRnas", features[12]);
+                        model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
+
                         model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
                         return "searchExperimentalData";
                     }
@@ -564,6 +609,11 @@ public class SearchController {
                         model.addAttribute("numberOfGenes", features[6]);
                         model.addAttribute("numberOfGenomes", features[7]);
                         model.addAttribute("items", (List<OrganismItem>) features[8]);
+                        model.addAttribute("numberOfSmallRnas", features[9]);
+                        model.addAttribute("numberOfSmallRnas", features[10]);
+                        model.addAttribute("numberOfSmallRnas", features[11]);
+                        model.addAttribute("numberOfSmallRnas", features[12]);
+                        model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
                         model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
                         return "searchExperimentalData";
                     }
@@ -590,6 +640,11 @@ public class SearchController {
                     model.addAttribute("numberOfGenes", features[6]);
                     model.addAttribute("numberOfGenomes", features[7]);
                     model.addAttribute("items", (List<OrganismItem>) features[8]);
+                    model.addAttribute("numberOfSmallRnas", features[9]);
+                    model.addAttribute("numberOfSmallRnas", features[10]);
+                    model.addAttribute("numberOfSmallRnas", features[11]);
+                    model.addAttribute("numberOfSmallRnas", features[12]);
+                    model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
                     model.addAttribute("message", "Please, choose a gene or an organism!");
 
                     return "searchPredictedData";
@@ -615,6 +670,11 @@ public class SearchController {
                         model.addAttribute("numberOfGenes", features[6]);
                         model.addAttribute("numberOfGenomes", features[7]);
                         model.addAttribute("items", (List<OrganismItem>) features[8]);
+                        model.addAttribute("numberOfSmallRnas", features[9]);
+                        model.addAttribute("numberOfSmallRnas", features[10]);
+                        model.addAttribute("numberOfSmallRnas", features[11]);
+                        model.addAttribute("numberOfSmallRnas", features[12]);
+                        model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
                         model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
 
                         return "searchPredictedData";
@@ -659,6 +719,11 @@ public class SearchController {
                         model.addAttribute("numberOfGenes", features[6]);
                         model.addAttribute("numberOfGenomes", features[7]);
                         model.addAttribute("items", (List<OrganismItem>) features[8]);
+                        model.addAttribute("numberOfSmallRnas", features[9]);
+                        model.addAttribute("numberOfSmallRnas", features[10]);
+                        model.addAttribute("numberOfSmallRnas", features[11]);
+                        model.addAttribute("numberOfSmallRnas", features[12]);
+                        model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
                         model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
 
                         return "searchPredictedData";
@@ -1272,6 +1337,7 @@ public class SearchController {
                     model.addAttribute("numberOfGenes", features[6]);
                     model.addAttribute("numberOfGenomes", features[7]);
                     model.addAttribute("organisms", (List<Organism>) features[8]);
+                    model.addAttribute("itemsRna", (List<OrganismItem>) features[9]);
                     model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
                     return "searchExperimentalData";
                 } else {
@@ -1286,6 +1352,7 @@ public class SearchController {
                     model.addAttribute("numberOfGenes", features[6]);
                     model.addAttribute("numberOfGenomes", features[7]);
                     model.addAttribute("organisms", (List<Organism>) features[8]);
+                    model.addAttribute("itemsRna", (List<OrganismItem>) features[9]);
                     model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
                     return "searchPredictedData";
                 }
@@ -1803,6 +1870,11 @@ public class SearchController {
             model.addAttribute("numberOfGenes", features[6]);
             model.addAttribute("numberOfGenomes", features[7]);
             model.addAttribute("items", (List<OrganismItem>) features[8]);
+            model.addAttribute("numberOfSmallRnas", features[9]);
+            model.addAttribute("numberOfSmallRnas", features[10]);
+            model.addAttribute("numberOfSmallRnas", features[11]);
+            model.addAttribute("numberOfSmallRnas", features[12]);
+            model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
             model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
             return model;
 
@@ -1818,6 +1890,11 @@ public class SearchController {
             model.addAttribute("numberOfGenes", features[6]);
             model.addAttribute("numberOfGenomes", features[7]);
             model.addAttribute("items", (List<OrganismItem>) features[8]);
+            model.addAttribute("numberOfSmallRnas", features[9]);
+            model.addAttribute("numberOfSmallRnas", features[10]);
+            model.addAttribute("numberOfSmallRnas", features[11]);
+            model.addAttribute("numberOfSmallRnas", features[12]);
+            model.addAttribute("itemsRna", (List<OrganismItem>) features[13]);
             model.addAttribute("message", "This gene identifier was not found in the searched organism, please try locus tag.");
             return model;
         }

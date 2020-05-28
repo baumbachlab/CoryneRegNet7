@@ -8,6 +8,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CoryneRegNet 7.0</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -17,6 +21,11 @@
         <script type="text/javascript" src="js/mainjs.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+
         <style>
             .loader {
                 border: 7px dotted #333;
@@ -82,6 +91,17 @@
             }
 
         </style>
+
+
+
+
+
+        <script type="text/javascript">
+            var intervalId = 0;
+            //intervalId = setInterval(operonStatus, 3000);
+        </script>
+
+
     </head>
 
     <body style="background-image: url('images/background.png'); background-size: cover;" >
@@ -144,44 +164,70 @@
                             <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="How to search?" data-content="For network visualization it is necessary to select an organism. For search button it is possible to search the database content of all organisms, but a gene is required." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
-                            <select class="form-control space-after-input" id="organism-search" name="organism" onchange="enableNetworkButton()">
-                                <option value="0">All</option>
-                                <c:forEach items="${items}" var="organismItem">
+                            <div id="organism-select-gene">
+                                <select class="form-control space-after-input" id="organism-search" name="organism" onchange="enableNetworkButton()">
+                                    <option value="0">All</option>
+                                    <c:forEach items="${items}" var="organismItem">
 
-                                    <option value="${organismItem.id}">${organismItem.name}</option>
-                                </c:forEach>                              
-                            </select>
+                                        <option value="${organismItem.id}">${organismItem.name}</option>
+                                    </c:forEach>                              
+                                </select>
+                            </div>
+                            <div id="organism-select-rna" style="display: none;">
+                                <select class="form-control space-after-input" id="organism-search-rna" name="organism-rna" onchange="enableNetworkButton()">
+                                    <option value="0">All genome rna</option>
+                                    <c:forEach items="${itemsRna}" var="organismItemRna">
+
+                                        <option value="${organismItemRna.id}">${organismItemRna.name}</option>
+                                    </c:forEach>                              
+                                </select>
+                            </div>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-1"></div>
+                        <div class="col-sm-1">
+                        </div>
                         <div class="col-sm-10 form-small-screen">
-                            <label for="gene-search">Gene/Small RNA&nbsp;</label>
+                            <label for="gene-search" id="gene-rna-label">Gene&nbsp;</label>
                             <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search by gene id(locus_tag) and gene name. To search in all organisms a gene is mandatory." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
-                            <input type="text" class="form-control" id="gene-search" name="gene">
-                            <label for="checkbox-div" style="margin-top: 15px;">Search for:&nbsp;</label>
+                            <div id="resultList">
+                                <select class="form-control space-after-input" id="geneList-select" name="geneListSelect" onchange="checkSelectGenes()">
+                                    <option value="all">All genes</option>
+                                    <option value="wildcards">Search with wildcards</option>
+                                </select>
+                            </div>
+                            <div id="srnaList" >
+                                <select class="form-control space-after-input" id="srnaList-select" name="srnaListSelect" onchange="checkSelectSrnas()"  style="display: none;">
+                                    <option value="all">All sRNAs</option>
+                                    <option value="wildcards">Search with wildcards</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control" id="gene-search" name="gene"  style="display: none;">
+
+                            <label for="checkbox-div" style="margin-top: 15px;" >Search for:&nbsp;</label>
                             <%-- <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search regulatory interactions regulated by Transcripction Factors (TFs), non-coding RNAs (ncRNAs) or both." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>--%><br>
                             <span class="align-text-bottom" id="checkbox-div">
-                                <input type="radio" id="gene" name="geneRna" value="gene" checked="checked">
+                                <input type="radio" id="gene" name="geneRna" value="gene" checked="checked" onclick="checkGeneRna(this);">
                                 <label style="margin-right: 30px" for="tf">Genes</label>
-                                <input type="radio" id="rna" name="geneRna" value="rna">
+                                <input type="radio" id="rna" name="geneRna" value="rna" onclick="checkGeneRna(this);">
                                 <label for="rna">Small RNAs</label><br>
                             </span>
                             <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
-                            
+
                             <span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0;document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
+                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0; document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
                             </span>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
+
                 </div>
                 <div class="col-sm-3"></div>
             </div>
@@ -230,7 +276,7 @@
                                 <center>
                                     <input type="hidden" name="goBackTo" value="experimental">
                                     <div class="tooltip">
-                                        <input id="dinamic-network-caller" formaction="whichNetwork.htm?layoutType=fast" type="submit" class="btn btn-primary btn-block btn-normal font" value="Visualize Gene Regulatory Network" onclick="showLoader()" disabled>
+                                        <input id="dinamic-network-caller" formaction="whichNetwork.htm?layoutType=fast" type="submit" class="btn btn-primary btn-block btn-normal font" value="Gene Regulatory Network" onclick="showLoader()" disabled>
                                         <span class="tooltiptext">Searches the database content and presents a dynamic network visualization of the TRN of selected organism</span>
                                     </div>
                                 </center>
@@ -274,7 +320,7 @@
                                 <td>Transcription factors</td>
                                 <td>${totalNumberOfRegulators}</td>
                             </tr>
-                              <tr>
+                            <tr>
                                 <td>Genomes</td>
                                 <td>${numberOfGenomes}</td>
                             </tr>
@@ -364,12 +410,20 @@
     </div>
 </body>
 <script>
+    $('.select2').select2();
+</script>
+<script>
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover();
+        $(function () {
+            $('select').selectpicker();
+        })
     });
 
     window.addEventListener('beforeunload', (event) => {
         showButtonsSearch();
     });
+
 </script>
+
 </html>
