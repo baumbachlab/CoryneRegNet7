@@ -48,6 +48,27 @@ public class RnaRegulationViewDAO extends GenericDAO {
             return null;
         }
     }
+    
+        
+//findByGenomeRank
+        public List<RnaRegulationView> findByGenomeRank(Integer genome, Integer rank) {
+        try {
+            List list = new ArrayList<>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaRegulationView.findByGenomeRank");
+            query.setInteger("genome", genome);
+            query.setInteger("rank", rank);
+            list = query.list();
+            this.tx.commit();
+            return list;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+    }
+    
+    
 
     public List<RnaRegulationView> findByOperon(String operon) {
         try {

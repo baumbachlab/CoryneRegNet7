@@ -32,6 +32,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 @NamedQueries({
     @NamedQuery(name = "RnaRegulationView.findAll", query = "SELECT o FROM RnaRegulationView o order by o.genome")
     , @NamedQuery(name = "RnaRegulationView.findByGenome", query = "SELECT o FROM RnaRegulationView o WHERE o.genome = :genome ORDER BY o.genome")
+    , @NamedQuery(name = "RnaRegulationView.findByGenomeRank", query = "SELECT o FROM RnaRegulationView o WHERE o.genome = :genome and o.rank < :rank ORDER BY o.genome")
     , @NamedQuery(name = "RnaRegulationView.findByTg", query = "SELECT o FROM RnaRegulationView o WHERE o.tg = :tg ORDER BY o.genome")
     , @NamedQuery(name = "RnaRegulationView.findBySrna", query = "SELECT o FROM RnaRegulationView o WHERE o.srna = :srna ORDER BY o.genome")
     , @NamedQuery(name = "RnaRegulationView.findByOperon", query = "SELECT o FROM RnaRegulationView o WHERE o.operon = :operon ORDER BY o.genome")
@@ -59,6 +60,8 @@ public class RnaRegulationView implements Serializable {
     private String operon;
     @Column(name = "pvalue")
     private BigDecimal pvalue;
+        @Column(name = "rank")
+    private Integer rank;
 
 //reg_rna
     /**
@@ -161,7 +164,21 @@ public class RnaRegulationView implements Serializable {
 
     @Override
     public String toString() {
-        return "RnaRegulationView{" + "id=" + id + ", srna=" + srna + ", tg=" + tg+ ", role=" + role + ", genome=" + genome + ", operon=" + operon + ", pvalue=" + pvalue + '}';
+        return "RnaRegulationView{" + "id=" + id + ", srna=" + srna + ", tg=" + tg + ", role=" + role + ", genome=" + genome + ", operon=" + operon + ", pvalue=" + pvalue + ", rank=" + rank + '}';
+    }
+
+    /**
+     * @return the rank
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * @param rank the rank to set
+     */
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
 }
