@@ -158,7 +158,7 @@
                                 </select>
                             </div>
                             <div id="organism-select-rna" style="display: none;">
-                                <select class="form-control space-after-input" id="organism-search-rna" name="organism-rna" onchange="enableNetworkButton()">
+                                <select class="form-control space-after-input" id="organism-search-rna" name="organismRna" onchange="enableNetworkButton()">
                                     <option value="0">All genome rna</option>
                                     <c:forEach items="${itemsRna}" var="organismItemRna">
 

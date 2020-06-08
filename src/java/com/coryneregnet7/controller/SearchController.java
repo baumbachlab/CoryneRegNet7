@@ -1679,13 +1679,15 @@ public class SearchController {
     }
 
     @RequestMapping("whichNetwork")
-    public String whichNetwork(Model model, Integer organism, String searchType, String gene, String goBackTo, String layoutType, String geneRna) throws InterruptedException {
+    public String whichNetwork(Model model, Integer organism, Integer organismRna, String searchType, String gene, String goBackTo,
+             String layoutType, String geneRna) throws InterruptedException {
 
         if (searchType == null) {
             return "index";
         }
 
         System.out.println("--------------- Organism: " + organism);
+        System.out.println("--------------- OrganismRna: " + organismRna);
         System.out.println("--------------- SearchType: " + searchType);
         System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println("gene: " + gene);
@@ -1742,7 +1744,14 @@ public class SearchController {
             System.out.println("Gene is empty!!! -->> Experimental + Predicted data");
 
             if (geneRna.equals("rna")) {
-                rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                organism = organismRna;
+                genome = genomeDAO.findByOrganism(organism);
+                if (genome.getId() == 1226) {
+                    //findByGenomeRank
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenomeRank(genome.getId(),5);
+                } else {
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                }
                 //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 for (int i = 0; i < rnaRegList.size(); i++) {
@@ -1778,6 +1787,9 @@ public class SearchController {
 ////            }
         } else {
             if (geneRna.equals("rna")) {
+                organism = organismRna;
+                genome = genomeDAO.findByOrganism(organism);
+
                 sRNA = srnaDAO.findByLocusTagAndOrganism(organism, gene);
 
                 System.out.println("sRNA: " + sRNA);
@@ -1792,7 +1804,7 @@ public class SearchController {
                 }
 
                 rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findBySrna(sRNA.getId());
-                System.out.println(rnaRegList);
+                //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 srnasInfo.put(sRNA.getLocusTag(), sRNA);
 
@@ -1838,9 +1850,8 @@ public class SearchController {
         cytoscapeFileName += ".sif";
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
 
-        System.out.println("regulationsView: " + regulationsView);
-        System.out.println("rnaRegList: " + rnaRegList);
-
+        //  System.out.println("regulationsView: " + regulationsView);
+        //   System.out.println("rnaRegList: " + rnaRegList);
         if (regulationsView.isEmpty() && rnaRegList.isEmpty()) {
             model.addAttribute("o", o);
             model.addAttribute("type", searchType);

@@ -187,6 +187,15 @@
                 </center>
             </div>
         </div>
+        <div id="network-loading-alert" class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>The network is loading!</strong> Please note it can take some minutes.
+        </div>
+        <div id="network-cg-rna-alert" class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Due to performance reasons only the top 5 sRNA regulations ranked by CopraRNA are shown in this page. </strong> 
+            In order to visualize all sRNA regulations of a sRNA, .
+        </div>
 
         <div id="wrapper" class="row" style="margin-top: 20px; padding-left: 0px; padding-right: 0px;">
             <div id="side-div" class="col-md-2">
@@ -985,6 +994,9 @@
                         document.getElementById('text').innerHTML = '100%';
                         document.getElementById('bar').style.width = '496px';
                         document.getElementById('loadingBar').style.opacity = 0;
+                        document.getElementById('network-loading-alert').style.display = "none";
+                        document.getElementById('network-cg-rna-alert').style.display = "block";
+
                     });
                     //NetWork on Zoom
                     network.on("zoom", function () {
@@ -1092,9 +1104,9 @@
                                             + targetNode.locusTag + '</a><span>';
                                 }
 
-                                if (clickedEdge[0].role != "X"){
+                                if (clickedEdge[0].role != "X") {
                                     edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
-                                }else{
+                                } else {
                                     edgeInfo += "<br>" + "<b>Role:</b> sRNA"
                                 }
                                 if (clickedEdge[0].pValue != -1) {
@@ -1381,9 +1393,9 @@
                                             + targetNode.locusTag + '</a><span>';
                                 }
 
-                                if (clickedEdge[0].role != "X"){
+                                if (clickedEdge[0].role != "X") {
                                     edgeInfo += "<br>" + "<b>Role:</b> " + clickedEdge[0].role;
-                                }else{
+                                } else {
                                     edgeInfo += "<br>" + "<b>Role:</b> sRNA"
                                 }
                                 if (clickedEdge[0].pValue != -1) {
