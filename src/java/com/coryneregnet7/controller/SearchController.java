@@ -413,7 +413,7 @@ public class SearchController {
 
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna,
-            String geneListSelect, String rnaListSelect) throws InterruptedException {
+            String geneListSelect, String rnaListSelect, Integer organismRna) throws InterruptedException {
 
         System.out.println("geneListSelect " + geneListSelect);
         System.out.println("rnaListSelect " + rnaListSelect);
@@ -443,6 +443,8 @@ public class SearchController {
 
         organism = Integer.parseInt(organism.toString());
         System.out.println("Organism: " + organism);
+        System.out.println("OrganismRNA: " + organismRna);
+
         System.out.println("Gene: " + gene);
         System.out.println("searchType " + searchType);
 
@@ -453,6 +455,7 @@ public class SearchController {
         Genome genome = new Genome();
 
         if (geneRna.equals("rna")) {
+            organism = organismRna;
             //search rnas by genome. 
             SmallRnaDAO sRnaDAO = new SmallRnaDAO();
 
@@ -482,7 +485,9 @@ public class SearchController {
 
                 //search a specific genome. 
             } else {
+                System.out.println("organism " + organism);
                 genome = genomeDAO.findByOrganism(organism);
+                System.out.println("genome " + genome);
                 if (gene.isEmpty()) {
                     //search by genome and type. 
 
@@ -1676,13 +1681,15 @@ public class SearchController {
     }
 
     @RequestMapping("whichNetwork")
-    public String whichNetwork(Model model, Integer organism, String searchType, String gene, String goBackTo, String layoutType, String geneRna) throws InterruptedException {
+    public String whichNetwork(Model model, Integer organism, Integer organismRna, String searchType, String gene, String goBackTo,
+            String layoutType, String geneRna) throws InterruptedException {
 
         if (searchType == null) {
             return "index";
         }
 
         System.out.println("--------------- Organism: " + organism);
+        System.out.println("--------------- OrganismRna: " + organismRna);
         System.out.println("--------------- SearchType: " + searchType);
         System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println("gene: " + gene);
@@ -1709,6 +1716,7 @@ public class SearchController {
         OperonDAO opDAO = new OperonDAO();
         TreeMap<String, ArrayList<String>> operons = new TreeMap<>();
         OrganismDAO organismDAO = new OrganismDAO();
+
         Organism o = organismDAO.findById(organism);
         GenomeDAO genomeDAO = new GenomeDAO();
         Genome genome = genomeDAO.findByOrganism(organism);
@@ -1735,11 +1743,22 @@ public class SearchController {
         RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
         List<RnaRegulationView> rnaRegList = new LinkedList<>();
 
+        if (geneRna.equals("rna")) {
+            o = organismDAO.findById(organismRna);
+        }
+
         if (gene == null || gene.isEmpty()) {
             System.out.println("Gene is empty!!! -->> Experimental + Predicted data");
 
             if (geneRna.equals("rna")) {
-                rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                organism = organismRna;
+                genome = genomeDAO.findByOrganism(organism);
+                if (genome.getId() == 1226) {
+                    //findByGenomeRank
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenomeRank(genome.getId(), 5);
+                } else {
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                }
                 //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 for (int i = 0; i < rnaRegList.size(); i++) {
@@ -1775,6 +1794,9 @@ public class SearchController {
 ////            }
         } else {
             if (geneRna.equals("rna")) {
+                organism = organismRna;
+                genome = genomeDAO.findByOrganism(organism);
+
                 sRNA = srnaDAO.findByLocusTagAndOrganism(organism, gene);
 
                 System.out.println("sRNA: " + sRNA);
@@ -1789,7 +1811,7 @@ public class SearchController {
                 }
 
                 rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findBySrna(sRNA.getId());
-                System.out.println(rnaRegList);
+                //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 srnasInfo.put(sRNA.getLocusTag(), sRNA);
 
@@ -1835,9 +1857,8 @@ public class SearchController {
         cytoscapeFileName += ".sif";
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
 
-        System.out.println("regulationsView: " + regulationsView);
-        System.out.println("rnaRegList: " + rnaRegList);
-
+        //  System.out.println("regulationsView: " + regulationsView);
+        //   System.out.println("rnaRegList: " + rnaRegList);
         if (regulationsView.isEmpty() && rnaRegList.isEmpty()) {
             model.addAttribute("o", o);
             model.addAttribute("type", searchType);
@@ -1858,6 +1879,7 @@ public class SearchController {
         //model.addAttribute("geneOpInfo", geneOpInfo);
         model.addAttribute("genesInfo", genesInfo);
         model.addAttribute("regulationsView", regulationsView);
+        model.addAttribute("geneRna", geneRna);
 
         //if (layoutType.equals("fast")) {
         return "networkDinamicVisualization-fast";
@@ -1930,7 +1952,7 @@ public class SearchController {
     public String networkDinamicVisualizationOperons(Model model, Integer organism, String searchType, String[] interestGenes, String role) throws InterruptedException {
         //System.out.println("--------------- Organism: " + organism);
         // System.out.println("--------------- SearchType: " + searchType);
-        // System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
         // System.out.println("gene: " + gene);
         //System.out.println("role: " + role);
 
