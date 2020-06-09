@@ -69,7 +69,15 @@
         <div id="top-button"></div>
         <div class="row bottom-btn">
             <div class="col-sm-4 col-4" style="padding-left: 0px;">
-                <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">Go Back</button></a>
+                <c:choose>
+                    <c:when test="${type eq 'predicted'}">
+                        <a href="searchPredictedData.htm"><button type="button" class="btn btn-primary btn-normal">Go Back</button></a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">Go Back</button></a>
+                    </c:otherwise>    
+                </c:choose>
+
             </div>
             <div class="col-sm-4 col-8">
                 <center>
@@ -193,15 +201,15 @@
         <div class="col-sm-12">
             <center>
                 <a href="#top-button"><button id="bottom-button" type="button" class="btn btn-primary btn-normal">Top</button></a>
-                 <c:choose>
-                        <c:when test="${type eq 'predicted'}">
-                            <a href="searchPredictedData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
-                        </c:otherwise>    
-                    </c:choose>
-                
+                <c:choose>
+                    <c:when test="${type eq 'predicted'}">
+                        <a href="searchPredictedData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="searchExperimentalData.htm"><button type="button" class="btn btn-primary btn-normal">New search</button></a>
+                    </c:otherwise>    
+                </c:choose>
+
             </center>
         </div>
     </div>
