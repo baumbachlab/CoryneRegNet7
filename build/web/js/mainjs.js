@@ -35,7 +35,7 @@ function checkSelectGenes() {
         document.getElementById("dinamic-network-caller").disabled = true;
     } else if (value == "all") {
         document.getElementById("dinamic-network-caller").disabled = true;
-    }else {
+    } else {
         document.getElementById("gene-search").style.display = "none";
     }
 }
@@ -66,7 +66,7 @@ function getGeneList(id) {
 
             $('#resultList').html(geneListHtml);
             $('.select2').select2();
-
+            
 
             // alert(value);
 
@@ -101,7 +101,6 @@ function getRnaList(id) {
 
             $('#srnaList').html(geneListHtml);
             $('.select2').select2();
-
             // alert(value);
 
 
@@ -174,9 +173,11 @@ function checkGeneRna(element) {
             document.getElementById("geneList-select").style.display = "block";
             document.getElementById('geneList-select').value = "all";
         }
-        if (document.getElementById("srnaList").innerHTML != "") {
-            document.getElementById("srnaList-select").style.display = "none";
-        }
+//        if (document.getElementById("srnaList").innerHTML != "") {
+//            document.getElementById("srnaList-select").style.display = "none";
+//        }else{
+           document.getElementById("srnaList").innerHTML = ""; 
+//        }
         document.getElementById("gene-search").style.display = "none";
         document.getElementById("gene-search").value = "";
         document.getElementById("dinamic-network-caller").value = "Gene Regulatory Network";
@@ -207,10 +208,12 @@ function checkGeneRna(element) {
 //            document.getElementById('srnaList-select').value = "all";
 //        }
 //        
-        if (document.getElementById("resultList").innerHTML != "") {
-            console.log("rna5");
-            document.getElementById("geneList-select").style.display = "none";
-        }
+//        if (document.getElementById("resultList").innerHTML != "") {
+//            
+//            document.getElementById("geneList-select").style.display = "none";
+//        }else{
+            document.getElementById("resultList").innerHTML = "";
+//        }
 //        console.log("rna6");
 //        document.getElementById("gene-search").style.display = "none";
 //        console.log("rna7");
