@@ -150,7 +150,7 @@
                         <%--/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/Ce-YS314-sRNA-4_0001_ss.ps
                             Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/" + pageContext.getAttribute("logoName")--%>
                         <img class="img-fluid" src="data:image/png;base64,
-                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_ss.png"))))%>"/>
+                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_ss.png"))))%>"/>
 
                         <!-- Button to Open the Modal -->
                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
@@ -166,7 +166,7 @@
                                     <div class="modal-body">
                                         <button type="button" class="close" data-dismiss="modal" >&times;</button>
                                         <img class="img-fluid" src="data:image/png;base64,
-                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_ss.png"))))%>"/>
+                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_ss.png"))))%>"/>
 
 
                                     </div>
@@ -226,7 +226,7 @@
 
 
                                         <img class="img-fluid" src="data:image/png;base64,
-                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_dp.png"))))%>"/>
+                                             <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_dp.png"))))%>"/>
                                     </div>
                                     <div class="modal-footer">
                                         <a href="downloadRnaImage.htm?fileName=${srna.locusTag}_0001_dp.ps">
@@ -259,7 +259,7 @@
                                         <button type="button" class="close" data-dismiss="modal" >&times;</button>
                                         <center>
                                             <img class="img-fluid" src="data:image/png;base64,
-                                                 <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_aln.png"))))%>"/>
+                                                 <%= new String(Base64.encode(Files.readAllBytes(Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/srnas/" + String.valueOf(pageContext.getAttribute("locus")) + "_0001_aln.png"))))%>"/>
                                         </center>
                                         <div class="modal-footer">
                                             <a href="downloadRnaImage.htm?fileName=${srna.locusTag}_0001_aln.ps">

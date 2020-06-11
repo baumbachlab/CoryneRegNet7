@@ -149,7 +149,7 @@
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
                             <div id="organism-select-gene">
-                                <select class="form-control space-after-input" id="organism-search" name="organism" onchange="enableNetworkButton()">
+                                <select class="form-control space-after-input" id="organism-search" name="organism" onchange="enableNetworkButton('predicted')">
                                     <option value="0">All</option>
                                     <c:forEach items="${items}" var="organismItem">
 
@@ -158,7 +158,7 @@
                                 </select>
                             </div>
                             <div id="organism-select-rna" style="display: none;">
-                                <select class="form-control space-after-input" id="organism-search-rna" name="organismRna" onchange="enableNetworkButton()">
+                                <select class="form-control space-after-input" id="organism-search-rna" name="organismRna" onchange="enableNetworkButton('predicted')">
                                     <option value="0">All genome rna</option>
                                     <c:forEach items="${itemsRna}" var="organismItemRna">
 

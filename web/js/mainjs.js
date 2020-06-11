@@ -135,8 +135,9 @@ function setAllGenesSelect() {
 
 }
 
-function enableNetworkButton() {
+function enableNetworkButton(type) {
     //organism-search-rna
+    //window.alert("ẗype "+type);
     if (document.getElementById('gene').checked) {
         var value = document.getElementById("organism-search").value;
     } else {
@@ -159,6 +160,11 @@ function enableNetworkButton() {
 
             getRnaList(value);
         }
+    }
+    
+    if(type=='experimental' && document.getElementById('rna').checked){
+        //window.alert('disable!');
+        document.getElementById("dinamic-network-caller").disabled = true;
     }
 }
 
@@ -223,6 +229,7 @@ function checkGeneRna(element) {
         document.getElementById("gene-search").style.display = "none";
         document.getElementById("gene-search").value = "";
         document.getElementById("dinamic-network-caller").value = "sRNA Regulatory Network";
+        //document.getElementById("dinamic-network-caller").disabled = true;
 //
 //
 //        //organism-select-rna
