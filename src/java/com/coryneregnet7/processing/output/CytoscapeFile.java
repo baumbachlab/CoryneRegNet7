@@ -17,6 +17,7 @@ import com.coryneregnet7.model.Operon;
 import com.coryneregnet7.model.Organism;
 import com.coryneregnet7.model.PredictedRegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteraction;
+import com.coryneregnet7.model.RnaRegulationView;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -406,6 +407,7 @@ public class CytoscapeFile {
                             regulations.remove(reglation);
                             reglation.add(tg);
                             regulations.add(reglation);
+                            break;
                         }
                     }
 
@@ -439,6 +441,137 @@ public class CytoscapeFile {
                             } else {
                                 role = "Sigma";
                             }
+                            regInfo += "\t" + role;
+                        }
+                    }
+                    //System.out.println(regInfo);
+                    printWriter.println(regInfo);
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
+        }
+
+        return cytoscapeFileName;
+    }
+
+    public String sRnaRegSif(List<RnaRegulationView> rnaRegList, Integer organismId, String geneInterest) {
+
+        ArrayList<ArrayList<String>> regulations = new ArrayList<ArrayList<String>>();
+        ArrayList<String> reglation = new ArrayList<>();
+        boolean contains;
+        String sRNA;
+        String tg;
+        String role;
+        OrganismDAO organismDAO = new OrganismDAO();
+        Organism organism = organismDAO.findById(organismId);
+        String cytoscapeFileName = "";
+        List<String> cytoscapeFilesList = new ArrayList<>();
+        File file;
+        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
+        List<Gene> tfs = new ArrayList<>();
+        List<Gene> tgs = new ArrayList<>();
+        GeneDAO geneDAO = new GeneDAO();
+        Gene gene = new Gene();
+        String geneName = "";
+        String strainName = organism.getStrain().replace(" ", "_");
+        strainName = strainName.replace("/", "-");
+
+        //System.out.println("geneInterest: " + geneInterest);
+        if (geneInterest != null && !geneInterest.isEmpty()) {
+
+            //System.out.println("organism: " + gene.getGenome().getOrganism().getGenera().charAt(0) + "_" + gene.getGenome().getOrganism().getSpecies().charAt(0) + "_" + gene.getGenome().getOrganism().getStrain() + "_" + geneName);
+            cytoscapeFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + strainName + "_" + geneInterest;
+
+        } else {
+            //System.out.println("organism: " + organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + organism.getStrain());
+            cytoscapeFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + strainName;
+        }
+        contains = true;
+
+        cytoscapeFileName = cytoscapeFileName.replace("/", "-");
+        cytoscapeFileName += "_rna";
+        //System.out.println(cytoscapeFileName);
+        //System.out.println(System.getProperty("user.dir"));
+        file = new File(System.getProperty("user.dir") + "/" + cytoscapeFileName + ".sif");
+        //System.out.println(file.getAbsolutePath());
+        String genes;
+
+        //if (file.exists()) {
+        if (!file.exists()) {
+            System.out.println("File exists!!!!!!!!!!!!");
+        } else {
+            PrintWriter printWriter = null;
+
+            try {
+                printWriter = new PrintWriter(file);
+
+                for (int i = 0; i < rnaRegList.size(); i++) {
+                    contains = false;
+                    sRNA = rnaRegList.get(i).getSrna().getLocusTag();
+
+                    if (!rnaRegList.get(i).getTg().getName().isEmpty()) {
+                        tg = rnaRegList.get(i).getTg().getName();
+                    } else {
+                        tg = rnaRegList.get(i).getTg().getLocusTag();
+                    }
+
+                    System.out.println("------------sRNA: " + sRNA);
+                    System.out.println("------------TG: " + tg);
+                    System.out.println("-");
+                    System.out.println("-");
+
+                    //System.out.println("regulations.size(): " + regulations.size());
+                    for (int j = 0; j < regulations.size(); j++) {
+                        reglation = new ArrayList<>();
+                        reglation = regulations.get(j);
+                        System.out.println("regulations.get(j): " + regulations.get(j));
+                        System.out.println("sRNA:" + reglation.get(0));
+                        System.out.println("role:" + reglation.get(1));
+                        System.out.println("TG: " + tg + "\n");
+                        System.out.println("=");
+                        System.out.println("=");
+                        if (reglation.get(0).equals(sRNA)) {
+                            System.out.println("tem!");
+                            contains = true;
+                            System.out.println("OLD REGULATION: "+reglation);
+                            regulations.remove(reglation);
+                            reglation.add(tg);
+                            regulations.add(reglation);
+                            System.out.println("NOVEL REGULATION: "+reglation);
+                            break;
+                        }else{
+                            System.out.println("nao tem!");
+                        }
+                    }
+
+                    if (contains == false) {
+                        System.out.println("add new regulation item. ");
+                        reglation = new ArrayList<>();
+                        reglation.add(sRNA);
+                        reglation.add("sRNA");
+                        reglation.add(tg);
+                        regulations.add(reglation);
+                    }
+                    reglation = new ArrayList<>();
+                }
+
+                String regInfo;
+                for (int i = 0; i < regulations.size(); i++) {
+                    //System.out.println(regulations.get(i));
+                    regInfo = "";
+                    for (int j = 0; j < regulations.get(i).size(); j++) {
+                        if (j > 1) {
+                            regInfo += "\t" + regulations.get(i).get(j);
+                        } else if (j == 0) {
+                            regInfo = regulations.get(i).get(j);
+                        } else if (j == 1) {
+                            role = regulations.get(i).get(j);
                             regInfo += "\t" + role;
                         }
                     }
