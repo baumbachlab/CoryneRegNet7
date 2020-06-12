@@ -131,9 +131,9 @@
                 <div class="row">
                     <div class="col-sm-12" style="font-weight: bold">
                         <center>
-                            Distribution of co-regulating TFs
-                            <a tabindex="2" role="button" data-toggle="popover" data-trigger="hover" title="Distribution of co-regulating TFs" 
-                               data-content="This part shows the distribution of the number of co-regulating transcription factors.">
+                            Distribution of co-regulating sRNAs
+                            <a tabindex="2" role="button" data-toggle="popover" data-trigger="hover" title="Distribution of co-regulating sRNAs"
+                               data-content="This part shows the distribution of the number of co-regulating sRNAs.">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
                         </center>
@@ -345,24 +345,7 @@
             var coregulators = [];
             var aux = '${numOfGeneCoregulators}'.split("=");
             //console.log(aux);
-            if (aux[0] == 0) {
-                coregulators.coregulators = "0-9";
-            } else if (aux[0] == 1) {
-                coregulators.coregulators = "10-19";
-            } else if (aux[0] == 2) {
-                coregulators.coregulators = "20-29";
-            } else if (aux[0] == 3) {
-                coregulators.coregulators = "30-39";
-            } else if (aux[0] == 4) {
-                coregulators.coregulators = "40-49";
-            } else if (aux[0] == 5) {
-                coregulators.coregulators = "50-59";
-            } else if (aux[0] == 6) {
-                coregulators.coregulators = "60-69";
-            } else {
-                coregulators.coregulators = ">=70"
-            }
-
+            coregulators.coregulators = aux[0];
             if (aux[1].length == 1) {
                 coregulators.tfs = "00" + aux[1];
             } else if (aux[1].length == 2) {

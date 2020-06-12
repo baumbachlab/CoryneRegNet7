@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : quantitiesOfRegulatorAndRegulationTypes
     Created on : Jan 29, 2019, 3:25:18 PM
     Author     : doglas

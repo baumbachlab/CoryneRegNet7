@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -15,7 +15,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
     var data = [ncRnaExperimental, ncRnaBsrd, ncRnaGLASSgo, ncRnaCmsearch];
     var chart_width = 450;
     var chart_height = 300;
-    var color = d3.scaleOrdinal(['#bc5a45', 'blue', 'grey', 'green']);
+    var color = d3.scaleOrdinal(['red', 'blue', 'grey', 'green']);
     //Pie layout
     var pie = d3.pie();
     //Arc
@@ -62,17 +62,17 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 //console.log(d.value);
                 var _d = arc.centroid(d);
                 if (d.value == 7) {
-                    _d[0] *= 3;	//multiply by a constant factor
-                    _d[1] *= 1;	//multiply by a constant factor
+                    _d[0] *= 3; //multiply by a constant factor
+                    _d[1] *= 1; //multiply by a constant factor
                 } else if (d.value == 40) {
-                    _d[0] *= 3;	//multiply by a constant factor
-                    _d[1] *= 1.6;	//multiply by a constant factor
+                    _d[0] *= 3; //multiply by a constant factor
+                    _d[1] *= 1.6; //multiply by a constant factor
                 } else if (d.value == 70) {
-                    _d[0] *= 2.2;	//multiply by a constant factor
-                    _d[1] *= 1.5;	//multiply by a constant factor
+                    _d[0] *= 2.2; //multiply by a constant factor
+                    _d[1] *= 1.5; //multiply by a constant factor
                 } else {
-                    _d[0] *= 1;	//multiply by a constant factor
-                    _d[1] *= 1;	//multiply by a constant factor
+                    _d[0] *= 1; //multiply by a constant factor
+                    _d[1] *= 1; //multiply by a constant factor
                 }
                 return "translate(" + _d + ")";
             })
@@ -100,7 +100,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 .attr("fill", function () {
                     //console.log(regulatorType);
                     if (regulatorType == "Experimental") {
-                        return "#bc5a45";
+                        return "red";
                     } else if (regulatorType == "BSRD") {
                         return "blue";
                     } else if (regulatorType == "CMsearch") {
@@ -115,7 +115,7 @@ function quantitiesOfsRNAAllTypes(ncRnaExperimental, ncRnaBsrd, ncRnaCmsearch,
                 .text(regulatorType)
                 .attr("fill", function () {
                     if (regulatorType == "Experimental") {
-                        return "#bc5a45";
+                        return "red";
                     } else if (regulatorType == "BSRD") {
                         return "blue";
                     } else if (regulatorType == "CMsearch") {

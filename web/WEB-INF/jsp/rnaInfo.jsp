@@ -199,7 +199,7 @@
                             <p>Source RNA: 
                                 <a style="color: black; " href="rnaInfo.htm?locusTag=${srna.sourceRna.locusTag}&type=${type}"><c:out value="${srna.sourceRna.locusTag}"/></a>&nbsp;
 
-                            </p><
+                            </p>
                         </c:if>
                         <c:if test="${type eq 'experimental'}">
                             <p>sRNA class: ${srna.srnaClass}</p>

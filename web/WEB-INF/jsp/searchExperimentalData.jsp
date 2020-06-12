@@ -174,7 +174,7 @@
                                 </select>
                             </div>
                             <div id="organism-select-rna" style="display: none;">
-                                <select class="form-control space-after-input" id="organism-search-rna" name="organism-rna" onchange="enableNetworkButton('experimental')">
+                                <select class="form-control space-after-input" id="organism-search-rna" name="organismRna" onchange="enableNetworkButton('experimental')">
                                     <option value="0">All genome rna</option>
                                     <c:forEach items="${itemsRna}" var="organismItemRna">
 
@@ -277,7 +277,7 @@
                                     <input type="hidden" name="goBackTo" value="experimental">
                                     <div class="tooltip">
                                         <input id="dinamic-network-caller" formaction="whichNetwork.htm?layoutType=fast" type="submit" class="btn btn-primary btn-block btn-normal font" value="Gene Regulatory Network" onclick="showLoader()" disabled>
-                                        <span class="tooltiptext">Searches the database content and presents a dynamic network visualization of the TRN of selected organism</span>
+                                        <span class="tooltiptext" id="tooltip-text">Searches the database content and presents a dynamic network visualization of the TRN of selected organism</span>
                                     </div>
                                 </center>
                             </div>
