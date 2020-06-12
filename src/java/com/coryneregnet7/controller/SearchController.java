@@ -1694,14 +1694,13 @@ public class SearchController {
             return "index";
         }
 
-        System.out.println("--------------- Organism: " + organism);
-        System.out.println("--------------- OrganismRna: " + organismRna);
-        System.out.println("--------------- SearchType: " + searchType);
-        System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("gene: " + gene);
-        System.out.println("goBackTo: " + goBackTo);
-        System.out.println("layoutType: " + layoutType);
-
+        //System.out.println("--------------- Organism: " + organism);
+        //System.out.println("--------------- OrganismRna: " + organismRna);
+        //System.out.println("--------------- SearchType: " + searchType);
+        //System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("gene: " + gene);
+        //System.out.println("goBackTo: " + goBackTo);
+        //System.out.println("layoutType: " + layoutType);
         //System.out.println("Which network?");
         RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
         ArrayList<RegulationView> regulationsView = new ArrayList<>();
@@ -1765,12 +1764,17 @@ public class SearchController {
                 } else {
                     rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
                 }
+                
+                for (int i = 0; i < rnaRegList.size(); i++) {
+                    System.out.println("rnaRegList: -> " + rnaRegList.get(i).getSrna().getLocusTag() + " -> " + rnaRegList.get(i).getTg().getLocusTag());
+                }
                 //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 for (int i = 0; i < rnaRegList.size(); i++) {
                     sRNA = rnaRegList.get(i).getSrna();
                     srnasInfo.put(sRNA.getLocusTag(), sRNA);
                 }
+                cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism, gene);
 
             } else {
                 ris = riDAO.findByOrganism(organism);
@@ -2833,11 +2837,38 @@ public class SearchController {
 
 //coRegAGene
         TreeMap<Integer, Integer> numOfCoregulators = new TreeMap<>();
-        RnaCoregulatingViewDAO rnaCoregulatingDAO = new RnaCoregulatingViewDAO();
-        List<RnaCoregulatingView> lisCoregRna = rnaCoregulatingDAO.findByGenome(0);
-        for (RnaCoregulatingView coRAG : lisCoregRna) {
-            numOfCoregulators.put(coRAG.getCoRegRnas(), coRAG.getCount());
+        ArrayList<CoregulatorsStatistics> coRegAGene = new ArrayList<>();
+        CoregulatorsStatisticsDAO csDAO = new CoregulatorsStatisticsDAO();
+        coRegAGene = (ArrayList<CoregulatorsStatistics>) csDAO.findByTypeAndDatabase("database", type);
+        Integer coRegRange = 0;
+        Integer numOfTFs = 0;
+        for (CoregulatorsStatistics coRAG : coRegAGene) {
+            if (coRAG.getNumCoregulators() < (coRegRange + 1) * 10) {
+                numOfTFs += coRAG.getNumTfs();
+            } else if (coRegRange == 7) {
+                numOfTFs += coRAG.getNumTfs();
+            } else {
+                numOfCoregulators.put(coRegRange, numOfTFs);
+                System.out.println("numOfTFs: " + numOfTFs);
+                numOfTFs = coRAG.getNumTfs();
+                if (coRAG.getNumCoregulators() < 20) {
+                    coRegRange = 1;
+                } else if (coRAG.getNumCoregulators() < 30) {
+                    coRegRange = 2;
+                } else if (coRAG.getNumCoregulators() < 40) {
+                    coRegRange = 3;
+                } else if (coRAG.getNumCoregulators() < 50) {
+                    coRegRange = 4;
+                } else if (coRAG.getNumCoregulators() < 60) {
+                    coRegRange = 5;
+                } else if (coRAG.getNumCoregulators() < 70) {
+                    coRegRange = 6;
+                } else {
+                    coRegRange = 7;
+                }
+            }
         }
+        numOfCoregulators.put(coRegRange, numOfTFs);
 
         ///////////////////-------------------------
         //model.addAttribute("distancesFromStartSite", distancesFromStartSite);
@@ -3301,7 +3332,7 @@ public class SearchController {
         return "coregulatorsStatistics";
     }
 
-    @RequestMapping("sRnaCoregulatorsStatistics")
+   @RequestMapping("sRnaCoregulatorsStatistics")
     public String sRnaCoregulatorsStatistics(Model model, String type) {
 
         if (type == null) {
@@ -3344,8 +3375,8 @@ public class SearchController {
                     for (RnaCoregulatingView coRAG : lisCoregRna) {
                         allCoregulatorsOfOrganism.put(coRAG.getCoRegRnas(), coRAG.getCount());
                     }
-                    numOfsRnaCoregulators.put(genomes.get(i).getOrganism().getGenera() + " "
-                            + genomes.get(i).getOrganism().getSpecies() + " "
+                    numOfsRnaCoregulators.put(genomes.get(i).getOrganism().getGenera() + " " 
+                            + genomes.get(i).getOrganism().getSpecies() + " " 
                             + genomes.get(i).getOrganism().getStrain(), allCoregulatorsOfOrganism);
                 }
             }

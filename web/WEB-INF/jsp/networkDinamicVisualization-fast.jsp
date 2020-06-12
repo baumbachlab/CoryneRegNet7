@@ -579,7 +579,7 @@
                         }
 
                         if (geneAttributes.name == "") {
-                            //    console.log(geneAttributes.locusTag);
+                            //console.log(geneAttributes.locusTag);
                             geneAttributes.name = geneAttributes.locusTag;
                         }
                         //console.log(geneAttributes);
@@ -591,11 +591,11 @@
 
             <c:forEach var="srnai" items="${srnasInfo}">
                 <script>
-                    console.log("genesInfo");
+                    //console.log("genesInfo");
                     key = '${srnai.key}';
                     value = '${srnai.value}';
-                    console.log("Key: " + key);
-                    console.log("Value: " + value);
+                    //console.log("Key: " + key);
+                    //console.log("Value: " + value);
                     //console.log("<br>");
 
                     //GeneInfo for gene based layout
@@ -683,7 +683,7 @@
                     //console.log('${ri.role}');
                     regInteraction.riRole = '${ri.role}';
                     regInteraction.pValue = '${ri.pValue}';
-                    //           console.log("Save: ");
+                    //console.log("Save: ");
                     //console.log(regInteraction);
                     var repetedRegulation = false;
                     for (var i = 0; i < regInteractionsCombined.length; i++) {
@@ -698,8 +698,8 @@
                     if (!repetedRegulation) {
                         regInteractionsCombined.push(regInteraction);
                     }
-                    //       console.log("------------------");
-                    //     console.log();
+                    //console.log("------------------");
+                    //console.log();
                 </script>
 
                 <script>
@@ -727,8 +727,8 @@
                         regInteraction.tfName = '${ri.transcriptionFactor.locusTag}';
                         regInteraction.tfLocusTag = '${ri.transcriptionFactor.locusTag}';
                     }
-                    //                    console.log("tfLocusTag: " + regInteraction.tfLocusTag);
-                    //                  console.log("tfName: " + regInteraction.tfName);
+                    //console.log("tfLocusTag: " + regInteraction.tfLocusTag);
+                    //console.log("tfName: " + regInteraction.tfName);
 
                     //regInteraction.tfAltLocusTag = '${ri.transcriptionFactor.alternativeLocusTag}';
                     regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
@@ -810,7 +810,7 @@
                     //console.log('${ri.role}');
                     regInteraction.riRole = '${rnaRL.role}';
                     regInteraction.pValue = '${rnaRL.pvalue}';
-                    //           console.log("Save: ");
+                    //console.log("Save: ");
                     //console.log(regInteraction);
                     var repetedRegulation = false;
                     for (var i = 0; i < regInteractionsCombined.length; i++) {
@@ -825,8 +825,8 @@
                     if (!repetedRegulation) {
                         regInteractionsCombined.push(regInteraction);
                     }
-                    //       console.log("------------------");
-                    //     console.log();
+                    //console.log("------------------");
+                    //console.log();
                 </script>
             </c:forEach>
 
@@ -912,9 +912,9 @@
                     var nodeColor;
                     var geneInfo;
                     mapNodes.forEach(mapNode => {
-                        console.log(mapNode);
-                        console.log("geneInfoMap.get(mapNode):");
-                        console.log(geneInfoMap.get(mapNode));
+                        //console.log(mapNode);
+                        //console.log("geneInfoMap.get(mapNode):");
+                        //console.log(geneInfoMap.get(mapNode));
                         geneInfo = geneInfoMap.get(mapNode);
                         nodeColor = "#b3b3b3";
                         if ((geneInfo.role == "Repressor") || (geneInfo.role == "R")) {

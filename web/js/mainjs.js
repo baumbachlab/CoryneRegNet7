@@ -137,12 +137,16 @@ function setAllGenesSelect() {
 
 function enableNetworkButton(type) {
     //organism-search-rna
+    window.alert(document.getElementById('organism-search-rna').value);
     if (document.getElementById('gene').checked) {
         var value = document.getElementById("organism-search").value;
+        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
     } else {
         var value = document.getElementById("organism-search-rna").value;
     }
     if (value == 0) {
+        window.alert("value 0");
+        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
         document.getElementById("dinamic-network-caller").disabled = true;
         if (document.getElementById('gene').checked) {
             setAllGenesSelect();
@@ -151,18 +155,23 @@ function enableNetworkButton(type) {
         }
 
 
-    } else if (document.getElementById('organism-search-rna').value == "1239" && type == "experimental") {
-        document.getElementById("dinamic-network-caller").disabled = true;
-        document.getElementById("tooltip-text").innerHTML = "There is no experimental sRNA network for this organism.";
-
     } else {
+        window.alert("else :)");
         document.getElementById("dinamic-network-caller").disabled = false;
         document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
         if (document.getElementById('gene').checked) {
             getGeneList(value);
         } else {
-
             getRnaList(value);
+        }
+        
+        if (document.getElementById('rna').checked && 
+                document.getElementById('organism-search-rna').value == "1239" &&
+                    type == "experimental") {
+            window.alert("CG! :)");
+            document.getElementById("dinamic-network-caller").disabled = true;
+            document.getElementById("tooltip-text").innerHTML = "There is no experimental sRNA network for this organism.";
+
         }
     }
 
