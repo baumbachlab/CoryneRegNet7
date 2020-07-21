@@ -194,7 +194,7 @@ public class HomologyDetection {
 
         for (int i = 0; i < bbhs.size(); i++) {
 
-            //System.out.println("\n[0]= " + bbhs.get(i)[0] + "\t[1]= " + bbhs.get(i)[1] + "\t[2]= " + bbhs.get(i)[2] + "\t[3]= " + bbhs.get(i)[3]);
+            System.out.println("\n[0]= " + bbhs.get(i)[0] + "\t[1]= " + bbhs.get(i)[1] + "\t[2]= " + bbhs.get(i)[2] + "\t[3]= " + bbhs.get(i)[3]);
             String bbhs0 = bbhs.get(i)[0];
             String bbhs1 = bbhs.get(i)[1];
 

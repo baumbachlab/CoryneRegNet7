@@ -372,6 +372,7 @@
             <script>
                 var regInteractions = [];
                 var geneInfoMap = new Map;
+                var toHide = [];
                 var regInteractionsCombined = [];
                 //var createdOperons = [];
                 var geneInfoMapCombined = new Map;
@@ -668,7 +669,6 @@
                         }
                     }
                     //console.log("regInteraction.tfName: " + regInteraction.tfName);
-                    //console.log("regInteraction.tgName: " + regInteraction.tgName);
                     //console.log("geneInfoMapCombined.get(regInteraction.tfName).name: " + geneInfoMapCombined.get(regInteraction.tfName).name);
                     regInteraction.tgProteinId = '${ri.targetGene.proteinId}';
                     regInteraction.tfProteinId = '${ri.transcriptionFactor.proteinId}';
@@ -739,6 +739,8 @@
                     //console.log('${ri.role}');
                     regInteraction.riRole = '${ri.role}';
                     regInteraction.pValue = '${ri.pValue}';
+                    toHide.push(regInteraction.tfName);
+                    toHide.push(regInteraction.tgName);
                     regInteractions.push(regInteraction);
                     //console.log("-------------------------------------");
                 </script> 
@@ -865,7 +867,6 @@
                     var edges;
                     var container;
                     for (var i = 0; i < regInteractions.length; i++) {
-                        //console.log(regInteractions[i]);
                         if ((regInteractions[i].riRole == "R") || (regInteractions[i].riRole == "Repressor")) {
                             edgeColor = '#ff6666';
                             riRole = "Repressor";
@@ -1127,6 +1128,17 @@
 
                                 $('#ri-modal-content').html(edgeInfo);
                                 $('#riModal').modal('show');
+                            } else {
+                                toHide.forEach(test2);
+                                function test2(edge) {
+                                    console.log(edge);
+                                    nodes.update([
+                                        {id: edge, hidden: toggle}
+                                    ]);
+                                }
+                                network.fit();
+                                // switch toggle
+                                toggle = !toggle;
                             }
                         }
                         //console.log("Finishing onClick");

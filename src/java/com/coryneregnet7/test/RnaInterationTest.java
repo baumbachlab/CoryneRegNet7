@@ -24,8 +24,15 @@ import java.util.List;
 public class RnaInterationTest {
 
     public static void main(String[] args) {
-        RnaInterationTest riTest = new RnaInterationTest();
-        riTest.findByMrna();
+       // RnaInterationTest riTest = new RnaInterationTest();
+        RnaInteractionDAO rDAO = new RnaInteractionDAO();
+        List<Gene> rnaInteraction = rDAO.findByGenomeInPosition(51828,83740, 1390);
+        for (Gene rnaInteraction1 : rnaInteraction) {
+            System.out.println(rnaInteraction1.getLocusTag());
+        }
+        //findByGenomeInPosition
+        
+        
     }
 
    

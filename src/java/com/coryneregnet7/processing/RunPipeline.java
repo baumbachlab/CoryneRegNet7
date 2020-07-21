@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,15 +46,27 @@ public class RunPipeline {
     public static void main(String[] args) throws IOException, InterruptedException {
         RunPipeline runTransfer = new RunPipeline();
 
-        String transferFolder = "/data/coryne-genus/test";
-        String targetfolder = "/data/coryne-genus/target";
+//        String transferFolder = "/data/coryne-genus/test";
+//        String targetfolder = "/data/coryne-genus/target";
+//        String templateFolder = "/data/coryne-genus/model";
+        String transferFolder = "/data/coryne-genus/test-brucella";
+        String targetfolder = "/data/coryne-genus/target-brucella";
         String templateFolder = "/data/coryne-genus/model";
+
 //       
         String blastEvalue = "1e-10";
         String hmmerEvalue = "100";
         GenomeDAO genomeDAO = new GenomeDAO();
 
-        List<Genome> targetGenomes = genomeDAO.findByOrgnismType("target");
+        List<Genome> targetGenomes = new ArrayList<>();
+        Genome g1 = genomeDAO.findById(9);
+        targetGenomes.add(g1);
+        Genome g2 = genomeDAO.findById(10);
+        targetGenomes.add(g2);
+        Genome g3 = genomeDAO.findById(11);
+        targetGenomes.add(g3);
+        Genome g4 = genomeDAO.findById(12);
+        targetGenomes.add(g4);
 
         System.out.println("target genomes: ");
         for (Genome targetGenome : targetGenomes) {
@@ -81,46 +94,47 @@ public class RunPipeline {
             List<Genome> modelGenomes, List<Genome> targetGenomes,
             Run run) throws InterruptedException, IOException {
 
-        /*
-        PREDICT OPERONS TO EVERY TARGET GENOME
-         */
-          System.out.println("OPERONS PREDICTIONS FOR TARGET GENOMES DONE");
-        predictOperons(targetGenomes, run);
-          System.out.println("op prediction done");
+//        /*
+//        PREDICT OPERONS TO EVERY TARGET GENOME
+//         */
+//          System.out.println("OPERONS PREDICTIONS FOR TARGET GENOMES DONE");
+//        predictOperons(targetGenomes, run);
+//          System.out.println("op prediction done");
+//
+//        /*
+//        CREATE HMMER PROFILES TO EACH TRANSCRIPTION FACTOR OF EACH MODEL GENOME
+//         */
+//        System.out.println("HMM CREATE START");
+//        createModelHmmerProfiles(modelGenomes, run);
+//        System.out.println("hmm done ;D");
 
-        /*
-        CREATE HMMER PROFILES TO EACH TRANSCRIPTION FACTOR OF EACH MODEL GENOME
-         */
-        System.out.println("HMM CREATE START");
-         createModelHmmerProfiles(modelGenomes, run);
-        System.out.println("hmm done ;D");
+//        /*
+//        PREDICT PROMOTER REGIONS FOR EVERY GENOME IN THE ANALYSIS
+//         */
+//        System.out.println("Predict promoter regions");
+//        predictPromoterRegion(modelGenomes, run, "template");
+//        predictPromoterRegion(targetGenomes, run, "target");
+//        System.out.println("PROMOTER REGION PREDICTION DONE");
 
-        /*
-        PREDICT PROMOTER REGIONS FOR EVERY GENOME IN THE ANALYSIS
-         */
-        System.out.println("Predict promoter regions");
-          predictPromoterRegion(modelGenomes, run, "template");
-         predictPromoterRegion(targetGenomes, run, "target");
-        System.out.println("PROMOTER REGION PREDICTION DONE");
+//        /*
+//        RUN MODEL-MODEL BLAST
+//         */
+//        runBlast(transferFolderPath, templateGenomesFolderPath,
+//                blastEvalue, modelGenomes, run, "template");
+//        /*
+//        RUN TARGET-TARGET BLAST
+//         */
+//        runBlast(transferFolderPath, targetGenomesFolderPath,
+//                blastEvalue, targetGenomes, run, "target");
 
-        /*
-        RUN MODEL-MODEL BLAST
-         */
-         runBlast(transferFolderPath, templateGenomesFolderPath,
-          blastEvalue, modelGenomes, run, "template");
-        /*
-        RUN TARGET-TARGET BLAST
-         */
-        runBlast(transferFolderPath, targetGenomesFolderPath,
-              blastEvalue, targetGenomes, run, "target");
+//        /*
+//        RUN BLAST, FIND THE HOMOLOGOUS TF/TG PAIRS of each target-model organism pairs
+//        AND RUN HMMER IN THE PROMOTER REGIONS OF THE SELECTED TARGET GENES.
+//         */
+//        TransferRegularoryNetwork transfer = new TransferRegularoryNetwork();
+//        transfer.run(transferFolderPath, targetGenomesFolderPath, templateGenomesFolderPath,
+//                targetGenomes, modelGenomes, blastEvalue, hmmerEvalue, run);
 
-        /*
-        RUN BLAST, FIND THE HOMOLOGOUS TF/TG PAIRS of each target-model organism pairs
-        AND RUN HMMER IN THE PROMOTER REGIONS OF THE SELECTED TARGET GENES.
-         */
-           TransferRegularoryNetwork transfer = new TransferRegularoryNetwork();
-           transfer.run(transferFolderPath, targetGenomesFolderPath, templateGenomesFolderPath,
-                   targetGenomes, modelGenomes, blastEvalue, hmmerEvalue, run);
         /*
         CREATE HMMER PROFILES TO EACH TRANSCRIPTION
         FACTOR OF EACH TARGET GENOME USING THE PREDICTED TRNs
@@ -215,12 +229,13 @@ public class RunPipeline {
                 //System.out.println("homologous " + homologousList.size() + "\n\n");
                 List<TfTgPair> homologousPairs = hd.bringTfTgPairs(genomeOne, genometwo);
 
-                //      System.out.println(homologousPairs.size() + " HOMOLOGOUS PAIRS:");
-                //    System.out.println("\n\nMODEL: " + genomeOne);
-                //  System.out.println("TARGET: " + genometwo);
+                System.out.println("\n\nMODEL: " + genomeOne);
+                System.out.println("TARGET: " + genometwo);
+                System.out.println(homologousPairs.size() + " HOMOLOGOUS PAIRS:");
+
 
                 /*
-                /------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------
                 //----------------------GET-BLAST-RESULTS-&-SAVE-HOMOLOGOUS---------------------------
                 //------------------------------------------------------------------------------------
                 GenomeDAO genomeDAO = new GenomeDAO();
@@ -288,7 +303,7 @@ public class RunPipeline {
     }
 
     public void predictOperons(List<Genome> targetGenomes, Run run) throws InterruptedException {
-       
+
         GeneOperonDAO geneOperonDAO = new GeneOperonDAO();
         RunDAO runDAO = new RunDAO();
         run.setOperons("0/" + targetGenomes.size());
@@ -297,11 +312,10 @@ public class RunPipeline {
         int count = 0;
         for (Genome targetGenome : targetGenomes) {
             //Thread.sleep(5000);
-             System.out.println("\ntargetGenome "+targetGenome.getGenomeName()+" "+targetGenome.getId());
+            System.out.println("\ntargetGenome " + targetGenome.getGenomeName() + " " + targetGenome.getId());
             Long numOp = geneOperonDAO.countOpByGenome(targetGenome.getId());
             System.out.println("numOp.compareTo(new Long(\"0\")) == " + numOp.compareTo(new Long("0")));
             if (numOp.compareTo(new Long("0")) == 0) {
-                
 
                 OperonPrediction op = new OperonPrediction();
                 String gbffFile = targetGenome.getGbffFile();
@@ -312,8 +326,8 @@ public class RunPipeline {
 //                    OperonFileReader operonFileReader = new OperonFileReader();
 //                    operonFileReader.readOperonFile(gbffFile.replace("_genomic.gbff", ".op"), targetGenome);
 //                } else {
-                    System.out.println("PREDISSE OPERON PARA " + targetGenome.getId());
-                    op.predictOperon(gbffFile, targetGenome);
+                System.out.println("PREDISSE OPERON PARA " + targetGenome.getId());
+                op.predictOperon(gbffFile, targetGenome);
 //                }
 
             } else {
@@ -516,10 +530,10 @@ public class RunPipeline {
     }
 
     public void createTargetHmmProfile(List<Genome> targetGenomes, Run run) throws IOException, InterruptedException {
-        RunDAO runDAO = new RunDAO();
-        run.setProfilesTarget("0/" + targetGenomes.size());
-        runDAO.update(run);
-        int countRun = 0;
+//        RunDAO runDAO = new RunDAO();
+//        run.setProfilesTarget("0/" + targetGenomes.size());
+//        runDAO.update(run);
+//        int countRun = 0;
 
         GeneDAO geneDAO = new GeneDAO();
 
@@ -529,7 +543,7 @@ public class RunPipeline {
             List<Gene> transcriptionFactors = priDAO.findByGenomeDistinct(targetGenome.getId());
             //        System.out.println("\n\n");
             for (Gene transcriptionFactor : transcriptionFactors) {
-                //          System.out.println("=======>" + transcriptionFactor.toString());
+                  System.out.println("=======>" + transcriptionFactor.toString());
             }
 
             //**************************
@@ -569,6 +583,8 @@ public class RunPipeline {
                     if (bindingSites.size() > 0) {
                         transcriptionFactor.setBsNumber(bindingSites.size());
                         geneDAO.update(transcriptionFactor);
+                        System.out.println("transcriptionFactor -> "+transcriptionFactor.getLocusTag());
+                        System.out.println("binding sites -> "+bindingSites.size());
                     }
 
                     for (BindingSite bindingSite : bindingSites) {
@@ -628,9 +644,9 @@ public class RunPipeline {
 
             }
             //Thread.sleep(1000);
-            countRun++;
-            run.setProfilesTarget(countRun + "/" + targetGenomes.size());
-            runDAO.update(run);
+//            countRun++;
+//            run.setProfilesTarget(countRun + "/" + targetGenomes.size());
+//            runDAO.update(run);
         }
     }
 

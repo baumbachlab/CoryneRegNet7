@@ -218,12 +218,7 @@ public class PredictedRegulatoryInteractionView implements Serializable {
         RegulationView regulationView = new RegulationView();
 
         for (PredictedRegulatoryInteractionView riView : riViews) {
-            System.out.println(riView.toString());
-            System.out.println(riView.getPvalue());
 
-            if (riView.getTf().getRole() == null) {
-
-            }
             regulationView = new RegulationView(riView.getId(), riView.getTg(), riView.getTf(), riView.getRole(),
                     "predicted", riView.getBindingSite(), null, null,
                     riView.getOperon(), riView.getOrganism(), new BigDecimal(riView.getPvalue()), new Long(riView.getRegulatorDensity()));

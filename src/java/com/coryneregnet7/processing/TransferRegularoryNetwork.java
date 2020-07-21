@@ -145,106 +145,76 @@ public class TransferRegularoryNetwork {
                 Genome targetGenomeObj = genomeDAO.findByGbffFile(targetGenomesFolderPath + "/" + targetGenome + "_genomic.gbff");
                 HomologyDetection hd = new HomologyDetection();
 
+                System.out.println("templateGenomeObj " + templateGenomeObj);
+                System.out.println("targetGenomeObj " + targetGenomeObj);
+
                 HomologousDAO homologousDAO = new HomologousDAO();
                 Long homologousSize = homologousDAO.bringByModelAndTargetGenomes(templateGenomeObj.getId(), targetGenomeObj.getId());
                 System.out.println("homologousSize.intValue() " + homologousSize.intValue());
 
-                if (homologousSize.intValue() == 0) {
-                    String blastFirstSide = "blastp -query '" + templateGenomesFolderPath + "/" + templateGenome + "_protein.faa' -db '" + targetGenomesFolderPath + "/" + targetGenome + "_protein.faa' -out " + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt -outfmt 7 -evalue " + blastEvalue + " -num_threads 4";
-                    String blastOtherSide = "blastp -query '" + targetGenomesFolderPath + "/" + targetGenome + "_protein.faa' -db '" + templateGenomesFolderPath + "/" + templateGenome + "_protein.faa' -out " + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt -outfmt 7 -evalue " + blastEvalue + " -num_threads 4";
+                String blastFirstSide = "blastp -query '" + templateGenomesFolderPath + "/" + templateGenome + "_protein.faa' -db '" + targetGenomesFolderPath + "/" + targetGenome + "_protein.faa' -out " + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt -outfmt 7 -evalue " + blastEvalue + " -num_threads 4";
+                String blastOtherSide = "blastp -query '" + targetGenomesFolderPath + "/" + targetGenome + "_protein.faa' -db '" + templateGenomesFolderPath + "/" + templateGenome + "_protein.faa' -out " + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt -outfmt 7 -evalue " + blastEvalue + " -num_threads 4";
 
-                    System.out.println("blastFirstSide: " + blastFirstSide);
-                    System.out.println("blastOtherSide: " + blastOtherSide);
-                    //TIRAR COMENTArio
+                System.out.println("blastFirstSide: " + blastFirstSide);
+                System.out.println("blastOtherSide: " + blastOtherSide);
+                //TIRAR COMENTArio
 
-                    String blastFileFirstSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt";
-                    String blastFileOtherSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt";
+                String blastFileFirstSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt";
+                String blastFileOtherSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt";
 
-                    System.out.println("blastFileFirstSide " + blastFileFirstSide);
-                    System.out.println("blastFileOtherSide " + blastFileOtherSide);
+                System.out.println("blastFileFirstSide " + blastFileFirstSide);
+                System.out.println("blastFileOtherSide " + blastFileOtherSide);
 
-                    System.out.println("VOU FAZER O BLAST?");
-                    System.out.println("new File(blastFileFirstSide).exists() " + new File(blastFileFirstSide).exists());
-                    System.out.println("new File(blastFileOtherSide).exists() " + new File(blastFileOtherSide).exists());
-                    System.out.println("new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists() " + (new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists()));
-                    if (new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists()) {
-                        System.out.println("SKIPPING BLAST!");
-                    } else {
-                        System.out.println("VOU SIM!");
-                        runBlast(blastFirstSide, blastOtherSide, blastBidirecionalFolder);
-                    }
-
-                    //------------------------------------------------------------------------------------
-                    //----------------------GET-BLAST-RESULTS-&-SAVE-HOMOLOGOUS---------------------------
-                    //------------------------------------------------------------------------------------
-                    System.out.println("GET-BLAST-RESULTS-&-SAVE-HOMOLOGOUS");
-
-                    //transferenceFolderPath + "/blast/Blast-Bidirecional-" + templateGenome + "x" + targetGenome
-                    //String blastFileFirstSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt";
-                    //String blastFileOtherSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt";
-                    System.out.println("\nblastFileFirstSide: " + blastFileFirstSide);
-                    System.out.println("blastFileOthertSide: " + blastFileOtherSide);
-
-                    System.out.println("TEMPLATE GENOME OBJ: " + templateGenomeObj);
-                    System.out.println("TARGET GENOME OBJ: " + targetGenomeObj);
-
-                    //  Thread.sleep(5000);
-                    //System.out.println("1");
-                    List<String[]> bestHitsFirstSide = hd.findBestHits(templateGenomeObj, targetGenomeObj, blastFileFirstSide);
-                    //System.out.println("2");
-                    List<String[]> bestHitsOtherSide = hd.findBestHits(templateGenomeObj, targetGenomeObj, blastFileOtherSide);
-                    // System.out.println("3");
-                    List<String[]> bbhs = hd.findBidirectionalBestHits(bestHitsFirstSide, bestHitsOtherSide, templateGenomeObj, targetGenomeObj);
-                    //System.out.println("4");
-                    hd.saveHomologous(bbhs, templateGenomeObj, targetGenomeObj);
-
-                    System.out.println("RUN HMMER???");
-                    PredictedRegulatoryInteractionDAO priLookUpDAO = new PredictedRegulatoryInteractionDAO();
-                    Long priSize = priLookUpDAO.bringNumByModelTargetGenome(templateGenomeObj.getId(), targetGenomeObj.getId());
-                    System.out.println("priSize " + priSize);
-                    if (priSize.intValue() == 0 && homologousSize.intValue() != 0) {
-//                System.out.println("5");
-                        //System.out.println("homologous " + homologousList.size() + "\n\n");
-//TIRAR O COMENTÁRIO DEPOIS. 
-                        /// System.out.println("6");
-                        System.out.println("vou rodar o hmmer!");
-                        System.out.println("bring tf tg pairs");
-
-                        List<TfTgPair> homologousPairs = hd.bringTfTgPairs(templateGenomeObj, targetGenomeObj);
-                        //System.out.println("6");
-
-//                11111111111111111
-                        System.out.println("\n\nMODEL: " + templateGenome);
-                        System.out.println("TARGET: " + targetGenome);
-
-                        //UPDATE RUN TABLE
-//                countBlastRun++;
-//                run.setBlast(countBlastRun + "/" + total);
-//                runDAO.update(run);
-                        //**********************************************************
-                        //**********TO EACH TFTG PAIR PREDICT BINDING SITE**********
-                        //*************AND SAVE THE PREDICTED REGULATION************
-                        //***********IF THE GENE IS THE FIST OF AN OPERON*********** 
-                        //*************OR IF IT IS NOT PART OF AN OPERON************
-                        //**********************************************************
-//TIRAR O COMENTÁRIO DEPOIS. 
-//                if (run.getHmmer() == null) {
-//                    run.setHmmer("0/" + total);
-//                    runDAO.update(run);
-//                }
-                        //  Thread.sleep(5000);
-                        runHmmer(homologousPairs, targetGenome, hmmerFolder, hmmerResultFolder, hmmerEvalue);
-                    } else {
-                        System.out.println("JÁ TEM PRI PRA ESSE PAR :) ");
-                    }
-
+                System.out.println("VOU FAZER O BLAST?");
+                System.out.println("new File(blastFileFirstSide).exists() " + new File(blastFileFirstSide).exists());
+                System.out.println("new File(blastFileOtherSide).exists() " + new File(blastFileOtherSide).exists());
+                System.out.println("new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists() " + (new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists()));
+                if (new File(blastFileFirstSide).exists() && new File(blastFileOtherSide).exists()) {
+                    System.out.println("SKIPPING BLAST!");
                 } else {
-                    System.out.println("HOMOLOGOUS OKAY");
+                    System.out.println("VOU SIM!");
+                    runBlast(blastFirstSide, blastOtherSide, blastBidirecionalFolder);
                 }
+
+                //------------------------------------------------------------------------------------
+                //----------------------GET-BLAST-RESULTS-&-SAVE-HOMOLOGOUS---------------------------
+                //------------------------------------------------------------------------------------
+                System.out.println("GET-BLAST-RESULTS-&-SAVE-HOMOLOGOUS");
+
+                //transferenceFolderPath + "/blast/Blast-Bidirecional-" + templateGenome + "x" + targetGenome
+                //String blastFileFirstSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + templateGenome + "x" + targetGenome + "-" + blastEvalue + "-blast-result.txt";
+                //String blastFileOtherSide = transferenceFolderPath + "/" + templateGenome + "x" + targetGenome + "/blast-bidirecional-" + templateGenome + "x" + targetGenome + "/" + targetGenome + "x" + templateGenome + "-" + blastEvalue + "-blast-result.txt";
+                System.out.println("\nblastFileFirstSide: " + blastFileFirstSide);
+                System.out.println("blastFileOthertSide: " + blastFileOtherSide);
+
+                System.out.println("TEMPLATE GENOME OBJ: " + templateGenomeObj);
+                System.out.println("TARGET GENOME OBJ: " + targetGenomeObj);
+
+                //  Thread.sleep(5000);
+                //System.out.println("1");
+                List<String[]> bestHitsFirstSide = hd.findBestHits(templateGenomeObj, targetGenomeObj, blastFileFirstSide);
+                //System.out.println("2");
+                List<String[]> bestHitsOtherSide = hd.findBestHits(templateGenomeObj, targetGenomeObj, blastFileOtherSide);
+                // System.out.println("3");
+                List<String[]> bbhs = hd.findBidirectionalBestHits(bestHitsFirstSide, bestHitsOtherSide, templateGenomeObj, targetGenomeObj);
+                //System.out.println("4");
+                hd.saveHomologous(bbhs, templateGenomeObj, targetGenomeObj);
+
+                System.out.println("RUN HMMER???");
+
+                System.out.println("vou rodar o hmmer!");
+                System.out.println("bring tf tg pairs");
+
+                List<TfTgPair> homologousPairs = hd.bringTfTgPairs(templateGenomeObj, targetGenomeObj);
+
+                System.out.println("\n\nMODEL: " + templateGenome);
+                System.out.println("TARGET: " + targetGenome);
+
+                runHmmer(homologousPairs, targetGenome, hmmerFolder, hmmerResultFolder, hmmerEvalue);
+
 //                countHmmerRun++;
 //                run.setHmmer(countHmmerRun + "/" + total);
 //                runDAO.update(run);
-
                 // System.out.println("\n\n");
             }
         }
@@ -439,7 +409,7 @@ public class TransferRegularoryNetwork {
                     BindingSitePredictionInfo bsPredictionInfo = new BindingSitePredictionInfo();
                     boolean hasMatch = runHmmer.findMatch(resultFile, hmmerResultFolder.getAbsolutePath());
                     if (hasMatch) {
-//                        System.out.println("has match :D in " + pair.getHomologousTranscriptionFactor().getLocusTag() + " -> " + pair.getHomologousTargetGene().getLocusTag());
+                        System.out.println("has match :D in " + pair.getHomologousTranscriptionFactor().getLocusTag() + " -> " + pair.getHomologousTargetGene().getLocusTag());
 //                        System.out.println("hmmerResultFolder " + hmmerResultFolder);
 //                        System.out.println("resultFile " + resultFile);
 //                        System.out.println("pair.getTargetGene().getOrientation() " + pair.getHomologousTargetGene().getOrientation());
@@ -568,7 +538,7 @@ public class TransferRegularoryNetwork {
                         }
 
                     } else {
-                        //System.out.println("no match!\n");
+                        System.out.println("no match!\n");
                         noMatches.add(pair);
                     }
                 }

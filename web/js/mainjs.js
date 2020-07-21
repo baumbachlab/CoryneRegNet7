@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 function checkSelectSrnas() {
     var value = document.getElementById("srnaList-select").value;
-    alert(value);
+  //alert(value);
     //wildcards
     if (value == "wildcards") {
         //alert("wildcard selected!");
@@ -27,7 +27,7 @@ function checkSelectSrnas() {
 
 function checkSelectGenes() {
     var value = document.getElementById("geneList-select").value;
-    alert(value);
+  //alert(value);
     //wildcards
     if (value == "wildcards") {
         //alert("wildcard selected!");
@@ -89,7 +89,7 @@ function getRnaList(id) {
             var geneListHtml = "";
             // $('#genesList').html(geneListHtml);
             var i;
-            geneListHtml += '<select class="form-control space-after-input select2" id="srnaList-select" name="geneListSelect" onchange="checkSelectSrnas()">';
+            geneListHtml += '<select class="form-control space-after-input select2" id="srnaList-select" name="srnaListSelect" onchange="checkSelectSrnas()">';
             geneListHtml += '<option value="all">All sRNAS</option>';
             geneListHtml += '<option value="wildcards">Search with wildcards</option>';
             for (i = 0; i < geneList.length; i++) {
@@ -137,16 +137,15 @@ function setAllGenesSelect() {
 
 function enableNetworkButton(type) {
     //organism-search-rna
-    window.alert(document.getElementById('organism-search-rna').value);
+   //window.alert("organism rna"+document.getElementById('organism-search-rna').value);
+   //window.alert("organism "+document.getElementById('organism-search').value);
     if (document.getElementById('gene').checked) {
         var value = document.getElementById("organism-search").value;
-        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
     } else {
         var value = document.getElementById("organism-search-rna").value;
     }
     if (value == 0) {
-        window.alert("value 0");
-        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
+       //window.alert("value 0");
         document.getElementById("dinamic-network-caller").disabled = true;
         if (document.getElementById('gene').checked) {
             setAllGenesSelect();
@@ -156,29 +155,32 @@ function enableNetworkButton(type) {
 
 
     } else {
-        window.alert("else :)");
+       //window.alert("else :)");
         document.getElementById("dinamic-network-caller").disabled = false;
-        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
         if (document.getElementById('gene').checked) {
             getGeneList(value);
         } else {
             getRnaList(value);
         }
-        
-        if (document.getElementById('rna').checked && 
+
+    }
+    
+     if (document.getElementById('rna').checked && 
                 document.getElementById('organism-search-rna').value == "1239" &&
                     type == "experimental") {
-            window.alert("CG! :)");
+           //window.alert("CG! :)");
             document.getElementById("dinamic-network-caller").disabled = true;
             document.getElementById("tooltip-text").innerHTML = "There is no experimental sRNA network for this organism.";
 
+        }else{
+           document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style."; 
         }
-    }
 
 
 }
 
 function checkGeneRna(element) {
+    document.getElementById("dinamic-network-caller").disabled = true;
     var value = element.value;
     var organismValue = "";
     if (value == 'gene') {
@@ -201,6 +203,8 @@ function checkGeneRna(element) {
 
         document.getElementById("organism-select-rna").style.display = "none";
         document.getElementById("organism-select-gene").style.display = "block";
+        
+        
         setAllGenesSelect();
 //        if (organismValue != 0) {
 //            getGeneList(organismValue);
@@ -245,7 +249,7 @@ function checkGeneRna(element) {
         document.getElementById("organism-select-rna").style.display = "block";
         document.getElementById("organism-select-gene").style.display = "none";
         setAllRnasSelect();
-
+        
 //
 //
 //        if (organismValue != 0) {
@@ -255,6 +259,7 @@ function checkGeneRna(element) {
 
         //srnaList-select
     }
+    
 }
 
 function goBack() {

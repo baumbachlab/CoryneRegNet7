@@ -9,11 +9,14 @@ import com.coryneregnet7.dao.GenomeDAO;
 import com.coryneregnet7.dao.OrganismDAO;
 import com.coryneregnet7.dao.PredictedRegulatoryInteractionDAO;
 import com.coryneregnet7.dao.RegulatoryInteractionDAO;
+import com.coryneregnet7.dao.RnaRegulationViewDAO;
 import com.coryneregnet7.dao.SmallRnaDAO;
 import com.coryneregnet7.model.Genome;
 import com.coryneregnet7.model.Organism;
 import com.coryneregnet7.model.PredictedRegulatoryInteraction;
 import com.coryneregnet7.model.RegulatoryInteraction;
+import com.coryneregnet7.model.RnaRegulationView;
+import com.coryneregnet7.model.SmallRna;
 import com.coryneregnet7.processing.output.CytoscapeFile;
 import com.coryneregnet7.processing.output.OperonsFile;
 import com.coryneregnet7.processing.output.RegulationsFile;
@@ -26,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,6 +82,9 @@ public class DownloadController {
         ArrayList<RegulatoryInteraction> ris = new ArrayList<>();
         ArrayList<PredictedRegulatoryInteraction> pris = new ArrayList<>();
         RnaFile rnaFileCreator = new RnaFile();
+        RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
+        List<RnaRegulationView> rnaRegList = new LinkedList<>();
+        GenomeDAO genomeDAO = new GenomeDAO();
 
         //EXPERIMENTAL
         if (searchType == 0) {
@@ -122,7 +129,6 @@ public class DownloadController {
             } else {
 
                 Organism organism = orgDAO.findById(organismExp);
-                GenomeDAO genomeDAO = new GenomeDAO();
                 Genome genome = genomeDAO.findByOrganism(organismExp);
 
                 zipFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + organism.getStrain() + ".zip";
@@ -148,12 +154,17 @@ public class DownloadController {
                     cytoscapeFileName += ".sif";
                     filesToZip.add(cytoscapeFileName);
 
-                    rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
-                    if (organism.getType().equals("model")) {
+                    try {
+                        rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
+                        if (organism.getType().equals("model")) {
 
-                        rnaFileCreator.bringRnaFileExperimental(genome.getId());
+                            rnaFileCreator.bringRnaFileExperimental(genome.getId());
+                        }
+                        filesToZip.addAll(rnaFileNames);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("there are no srnas for this strain.");
                     }
-                    filesToZip.addAll(rnaFileNames);
 
                     zipFiles.zipFile(filesToZip, zipFile);
                 }
@@ -196,10 +207,23 @@ public class DownloadController {
 
                         cytoscapeFileName += ".sif";
                         filesToZip.add(cytoscapeFileName);
+
+                        Genome genome = genomeDAO.findByOrganism(organism.getId());
+                        rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                        if (rnaRegList.size() > 0) {
+                            cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism.getId(), "");
+                            filesToZip.add(cytoscapeFileName);
+
+                        }
                     }
 
-                    rnaFileNames = rnaFileCreator.bringRnaFiles("all");
-                    filesToZip.addAll(rnaFileNames);
+                    try {
+                        rnaFileNames = rnaFileCreator.bringRnaFiles("all");
+                        filesToZip.addAll(rnaFileNames);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("there are no srnas for this strain.");
+                    }
 
                     zipFiles.zipFile(filesToZip, zipFile);
                 }
@@ -207,7 +231,6 @@ public class DownloadController {
                 //BY GENOME    
             } else {
                 Organism organism = orgDAO.findById(organismPred);
-                GenomeDAO genomeDAO = new GenomeDAO();
                 Genome genome = genomeDAO.findByOrganism(organismPred);
 
                 zipFileName = organism.getGenera().charAt(0) + "_" + organism.getSpecies().charAt(0) + "_" + organism.getStrain() + ".zip";
@@ -238,13 +261,31 @@ public class DownloadController {
                         cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism.getId(), "");
                     }
 
-                    //rna files:
-                    rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
-                    rnaFileNames.add(rnaFileCreator.bringRnaRegFile(genome.getId()));
-                    filesToZip.addAll(rnaFileNames);
+                    try {
+                        //rna files:
+
+                        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+                        List<SmallRna> rnas = srnaDAO.findByGenome(genome.getId());
+                        //System.out.println("RNAS? "+rnas);
+                        if (rnas != null && !rnas.isEmpty()) {
+                            rnaFileNames.add(rnaFileCreator.bringRnaFile(genome.getId()));
+                            rnaFileNames.add(rnaFileCreator.bringRnaRegFile(genome.getId()));
+
+                            filesToZip.addAll(rnaFileNames);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("there are no srnas for this strain.");
+                    }
 
                     cytoscapeFileName += ".sif";
                     filesToZip.add(cytoscapeFileName);
+
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                    if (rnaRegList.size() > 0) {
+                        cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism.getId(), "");
+                        filesToZip.add(cytoscapeFileName);
+                    }
 
                     zipFiles.zipFile(filesToZip, zipFile);
                 }

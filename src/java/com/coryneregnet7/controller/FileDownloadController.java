@@ -97,7 +97,7 @@ public class FileDownloadController {
         System.out.println("FileName: " + fileName);
         //File file = new File(System.getProperty("user.dir"));
         //String dataDirectory = file.getAbsolutePath() + "/";
-        Path filePath = Paths.get("/data/home/mariana/NetBeansProjects/CoryneRegNet7/web/images/srnas/", fileName);
+        Path filePath = Paths.get("/home/ubuntu/database/CoryneRegNet7/web/images/srnas/", fileName);
         if (Files.exists(filePath)) {
             response.setContentType("image/"+imgType);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);

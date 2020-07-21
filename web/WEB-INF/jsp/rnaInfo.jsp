@@ -124,7 +124,6 @@
             </div>
         </div>
     </div>
-
     <div class="container-fluid badge badge-light go-top-row" >
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
@@ -170,7 +169,7 @@
 
 
                                     </div>
-                                             <div class="modal-footer">
+                                    <div class="modal-footer">
                                         <a href="downloadRnaImage.htm?fileName=${srna.locusTag}_0001_ss.ps">
                                             <button type="button" class="btn btn-default">
                                                 <i class="fas fa-download"></i>

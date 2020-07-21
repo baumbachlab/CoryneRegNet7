@@ -25,11 +25,11 @@ public class GeneTest {
     public static void main(String[] args) {
 
         GeneDAO geneDAO = new GeneDAO();
-        List<Gene> genes = geneDAO.findByNoLocusTag();
-        for (Gene gene : genes) {
-            System.out.println(gene.toString());
-            geneDAO.delete(gene);
-        }
+//        List<Gene> genes = geneDAO.findByGenome(1456);
+//        for (Gene gene : genes) {
+//            System.out.println(gene.toString());
+//            geneDAO.delete(gene);
+//        }
         
         
 ////////        Gene gene = geneDAO.findById(1821465);

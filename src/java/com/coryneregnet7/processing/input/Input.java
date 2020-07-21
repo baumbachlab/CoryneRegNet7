@@ -67,10 +67,15 @@ public class Input {
 //        String targetfolder = "/home/doglas/Dropbox/Doutorado/CoryneRegNet7/genus-data/target";
 //        String templateFolder = "/home/doglas/Dropbox/Doutorado/CoryneRegNet7/genus-data/model";
 
-        String transferFolder = "/data/coryne-genus/test";
-        String targetfolder = "/data/coryne-genus/target";
+//////        String transferFolder = "/data/coryne-genus/test";
+//////        String targetfolder = "/data/coryne-genus/target";
+//////        String templateFolder = "/data/coryne-genus/model";
+////////        
+        String transferFolder = "/data/coryne-genus/test-brucella";
+        String targetfolder = "/data/coryne-genus/target-brucella";
         String templateFolder = "/data/coryne-genus/model";
-//        
+
+
         //String transferFolder= "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/genomes-doglas-run/target";
         
 //        String transferFolder = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/genomes-doglas-run/test";
@@ -92,7 +97,7 @@ public class Input {
         GbffReader gbffReader = new GbffReader();
         System.out.println("INPUT:d");
         gbffReader.readIntoDatabase(targetfolder, "target");
-      //  gbffReader.readIntoDatabase(templateFolder, "model");
+        gbffReader.readIntoDatabase(templateFolder, "model");
         System.out.println("input done :D");
 
     }

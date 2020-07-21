@@ -20,7 +20,7 @@ public class FaaReader {
 
     public static void main(String[] args) {
         FaaReader faaReader = new FaaReader();
-        faaReader.read("/home/mariana/Dropbox/Doutorado/CoryneRegNet7/operon_random_test/model/NNMO-S1.faa", 106);
+        faaReader.read("/data/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/target-brucella/Bab30_cro1_protein.faa", 1458);
     }
 
     public void read(String fnaFile, Integer genome) {
@@ -38,7 +38,7 @@ public class FaaReader {
             Integer searchSpace = 0;
             boolean sequence = false;
             String nucleotideSequence = "";
-
+            String type = "";
             while ((sCurrentLine = br.readLine()) != null) {
 
                 if (sCurrentLine.startsWith(">") && sequence) {
@@ -46,7 +46,13 @@ public class FaaReader {
 
                     searchSpace = searchSpace + nucleotideSequence.length();
                     if (sCurrentLine.contains("[locus_tag=")) {
-                        System.out.println("----MODELO DO NCBI");
+                        // System.out.println("----MODELO DO NCBI");
+                        type = "NCBI";
+                    }
+
+                    if (sCurrentLine.contains(">PROKKA")) {
+                        //System.out.println("----MODELO DO PROKKA!");
+                        type = "PROKKA";
                     }
 
 //                    SAVE SEARCH SPACE

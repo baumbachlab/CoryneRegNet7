@@ -255,15 +255,35 @@ public class RegulationsFile {
 
                             if (pri.getHomologousTranscriptionFactor().getName().isEmpty() || pri.getHomologousTranscriptionFactor().getName().equals("''") || pri.getHomologousTranscriptionFactor().getName().equals("")) {
                                 if (pri.getHomologousTargetGene().getName().isEmpty() || pri.getHomologousTargetGene().getName().equals("''") || pri.getHomologousTargetGene().getName().equals("")) {
-                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag()
+                                            + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag()
+                                            + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                            + ")";
                                 } else {
-                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName();
+                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag()
+                                            + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName()
+                                            + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                            + ")";
                                 }
                             } else {
                                 if (pri.getHomologousTargetGene().getName().isEmpty() || pri.getHomologousTargetGene().getName().equals("''") || pri.getHomologousTargetGene().getName().equals("")) {
-                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName()
+                                            + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag()
+                                            + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                            + ")";
                                 } else {
-                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName();
+                                    evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName()
+                                            + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName()
+                                            + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                            + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                            + ")";
                                 }
                             }
 
@@ -395,15 +415,35 @@ public class RegulationsFile {
 
                         if (pri.getHomologousTranscriptionFactor().getName().isEmpty() || pri.getHomologousTranscriptionFactor().getName().equals("''") || pri.getHomologousTranscriptionFactor().getName().equals("")) {
                             if (pri.getHomologousTargetGene().getName().isEmpty() || pri.getHomologousTargetGene().getName().equals("''") || pri.getHomologousTargetGene().getName().equals("")) {
-                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag()
+                                        + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag()
+                                        + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                        + ")";
                             } else {
-                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName();
+                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getLocusTag()
+                                        + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName()
+                                        + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                        + ")";
                             }
                         } else {
                             if (pri.getHomologousTargetGene().getName().isEmpty() || pri.getHomologousTargetGene().getName().equals("''") || pri.getHomologousTargetGene().getName().equals("")) {
-                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag();
+                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName()
+                                        + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getLocusTag()
+                                        + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                        + ")";
                             } else {
-                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName() + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName();
+                                evidence = pri.getRegulatoryInteraction().getCorrespondentTranscriptionFactor().getName()
+                                        + " -> " + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getName()
+                                        + "(" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getGenera().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getSpecies().charAt(0)
+                                        + "_" + pri.getRegulatoryInteraction().getCorrespondentTargetGene().getGenome().getOrganism().getStrain()
+                                        + ")";
                             }
                         }
 

@@ -107,10 +107,29 @@
     <div class="container-fluid badge badge-light space-to-footer">
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row">
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-primary btn-block">sRNAs regulating TFs</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+
+        </div>
+        <div class="row">
             <div class="col-sm-12 text-center tables-top" style="font-size: 22px">
                 <p class="font">Results (${fn:length(rnaTableView)} found)</p>
             </div>
         </div>
+
         <div class="row">
             <%-- rnaTableView --%>
             <div class="col-12 align-self-center">
@@ -141,7 +160,18 @@
                     </thead>
                     <tbody> 
                         <c:forEach items="${rnaTableView}" var="list">
-                            <tr>
+                            <c:choose>
+                                <c:when test="${list.functionalRna}">
+                                    <tr funcional="true">
+                                </c:when>
+                                <c:otherwise>
+                                    <tr funcional="false">
+                                </c:otherwise>  
+                            </c:choose>
+                            <%--
+                            ${list.functionalRna}
+                            --%>
+                            
                                 <td>    
                                     <a style="color: black; font-size: medium; font-weight: bold" href="rnaInfo.htm?locusTag=${list.locusTag}&type=${type}">${list.locusTag}</a>
                                 </td>
@@ -169,6 +199,7 @@
                                         <td style="word-wrap:break-word; max-width: 450px;">${list.sequence}</td>
                                     </c:otherwise>    
                                 </c:choose>
+
 
                                 <%--<c:choose>
                                     <c:when test="${type eq 'predicted'}">

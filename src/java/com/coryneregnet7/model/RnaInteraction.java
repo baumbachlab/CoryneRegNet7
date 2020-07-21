@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnaInteraction.findByRank", query = "SELECT r FROM RnaInteraction r WHERE r.rank = :rank")
     , @NamedQuery(name = "RnaInteraction.findByMrna", query = "SELECT r FROM RnaInteraction r WHERE r.mrna = :mrna")
     , @NamedQuery(name = "RnaInteraction.findByGenome", query = "SELECT r FROM RnaInteraction r WHERE r.mrna in (SELECT g.id FROM Gene g WHERE g.genome = :genome)")
+    , @NamedQuery(name = "RnaInteraction.bringDistinctRnaByGenome", query = "SELECT distinct r.mrna FROM RnaInteraction r WHERE r.mrna in (SELECT g.id FROM Gene g WHERE g.genome = :genome)")
     , @NamedQuery(name = "RnaInteraction.bringDistinctMrna", query = "SELECT count(distinct r.mrna) FROM RnaInteraction r")
     , @NamedQuery(name = "RnaInteraction.findBySrna", query = "SELECT r FROM RnaInteraction r WHERE r.srna = :srna")
     , @NamedQuery(name = "RnaInteraction.findByCopraPvalue", query = "SELECT r FROM RnaInteraction r WHERE r.copraPvalue = :copraPvalue")
@@ -50,6 +51,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RnaInteraction.findByUnfoldingEnergyMrna", query = "SELECT r FROM RnaInteraction r WHERE r.unfoldingEnergyMrna = :unfoldingEnergyMrna")
     , @NamedQuery(name = "RnaInteraction.findByUnfoldingEnergyNcrna", query = "SELECT r FROM RnaInteraction r WHERE r.unfoldingEnergyNcrna = :unfoldingEnergyNcrna")
     , @NamedQuery(name = "RnaInteraction.findByTfMrna", query = "SELECT count(r) FROM RnaInteraction r WHERE r.mrna in (SELECT g FROM Gene g WHERE g.role != '')")
+    , @NamedQuery(name = "RnaInteraction.findByGenomeInPosition", query = "SELECT distinct r.mrna FROM RnaInteraction r WHERE r.mrna in (SELECT g.id FROM Gene g WHERE g.startPosition >= :startPosition and g.endPosition <= :endPosition and g.genome=:genome)")
+    , @NamedQuery(name = "RnaInteraction.findByGenomeInPositionSrna", query = "SELECT distinct r.srna FROM RnaInteraction r WHERE r.srna in (SELECT s.id FROM SmallRna s WHERE s.startPosition >= :startPosition and s.endPosition <= :endPosition and s.genome=:genome)")
+//start_position >= 8536 and end_position <=40429
 })
 
 public class RnaInteraction implements Serializable {
@@ -263,12 +267,12 @@ public class RnaInteraction implements Serializable {
     public String toString2() {
         return "RnaInteraction{" + "id=" + id + ", rank=" + rank + ", copraPvalue=" + copraPvalue + ", copraFdr=" + copraFdr + ", energy=" + energy + ", intaPvalue=" + intaPvalue + ", positionMrna=" + positionMrna + ", positionNcrna=" + positionNcrna + ", positionSeedMrna=" + positionSeedMrna + ", positionSeedNcrna=" + positionSeedNcrna + ", hybridizationEnergy=" + hybridizationEnergy + ", unfoldingEnergyMrna=" + unfoldingEnergyMrna + ", unfoldingEnergyNcrna=" + unfoldingEnergyNcrna + ", srna=" + srna + ", mrna=" + mrna + '}';
     }
-    
+
     public String toFile() {
-        return   srna.getLocusTag() + "\t" + mrna.getLocusTag() + "\t" + rank + "\t" + copraPvalue + "\t" + copraFdr + "\t" + energy 
-                + "\t" + intaPvalue + "\t" + positionMrna + "\t" + positionNcrna 
-                + "\t" + interaction + "\t" + positionSeedMrna 
-                + "\t" + positionSeedNcrna + "\t" + hybridizationEnergy 
+        return srna.getLocusTag() + "\t" + mrna.getLocusTag() + "\t" + rank + "\t" + copraPvalue + "\t" + copraFdr + "\t" + energy
+                + "\t" + intaPvalue + "\t" + positionMrna + "\t" + positionNcrna
+                + "\t" + interaction + "\t" + positionSeedMrna
+                + "\t" + positionSeedNcrna + "\t" + hybridizationEnergy
                 + "\t" + unfoldingEnergyMrna + "\t" + unfoldingEnergyNcrna;
     }
 

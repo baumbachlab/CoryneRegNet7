@@ -217,13 +217,13 @@
                                 <input type="radio" id="rna" name="geneRna" value="rna" onclick="checkGeneRna(this);">
                                 <label for="rna">Small RNAs</label><br>
                             </span>
-                            <span class="align-text-bottom"> 
+                            <%--<span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
 
                             <span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0; document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
-                            </span>
+                            </span>--%>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>

@@ -5,7 +5,10 @@
  */
 package com.coryneregnet7.dao;
 
+import com.coryneregnet7.model.Gene;
 import com.coryneregnet7.model.RnaInteraction;
+import com.coryneregnet7.model.SmallRna;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -61,6 +64,62 @@ public class RnaInteractionDAO extends GenericDAO {
             this.session = getSession();
             this.tx = this.session.beginTransaction();
             Query query = session.getNamedQuery("RnaInteraction.findByGenome");
+            query.setInteger("genome", id);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+
+    }
+
+    public List<Gene> findByGenomeInPosition(Integer startPosition, Integer endPosition, Integer genome) {
+        try {
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.findByGenomeInPosition");
+            query.setInteger("startPosition", startPosition);
+            query.setInteger("endPosition", endPosition);
+            query.setInteger("genome", genome);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+
+    }
+
+    public List<SmallRna> findByGenomeInPositionSrna(Integer startPosition, Integer endPosition, Integer genome) {
+        try {
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.findByGenomeInPositionSrna");
+            query.setInteger("startPosition", startPosition);
+            query.setInteger("endPosition", endPosition);
+            query.setInteger("genome", genome);
+            lista = query.list();
+            this.tx.commit();
+            return lista;
+        } catch (Exception E) {
+            System.out.println("Exception = " + E.toString());
+            return null;
+        }
+
+    }
+
+    //bringDistinctRnaByGenome
+    public List<Gene> bringDistinctRnaByGenome(Integer id) {
+        try {
+            List lista = new ArrayList<Object>();
+            this.session = getSession();
+            this.tx = this.session.beginTransaction();
+            Query query = session.getNamedQuery("RnaInteraction.bringDistinctRnaByGenome");
             query.setInteger("genome", id);
             lista = query.list();
             this.tx.commit();

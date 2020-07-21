@@ -28,7 +28,7 @@ public class GbffReader {
 
     public static void main(String[] args) throws InterruptedException {
         GbffReader g = new GbffReader();
-        g.readFileIntoDatabase(new File("/data/home/mariana/Dropbox/Doutorado/CoryneRegNet7/bkps/pos-submissao/genomas-ref-seq/Glutamicum_genomic.gbff"), "target");
+        g.readFileIntoDatabase(new File("/data/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/target-brucella/Bab2308_cro2_genomic.gbff"), "target");
     }
 
     public void readIntoDatabase(String folderPath, String type) throws InterruptedException {
@@ -109,11 +109,11 @@ public class GbffReader {
 
                 OrganismDAO organismDAO = new OrganismDAO();
                 organism.setType(type);
-                //  organism = (Organism) organismDAO.save(organism);
+                organism = (Organism) organismDAO.save(organism);
 
                 genome.setOrganism(organism);
                 GenomeDAO genomeDAO = new GenomeDAO();
-                //genomeDAO.save(genome);
+                genomeDAO.save(genome);
 
                 /*
                     SAVE GENES FROM A GENOME
@@ -163,8 +163,8 @@ public class GbffReader {
 //                            }
 
                             gene.setGenome(genome);
-                            //System.out.println("START POSITION: " + startPosition);
-                            //System.out.println("END POSITION: " + endPosition);
+                            System.out.println("START POSITION: " + startPosition);
+                            System.out.println("END POSITION: " + endPosition);
                             gene.setStartPosition(new BigInteger(startPosition));
 
                             gene.setEndPosition(new BigInteger(endPosition));
@@ -175,17 +175,17 @@ public class GbffReader {
                             gene.setProteinId(proteinId);
                             gene.setAlternativeLocusTag(alternativeLocusTag);
                             gene.setOrientation(orientation);
-                            if (!gene.getAlternativeLocusTag().isEmpty()) {
-                                System.out.println(gene.getLocusTag() + "\t" + gene.getAlternativeLocusTag());
-                                Gene currentGene = geneDAO.findByLocusTag(gene.getAlternativeLocusTag());
-                                currentGene.setAlternativeLocusTag(gene.getLocusTag());
-                                System.out.println("currentGene= "+currentGene.toString2());
-                                //geneDAO.update(currentGene);
-                            }
-                            // geneDAO.save(gene);
-                            //System.out.println("gene "+gene.toString());
+//                            if (!gene.getAlternativeLocusTag().isEmpty()) {
+//                                System.out.println(gene.getLocusTag() + "\t" + gene.getAlternativeLocusTag());
+//                                Gene currentGene = geneDAO.findByLocusTag(gene.getAlternativeLocusTag());
+//                                currentGene.setAlternativeLocusTag(gene.getLocusTag());
+//                                System.out.println("currentGene= " + currentGene.toString2());
+//                                //geneDAO.update(currentGene);
+//                            }
+                            geneDAO.save(gene);
+                            System.out.println("gene " + gene.toString());
                             gene = new Gene();
-                            //System.out.println("\n\n");
+                            System.out.println("\n\n");
                         }
 
                         locusTag = "";
@@ -198,7 +198,7 @@ public class GbffReader {
                         alternativeLocusTag = "";
                         orientation = "";
 
-                        //System.out.println("=======> " + sCurrentLine);
+                        System.out.println("=======> " + sCurrentLine);
                     }
 
                     if (sCurrentLine.contains("CDS") && sCurrentLine.contains("..")) {
@@ -209,7 +209,7 @@ public class GbffReader {
                         //in case join(1436518..1437422,1437422..1437710)
                         startPosition = positions[0];
                         endPosition = positions[positions.length - 1];
-                        // System.out.println("------startPosition= " + startPosition);
+                        //System.out.println("------startPosition= " + startPosition);
                         // System.out.println("------endPosition= " + endPosition);
 
                         if (startPosition.contains("complement(")) {
@@ -269,7 +269,7 @@ public class GbffReader {
                         System.out.println("source: " + size);
                         genomeDAO = new GenomeDAO();
                         genome.setSize(new BigInteger(size));
-                        //genomeDAO.update(genome);
+                        genomeDAO.update(genome);
                     }
 
                     if (locusTag.contains("ncRNA")) {
@@ -279,27 +279,27 @@ public class GbffReader {
 
                     if (sCurrentLine.contains("/gene=\"") && name.isEmpty()) {
                         name = trimRemove(sCurrentLine, "/gene=\"");
-//                        System.out.println("GENE NAME: " + name);
+                        System.out.println("GENE NAME: " + name);
                     }
 
                     if (sCurrentLine.contains("/locus_tag=\"") && locusTag.isEmpty()) {
                         locusTag = trimRemove(sCurrentLine, "/locus_tag=\"");
-                        //  System.out.println("LOCUS TAG: " + locusTag);
+                        System.out.println("LOCUS TAG: " + locusTag);
                     }
 
                     if (sCurrentLine.contains("/old_locus_tag=\"")) {
                         alternativeLocusTag = trimRemove(sCurrentLine, "/old_locus_tag=\"");
-                        //  System.out.println("ALTERNATIVE LOCUS TAG: " + alternativeLocusTag);
+                        System.out.println("ALTERNATIVE LOCUS TAG: " + alternativeLocusTag);
                     }
 
                     if (sCurrentLine.contains("/product=")) {
                         product = trimRemove(sCurrentLine, "/product=");
-//                        System.out.println("PRODUCT: " + product);
+                        System.out.println("PRODUCT: " + product);
                     }
 
                     if (sCurrentLine.contains("/protein_id=\"")) {
                         proteinId = trimRemove(sCurrentLine, "/protein_id=\"");
-//                        System.out.println("PROTEIN ID: " + proteinId);
+                        System.out.println("PROTEIN ID: " + proteinId);
 
                     }
 
@@ -321,8 +321,8 @@ public class GbffReader {
                             if (aminoAcidSequence.contains("\"")) {
                                 aminoAcidSequence = aminoAcidSequence.replace("\"", "");
                                 translation = false;
-//                                System.out.println("TRANSLATION: --------------------S");
-                                // System.out.println(aminoAcidSequence);
+                                System.out.println("TRANSLATION: --------------------S");
+                                System.out.println(aminoAcidSequence);
                             }
                         }
 
@@ -362,66 +362,66 @@ public class GbffReader {
                     if (!gene.getAlternativeLocusTag().isEmpty()) {
                         System.out.println(gene.getLocusTag() + "\t" + gene.getAlternativeLocusTag());
                     }
-                    //geneDAO.save(gene);
+                    geneDAO.save(gene);
                     gene = new Gene();
 
-                    //System.out.println("SIZE: "+size);
+                    System.out.println("SIZE: "+size);
                 }
 
-//                /*
-//                    SAVE NUCLETIDE-SEQUENCE FOR EACH GENE
-//                 */
-//                FnaReader fnaReader = new FnaReader();
-//                //System.out.println(genome.getFnaFile());
-//                fnaReader.read(genome.getFnaFile(), genome.getId());
-//
-//                /*
-//                    SAVE GENOME SEARCH SPACE
-//                 */
-//                //System.out.println("SAVE SEARCH SPACE");
-//                FaaReader faaReader = new FaaReader();
-//                faaReader.read(genome.getFaaFile(), genome.getId());
-//
-//                /*
-//                    SAVE REGULATION & OPERON IF IT IS A MODEL GENOME
-//                 */
-////                System.out.println("SAVE REGULATION & OPERON IF IT IS A MODEL GENOME");
-////                System.out.println("type => " + organism.getType() + "************************************");
-////                System.out.println("file => " + file + "************************************");
-//                try {
-//
-//                    if (organism.getType().equals("model")) {
-//                        RegulationInput regulationFileReader = new RegulationInput();
-//
-//                        regulationFileReader.readIntoDatabase(file.getAbsolutePath().replace("_genomic.gbff", ".tsv.ctftg"), genome);
-//                        //
-//                        File chipDataConsensus = new File(file.getAbsolutePath().replace("_genomic.gbff", "_chip_consensus.csv"));
-//                        if (chipDataConsensus.exists()) {
-//                            System.out.println("Exists!!!!!! " + chipDataConsensus.getAbsolutePath());
-//                            GetMinchChipDataMTB get = new GetMinchChipDataMTB();
-//                            get.getMotifs(chipDataConsensus.getAbsolutePath(), genome.getId());
+                /*
+                    SAVE NUCLETIDE-SEQUENCE FOR EACH GENE
+                 */
+                FnaReader fnaReader = new FnaReader();
+                //System.out.println(genome.getFnaFile());
+                fnaReader.read(genome.getFnaFile(), genome.getId());
+
+                /*
+                    SAVE GENOME SEARCH SPACE
+                 */
+                //System.out.println("SAVE SEARCH SPACE");
+                FaaReader faaReader = new FaaReader();
+                faaReader.read(genome.getFaaFile(), genome.getId());
+
+                /*
+                    SAVE REGULATION & OPERON IF IT IS A MODEL GENOME
+                 */
+                System.out.println("SAVE REGULATION & OPERON IF IT IS A MODEL GENOME");
+                System.out.println("type => " + organism.getType() + "************************************");
+                System.out.println("file => " + file + "************************************");
+                try {
+
+                    if (organism.getType().equals("model")) {
+                        RegulationInput regulationFileReader = new RegulationInput();
+
+                        regulationFileReader.readIntoDatabase(file.getAbsolutePath().replace("_genomic.gbff", ".tsv.ctftg"), genome);
+                        //
+                        File chipDataConsensus = new File(file.getAbsolutePath().replace("_genomic.gbff", "_chip_consensus.csv"));
+                        if (chipDataConsensus.exists()) {
+                            System.out.println("Exists!!!!!! " + chipDataConsensus.getAbsolutePath());
+                            GetMinchChipDataMTB get = new GetMinchChipDataMTB();
+                            get.getMotifs(chipDataConsensus.getAbsolutePath(), genome.getId());
+                        }
+                        // }
+                        OperonFileReader operonFileReader = new OperonFileReader();
+                        operonFileReader.readOperonFile(file.getAbsolutePath().replace("_genomic.gbff", ".op"), genome);
+                    } else {
+
+//                    //
+//                        boolean targetOpExists = new File(file.getAbsolutePath().replace("_genomic.gbff", ".op")).exists();
+//                        if (organism.getType().equals("target") && targetOpExists) {
+//                            OperonFileReader operonFileReader = new OperonFileReader();
+//                            operonFileReader.readOperonFile(file.getAbsolutePath().replace("_genomic.gbff", ".op"), genome);
 //                        }
-//                        // }
-//                        OperonFileReader operonFileReader = new OperonFileReader();
-//                        operonFileReader.readOperonFile(file.getAbsolutePath().replace("_genomic.gbff", ".op"), genome);
-//                    } else {
-//
-////                    //
-////                        boolean targetOpExists = new File(file.getAbsolutePath().replace("_genomic.gbff", ".op")).exists();
-////                        if (organism.getType().equals("target") && targetOpExists) {
-////                            OperonFileReader operonFileReader = new OperonFileReader();
-////                            operonFileReader.readOperonFile(file.getAbsolutePath().replace("_genomic.gbff", ".op"), genome);
-////                        }
-//
-////                        OperonPrediction opPred = new OperonPrediction();
-////                        opPred.predictOperon(genome.getGbffFile(), genome);
-//                    }
-//
-//                } catch (Exception e) {
-//                    //System.out.println("ERRO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//                    e.printStackTrace();
-//                    //Thread.sleep(5000000);
-//                }
+
+                        OperonPrediction opPred = new OperonPrediction();
+                        opPred.predictOperon(genome.getGbffFile(), genome);
+                    }
+
+                } catch (Exception e) {
+                    //System.out.println("ERRO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    e.printStackTrace();
+                    //Thread.sleep(5000000);
+                }
             } catch (IOException e) {
 
                 e.printStackTrace();

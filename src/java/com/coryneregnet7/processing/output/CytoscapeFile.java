@@ -281,6 +281,7 @@ public class CytoscapeFile {
                             regulations.remove(reglation);
                             reglation.add(tg);
                             regulations.add(reglation);
+                            break;
                         }
                     }
 
@@ -503,7 +504,7 @@ public class CytoscapeFile {
         String genes;
 
         //if (file.exists()) {
-        if (!file.exists()) {
+        if (file.exists()) {
             System.out.println("File exists!!!!!!!!!!!!");
         } else {
             PrintWriter printWriter = null;
@@ -521,37 +522,37 @@ public class CytoscapeFile {
                         tg = rnaRegList.get(i).getTg().getLocusTag();
                     }
 
-                    System.out.println("------------sRNA: " + sRNA);
-                    System.out.println("------------TG: " + tg);
-                    System.out.println("-");
-                    System.out.println("-");
+                    //System.out.println("------------sRNA: " + sRNA);
+                    //System.out.println("------------TG: " + tg);
+                    //System.out.println("-");
+                    //System.out.println("-");
 
-                    //System.out.println("regulations.size(): " + regulations.size());
+                    ////System.out.println("regulations.size(): " + regulations.size());
                     for (int j = 0; j < regulations.size(); j++) {
                         reglation = new ArrayList<>();
                         reglation = regulations.get(j);
-                        System.out.println("regulations.get(j): " + regulations.get(j));
-                        System.out.println("sRNA:" + reglation.get(0));
-                        System.out.println("role:" + reglation.get(1));
-                        System.out.println("TG: " + tg + "\n");
-                        System.out.println("=");
-                        System.out.println("=");
+                        //System.out.println("regulations.get(j): " + regulations.get(j));
+                        //System.out.println("sRNA:" + reglation.get(0));
+                        //System.out.println("role:" + reglation.get(1));
+                        //System.out.println("TG: " + tg + "\n");
+                        //System.out.println("=");
+                        //System.out.println("=");
                         if (reglation.get(0).equals(sRNA)) {
-                            System.out.println("tem!");
+                            //System.out.println("tem!");
                             contains = true;
-                            System.out.println("OLD REGULATION: "+reglation);
+                            //System.out.println("OLD REGULATION: "+reglation);
                             regulations.remove(reglation);
                             reglation.add(tg);
                             regulations.add(reglation);
-                            System.out.println("NOVEL REGULATION: "+reglation);
+                            //System.out.println("NOVEL REGULATION: "+reglation);
                             break;
                         }else{
-                            System.out.println("nao tem!");
+                            //System.out.println("nao tem!");
                         }
                     }
 
                     if (contains == false) {
-                        System.out.println("add new regulation item. ");
+                        //System.out.println("add new regulation item. ");
                         reglation = new ArrayList<>();
                         reglation.add(sRNA);
                         reglation.add("sRNA");

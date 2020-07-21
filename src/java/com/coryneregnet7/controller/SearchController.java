@@ -431,6 +431,12 @@ public class SearchController {
             gene = rnaListSelect;
 
         }
+        
+        
+        if(gene==null){
+            return "index";
+        }
+        
         gene = gene.trim();
         if (gene.contains(" ")) {
             int position = gene.indexOf(" ");
@@ -774,7 +780,6 @@ public class SearchController {
             return "predictedData";
         }
     }
-
 
     @RequestMapping("geneInfo")
     public String geneInfo(Model model, String locusTag, String type) throws IOException, ParseException, InterruptedException {
@@ -1687,16 +1692,21 @@ public class SearchController {
     }
 
     @RequestMapping("whichNetwork")
-    public String whichNetwork(Model model, Integer organism, Integer organismRna, String searchType, String gene, String goBackTo,
+    public String whichNetwork(Model model, Integer organism, Integer organismRna, String searchType,
+            String gene, String goBackTo, String geneListSelect, String srnaListSelect,
             String layoutType, String geneRna) throws InterruptedException {
 
         if (searchType == null) {
             return "index";
         }
 
-        //System.out.println("--------------- Organism: " + organism);
-        //System.out.println("--------------- OrganismRna: " + organismRna);
-        //System.out.println("--------------- SearchType: " + searchType);
+        System.out.println("GRN:");
+        System.out.println("--------------- Organism: " + organism);
+        System.out.println("--------------- OrganismRna: " + organismRna);
+        System.out.println("--------------- SearchType: " + searchType);
+        System.out.println("--------------- Gene: " + gene);
+        System.out.println("--------------- geneListSelect: " + geneListSelect);
+        System.out.println("--------------- srnaListSelect: " + srnaListSelect);
         //System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
         //System.out.println("gene: " + gene);
         //System.out.println("goBackTo: " + goBackTo);
@@ -1744,49 +1754,88 @@ public class SearchController {
         PredictedRegulatoryInteractionViewDAO priViewDAO = new PredictedRegulatoryInteractionViewDAO();
         PredictedRegulatoryInteractionView priView = new PredictedRegulatoryInteractionView();
         List<PredictedRegulatoryInteractionView> predictedRegulatoryInteractionViews;
+        String entireNetwork="false";
 
         RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
         List<RnaRegulationView> rnaRegList = new LinkedList<>();
 
         if (geneRna.equals("rna")) {
             o = organismDAO.findById(organismRna);
+            if (gene.isEmpty()) {
+                gene = srnaListSelect.trim();
+                //System.out.println("GENE:" + gene + "-----");
+            }
+
+        } else {
+            if (gene.isEmpty()) {
+                gene = geneListSelect.trim();
+                //System.out.println("GENE:" + gene + "-----");
+            }
         }
 
+        if (gene.equals("all")) {
+            gene = "";
+        }
+
+        //System.out.println("---1----");
         if (gene == null || gene.isEmpty()) {
+            entireNetwork = "true";
             System.out.println("Gene is empty!!! -->> Experimental + Predicted data");
 
+            //System.out.println("---2----");
             if (geneRna.equals("rna")) {
+                //System.out.println("---3----");
                 organism = organismRna;
                 genome = genomeDAO.findByOrganism(organism);
-                if (genome.getId() == 1226) {
-                    //findByGenomeRank
-                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenomeRank(genome.getId(),6);
-                } else {
-                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
-                }
-                
-                for (int i = 0; i < rnaRegList.size(); i++) {
-                    System.out.println("rnaRegList: -> " + rnaRegList.get(i).getSrna().getLocusTag() + " -> " + rnaRegList.get(i).getTg().getLocusTag());
-                }
-                //System.out.println(rnaRegList);
-                genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
-                for (int i = 0; i < rnaRegList.size(); i++) {
-                    sRNA = rnaRegList.get(i).getSrna();
-                    srnasInfo.put(sRNA.getLocusTag(), sRNA);
-                }
-                cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism, gene);
-
-            } else {
                 ris = riDAO.findByOrganism(organism);
                 pris = priDAO.findByOrganism(organism);
                 //rnaRegList = rnaRegDAO.findByGenome(genome.getId());
 
                 if (o.getType().equals("model")) {
+                    //System.out.println("---8----");
+                    regulatoryInteractionViews = riViewDAO.findByGenome(genome.getId());
+                    regulationsView = riView.getRegulationViewList(regulatoryInteractionViews);
+                    //ris = (ArrayList<RegulatoryInteraction>) riDAO.findByOrganismAndGene(organism, g.getId());
+                    cytoscapeFileName = cytoscapeFile.experimentalRegSif(ris, organism, gene);
+                    if (genome.getId() == 1226) {
+                        //findByGenomeRank
+                        //System.out.println("---4----");
+                        rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenomeRank(genome.getId(), 6);
+                    }
+                } else {
+                    //System.out.println("---9----");
+                    //System.out.println("Predicted TRN of organism");
+                    //pris = (ArrayList<PredictedRegulatoryInteraction>) priDAO.findByOrganismAndGene(organism, g.getId());
+                    predictedRegulatoryInteractionViews = priViewDAO.findByGenome(genome.getId());
+                    regulationsView = priView.getRegulationViewList(predictedRegulatoryInteractionViews);
+                    cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism, gene);
+                    rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
+                }
+                genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
+                
+                for (int i = 0; i < rnaRegList.size(); i++) {
+                    //System.out.println("---6----");
+                    sRNA = rnaRegList.get(i).getSrna();
+                    srnasInfo.put(sRNA.getLocusTag(), sRNA);
+                }
+                
+                //rnaRegList is still missing on the cytoscape file
+                //cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism, gene);
+
+            } else {
+                //System.out.println("---7----");
+                ris = riDAO.findByOrganism(organism);
+                pris = priDAO.findByOrganism(organism);
+                //rnaRegList = rnaRegDAO.findByGenome(genome.getId());
+
+                if (o.getType().equals("model")) {
+                    //System.out.println("---8----");
                     regulatoryInteractionViews = riViewDAO.findByGenome(genome.getId());
                     regulationsView = riView.getRegulationViewList(regulatoryInteractionViews);
                     //ris = (ArrayList<RegulatoryInteraction>) riDAO.findByOrganismAndGene(organism, g.getId());
                     cytoscapeFileName = cytoscapeFile.experimentalRegSif(ris, organism, gene);
                 } else {
+                    //System.out.println("---9----");
                     //System.out.println("Predicted TRN of organism");
                     //pris = (ArrayList<PredictedRegulatoryInteraction>) priDAO.findByOrganismAndGene(organism, g.getId());
                     predictedRegulatoryInteractionViews = priViewDAO.findByGenome(genome.getId());
@@ -1824,7 +1873,7 @@ public class SearchController {
                 //System.out.println(rnaRegList);
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
                 srnasInfo.put(sRNA.getLocusTag(), sRNA);
-
+                cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism, gene);
             } else {
                 g = geneDAO.findGeneByLocusTagOrGeneName(organism, gene);
                 //System.out.println("----------------------------------g: " + g);
@@ -1861,6 +1910,7 @@ public class SearchController {
                 }
             }
         }
+        //System.out.println("---10----");
         operons = govDAO.getOperonsTreeByGenome(genome.getId());
 
         System.out.println("cytoscapeFileName: " + cytoscapeFileName);
@@ -1890,6 +1940,7 @@ public class SearchController {
         model.addAttribute("genesInfo", genesInfo);
         model.addAttribute("regulationsView", regulationsView);
         model.addAttribute("geneRna", geneRna);
+        model.addAttribute("entireNetwork", entireNetwork);
 
         //if (layoutType.equals("fast")) {
         return "networkDinamicVisualization-fast";
@@ -1950,7 +2001,7 @@ public class SearchController {
 
         String geneNames = "";
         for (GeneInfoView geneInfoViewsSet1 : geneInfoViews) {
-            System.out.println(geneInfoViewsSet1);
+            //System.out.println(geneInfoViewsSet1);
             geneInfo.put(geneInfoViewsSet1.getGeneName(), geneInfoViewsSet1.getGeneInfo());
         }
 
@@ -3332,7 +3383,7 @@ public class SearchController {
         return "coregulatorsStatistics";
     }
 
-   @RequestMapping("sRnaCoregulatorsStatistics")
+    @RequestMapping("sRnaCoregulatorsStatistics")
     public String sRnaCoregulatorsStatistics(Model model, String type) {
 
         if (type == null) {
@@ -3375,8 +3426,8 @@ public class SearchController {
                     for (RnaCoregulatingView coRAG : lisCoregRna) {
                         allCoregulatorsOfOrganism.put(coRAG.getCoRegRnas(), coRAG.getCount());
                     }
-                    numOfsRnaCoregulators.put(genomes.get(i).getOrganism().getGenera() + " " 
-                            + genomes.get(i).getOrganism().getSpecies() + " " 
+                    numOfsRnaCoregulators.put(genomes.get(i).getOrganism().getGenera() + " "
+                            + genomes.get(i).getOrganism().getSpecies() + " "
                             + genomes.get(i).getOrganism().getStrain(), allCoregulatorsOfOrganism);
                 }
             }

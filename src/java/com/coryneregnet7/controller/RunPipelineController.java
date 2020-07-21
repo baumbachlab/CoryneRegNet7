@@ -77,10 +77,15 @@ public class RunPipelineController {
                 strainNamesTarget.add(strains);
             }
         }
+        // /data/home/mariana/Dropbox/Termofilas/genomes-refseq
+         String workspace = "/data/home/mariana/Dropbox/Termofilas/genomes-refseq/test";
+        String targetfolder = "/data/home/mariana/Dropbox/Termofilas/genomes-refseq/target";
+        String templateFolder = "/data/home/mariana/Dropbox/Termofilas/genomes-refseq/model";
 
-        String workspace = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/test";
+        
+        /*String workspace = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/test";
         String targetfolder = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/target";
-        String templateFolder = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/model";
+        String templateFolder = "/home/mariana/Dropbox/Doutorado/CoryneRegNet7/coryne-genus-test/model";*/
 
         model.addAttribute("downloadMessage", downloadMessage);
         model.addAttribute("workspace", workspace);
