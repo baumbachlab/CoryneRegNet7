@@ -164,7 +164,7 @@
                                                 <c:forTokens var="tokenInside" items="${token}" delims=",">
                                                     <c:choose>
                                                         <c:when test="${i eq 0}">
-                                                            <a href="geneInfo.htm?locusTag=${tokenInside}&type=experimental"><c:out value="${tokenInside}"/> </a>
+                                                            <a href="rnaInfo.htm?locusTag=${tokenInside}&type=experimental"><c:out value="${tokenInside}"/> </a>
                                                         </c:when>    
                                                         <c:otherwise>
                                                             <c:choose>
@@ -294,6 +294,8 @@
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "order": [[0, "asc"]]
             });
+
+            $('[data-toggle="popover"]').popover();
         });
     </script>
 </body>

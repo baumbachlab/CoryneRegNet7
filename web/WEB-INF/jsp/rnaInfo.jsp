@@ -399,7 +399,7 @@
             }
             $('#regulates-table').DataTable({
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "order": [[5, "desc"]]
+                "order": [[5, "asc"]]
             });
             $('[data-toggle="popover"]').popover();
         });

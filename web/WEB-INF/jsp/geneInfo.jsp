@@ -407,20 +407,20 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                              <div class="col-sm-12">
+                            <div class="col-sm-12">
                                 <table id="regulatedby-table" class="table table-striped text-center" style="width:100%">
                                     <thead>
                                         <tr>
                                             <c:if test="${type eq 'predicted'}">
                                                 <th>Type</th>
                                                 </c:if>
-                                           
+
                                             <th>RNA id</th>
                                             <th>Evidence</th>
                                                 <c:if test="${type eq 'predicted'}">
                                                 <th>p-value</th>
                                                 </c:if>
-                                           
+
                                         </tr>
                                     </thead>
                                     <tbody>

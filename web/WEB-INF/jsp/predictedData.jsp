@@ -28,7 +28,6 @@
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.cssf">
     </head>
 
     <body style="background-color: #fcfcfc; background-size: cover;" >
@@ -163,7 +162,7 @@
                                                 <c:forTokens var="tokenInside" items="${token}" delims=",">
                                                     <c:choose>
                                                         <c:when test="${i eq 0}">
-                                                            <a href="geneInfo.htm?locusTag=${tokenInside}&type=predicted"><c:out value="${tokenInside}"/> </a>
+                                                            <a href="rnaInfo.htm?locusTag=${tokenInside}&type=predicted"><c:out value="${tokenInside}"/> </a>
                                                         </c:when>    
                                                         <c:otherwise>
                                                             <c:choose>
@@ -291,9 +290,11 @@
     <script>
         $(document).ready(function () {
             $('#predicted-data').DataTable({
-                "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
-                "ordering": false
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "order": [[0, "asc"]]
             });
+            
+            $('[data-toggle="popover"]').popover();
         });
     </script>
 </body>
