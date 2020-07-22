@@ -30,6 +30,19 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.cssf">
     </head>
+    <script>
+        function hideNonTfs() {
+            if ($("[funcional=false]").is(":visible")) {
+                $("[funcional=false]").hide();
+                var el= document.getElementById("hide");
+                window.alert("element "+el.innerHTML);
+                //$("#btnAddProfile").html('Save');
+            } else {
+                $("[funcional=false]").show();
+                window.alert("element2");
+            }
+        }
+    </script>
 
     <body>
 
@@ -111,7 +124,7 @@
                 <button type="button" class="btn btn-primary btn-block">sRNAs regulating TFs</button>
             </div>
             <div class="col-sm-2">
-                <button type="button" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
+                <button type="button" id="ḧide" onclick="hideNonTfs()" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
             </div>
             <div class="col-sm-2">
 
@@ -163,15 +176,15 @@
                             <c:choose>
                                 <c:when test="${list.functionalRna}">
                                     <tr funcional="true">
-                                </c:when>
-                                <c:otherwise>
+                                    </c:when>
+                                    <c:otherwise>
                                     <tr funcional="false">
-                                </c:otherwise>  
-                            </c:choose>
-                            <%--
-                            ${list.functionalRna}
-                            --%>
-                            
+                                    </c:otherwise>  
+                                </c:choose>
+                                <%--
+                                ${list.functionalRna}
+                                --%>
+
                                 <td>    
                                     <a style="color: black; font-size: medium; font-weight: bold" href="rnaInfo.htm?locusTag=${list.locusTag}&type=${type}">${list.locusTag}</a>
                                 </td>
