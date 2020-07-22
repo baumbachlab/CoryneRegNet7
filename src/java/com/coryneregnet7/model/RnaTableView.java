@@ -77,6 +77,9 @@ public class RnaTableView implements Serializable {
     private String evidenceFunctional;
     @Column(name = "functional_rna")
     private Boolean functionalRna;
+    @Column(name = "count_mrnas")
+    private Integer countMrnas;
+    
 
 //reg_rna
     public String getLocusTag() {
@@ -183,7 +186,7 @@ public class RnaTableView implements Serializable {
 
     @Override
     public String toString() {
-        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + '}';
+        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + ", countMrnas=" + countMrnas + '}';
     }
 
     /**
@@ -212,6 +215,20 @@ public class RnaTableView implements Serializable {
      */
     public void setFunctionalRna(Boolean functionalRna) {
         this.functionalRna = functionalRna;
+    }
+
+    /**
+     * @return the countMrnas
+     */
+    public Integer getCountMrnas() {
+        return countMrnas;
+    }
+
+    /**
+     * @param countMrnas the countMrnas to set
+     */
+    public void setCountMrnas(Integer countMrnas) {
+        this.countMrnas = countMrnas;
     }
 
 }

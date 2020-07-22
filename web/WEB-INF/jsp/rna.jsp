@@ -34,12 +34,15 @@
         function hideNonTfs() {
             if ($("[funcional=false]").is(":visible")) {
                 $("[funcional=false]").hide();
-                var el= document.getElementById("hide");
-                window.alert("element "+el.innerHTML);
+                var el = document.getElementById("nc-tfs");
+                el.innerHTML="Show non-functional sRNAs";
+                window.alert("element " + el.innerHTML);
                 //$("#btnAddProfile").html('Save');
             } else {
                 $("[funcional=false]").show();
-                window.alert("element2");
+                var el = document.getElementById("nc-tfs");
+                el.innerHTML="Hide non-functional sRNAs";
+                window.alert("element2 " + el.innerHTML);
             }
         }
     </script>
@@ -124,7 +127,7 @@
                 <button type="button" class="btn btn-primary btn-block">sRNAs regulating TFs</button>
             </div>
             <div class="col-sm-2">
-                <button type="button" id="ḧide" onclick="hideNonTfs()" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
+                <button id="nc-tfs" type="button"  onclick="hideNonTfs()" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
             </div>
             <div class="col-sm-2">
 
@@ -151,21 +154,18 @@
                         <tr>
                             <th>RNA ID</th>
                             <th>Evidence</th>
-                                <c:choose>
-                                    <c:when test="${type eq 'predicted'}">
-                                    <th>Source RNA</th>
-                                    </c:when>
-                                </c:choose>
+
                             <th>sRNA Class</th>
                             <th>Position</th>
                             <th>Orientation</th>
-                            <th>Sequence</th>
+
 
                             <c:choose>
                                 <c:when test="${type eq 'predicted'}">
-                                    <%--<th>Is functional?</th>
-                                    <th>Functional evidence</th>--%>
-                                    <th>Regulates</th>
+                                    <th>Is functional?</th>
+                                    <th>Functional evidence</th>
+                                    <th>Num. of regulated genes</th>
+                                    <th>Regulated genes</th>
                                     </c:when>
                                 </c:choose>
 
@@ -190,36 +190,29 @@
                                 </td>
                                 <td>${list.evidence}</td>
 
-                                <c:choose>
-                                    <c:when test="${type eq 'predicted'}">
-                                        <td> ${list.sourceRna}
-                                            <c:if test="${empty list.sourceRna}">-</c:if>
-                                            </td>
-
-                                    </c:when>
-                                </c:choose>
-
                                 <td>${list.srnaClass}
                                     <c:if test="${empty list.srnaClass}">-</c:if>
                                     </td>
                                     <td>${list.startPosition} - ${list.endPosition}</td>
                                 <td>${list.orientation}</td>
-                                <c:choose>
+
+                                <%--<c:choose>
                                     <c:when test="${type eq 'predicted'}">
                                         <td style="word-wrap:break-word; max-width: 250px;">${list.sequence}</td>
                                     </c:when>
                                     <c:otherwise>
                                         <td style="word-wrap:break-word; max-width: 450px;">${list.sequence}</td>
                                     </c:otherwise>    
-                                </c:choose>
+                                </c:choose>--%>
 
 
-                                <%--<c:choose>
+                                <c:choose>
                                     <c:when test="${type eq 'predicted'}">
                                         <td>${list.functionalRna}</td>
                                         <td>${list.evidenceFunctional}</td>
-                                     </c:when>
-                                </c:choose>--%>
+                                    </c:when>
+                                </c:choose>
+                                <td>${list.countMrnas}</td>
                                 <c:choose>
                                     <c:when test="${type eq 'predicted'}">
                                         <td style="word-wrap:break-word; max-width: 500px;">      
@@ -307,8 +300,8 @@
 <script>
     $(document).ready(function () {
         $('#experimental-data').DataTable({
-            "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
-            "ordering": false
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "order": [[0, "asc"]]
         });
     });
 </script>
