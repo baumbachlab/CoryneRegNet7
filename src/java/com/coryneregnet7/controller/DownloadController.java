@@ -243,11 +243,13 @@ public class DownloadController {
                     for (String regFileName : regFileNames) {
                         regFileName += ".csv";
                         filesToZip.add(regFileName);
+                        System.out.println("1 FILES TO ZIP: "+filesToZip.toString());
                     }
                     operonsFilesNames = opFiles.operonsFileByOrganism(organismPred);
                     for (String operonsFileName : operonsFilesNames) {
                         operonsFileName += ".csv";
                         filesToZip.add(operonsFileName);
+                        System.out.println("2 FILES TO ZIP: "+filesToZip.toString());
                     }
 
                     //Organism organism = orgDAO.findById(organismPred);
@@ -272,7 +274,9 @@ public class DownloadController {
                             rnaFileNames.add(rnaFileCreator.bringRnaRegFile(genome.getId()));
 
                             filesToZip.addAll(rnaFileNames);
+                            System.out.println("3 FILES TO ZIP: "+filesToZip.toString());
                         }
+                        
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("there are no srnas for this strain.");
@@ -280,11 +284,13 @@ public class DownloadController {
 
                     cytoscapeFileName += ".sif";
                     filesToZip.add(cytoscapeFileName);
+                    System.out.println("4 FILES TO ZIP: "+filesToZip.toString());
 
                     rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
                     if (rnaRegList.size() > 0) {
                         cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism.getId(), "");
-                        filesToZip.add(cytoscapeFileName);
+                        filesToZip.add(cytoscapeFileName+".sif");
+                        System.out.println("5 FILES TO ZIP: "+filesToZip.toString());
                     }
 
                     zipFiles.zipFile(filesToZip, zipFile);

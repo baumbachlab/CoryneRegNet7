@@ -128,7 +128,7 @@
             <li class="nav-item">
                 <a class="nav-link tab-color" data-toggle="tab" href="#homologous">Homologous proteins</a>
             </li>
-            <c:if test="${not empty regulatedBy || not empty rnaRegViews }">
+            <c:if test="${not empty regulatedBy || (not empty rnaRegViews && type eq 'predicted') }">
                 <li class="nav-item">
                     <a class="nav-link tab-color" data-toggle="tab" href="#regulatedBy">Regulated by:</a>
                 </li>
@@ -301,6 +301,7 @@
                     <c:choose>
                         <c:when test="${not empty regulatedBy}">
                             <div class="col-sm-12">
+
                                 <table id="regulatedby-table" class="table table-striped text-center" style="width:100%">
                                     <thead>
                                         <tr>
@@ -380,7 +381,7 @@
                                             <c:forEach items="${rnaRegViews}" var="rna">
                                                 <tr>
                                                     <td>sRNA</td>
-                                                    <td><span><a href="geneInfo.htm?locusTag=${rna.smallRna.locusTag}&type=${type}">${rna.smallRna.locusTag}</a></span></td>
+                                                    <td><span><a href="rnaInfo.htm?locusTag=${rna.smallRna.locusTag}&type=${type}">${rna.smallRna.locusTag}</a></span></td>
                                                     <td>
                                                         <span>-</span>
                                                     </td>
@@ -407,20 +408,21 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                              <div class="col-sm-12">
+                            <div class="col-sm-12">
+
                                 <table id="regulatedby-table" class="table table-striped text-center" style="width:100%">
                                     <thead>
                                         <tr>
                                             <c:if test="${type eq 'predicted'}">
                                                 <th>Type</th>
                                                 </c:if>
-                                           
+
                                             <th>RNA id</th>
                                             <th>Evidence</th>
                                                 <c:if test="${type eq 'predicted'}">
                                                 <th>p-value</th>
                                                 </c:if>
-                                           
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -428,7 +430,7 @@
                                             <c:forEach items="${rnaRegViews}" var="rna">
                                                 <tr>
                                                     <td>sRNA</td>
-                                                    <td><span><a href="geneInfo.htm?locusTag=${rna.smallRna.locusTag}&type=${type}">${rna.smallRna.locusTag}</a></span></td>
+                                                    <td><span><a href="rnaInfo.htm?locusTag=${rna.smallRna.locusTag}&type=${type}">${rna.smallRna.locusTag}</a></span></td>
                                                     <td><span>${rna.evidence}</span></td>
                                                     <c:if test="${type eq 'predicted'}">
                                                         <td>
@@ -440,7 +442,6 @@
                                         </c:if>
                                     </tbody>
                                 </table>
-
                             </div>
                         </c:otherwise>
                     </c:choose>

@@ -69,6 +69,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -418,25 +419,25 @@ public class SearchController {
 
     @RequestMapping("dataSearch")
     public String dataSearch(Model model, Integer organism, String gene, String searchType, String geneRna,
-            String geneListSelect, String rnaListSelect, Integer organismRna) throws InterruptedException {
+            String geneListSelect, String srnaListSelect, Integer organismRna, String organismSearchRna) throws InterruptedException {
 
+        //String organismSearchRna
         System.out.println("geneListSelect " + geneListSelect);
-        System.out.println("rnaListSelect " + rnaListSelect);
+        System.out.println("rnaListSelect " + srnaListSelect);
 
         if (geneListSelect != null && !geneListSelect.equals("wildcards")) {
             gene = geneListSelect;
         }
 
-        if (rnaListSelect != null && !rnaListSelect.equals("wildcards")) {
-            gene = rnaListSelect;
+        if (srnaListSelect != null && !srnaListSelect.equals("wildcards")) {
+            gene = srnaListSelect;
 
         }
-        
-        
-        if(gene==null){
+
+        if (gene == null) {
             return "index";
         }
-        
+
         gene = gene.trim();
         if (gene.contains(" ")) {
             int position = gene.indexOf(" ");
@@ -502,7 +503,12 @@ public class SearchController {
                 if (gene.isEmpty()) {
                     //search by genome and type. 
 
-                    rnaTableView = rnaTableViewDAO.findByGenome(genome.getId());
+                    if (searchType.equals("predicted")) {
+
+                        rnaTableView = rnaTableViewDAO.findByGenome(genome.getId());
+                    } else {
+                        rnaTableView = rnaTableViewDAO.findByGenomeType(genome.getId(), "experimental");
+                    }
                 } else {
                     //search by gene name and genome
                     //findByGenomeLocusTag
@@ -768,6 +774,7 @@ public class SearchController {
         //System.out.println("GOooooooooooooooooooooooooooooooooooo screen!!!!!!!!!!!");
         model.addAttribute("genesFound", genesFound);
         model.addAttribute("entriesFound", entriesFound);
+
 //        model.addAttribute("regulatedBy", regulatedBy);
 //        model.addAttribute("regulates", regulates);
 //        model.addAttribute("operons", operons);
@@ -1754,7 +1761,7 @@ public class SearchController {
         PredictedRegulatoryInteractionViewDAO priViewDAO = new PredictedRegulatoryInteractionViewDAO();
         PredictedRegulatoryInteractionView priView = new PredictedRegulatoryInteractionView();
         List<PredictedRegulatoryInteractionView> predictedRegulatoryInteractionViews;
-        String entireNetwork="false";
+        String entireNetwork = "false";
 
         RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
         List<RnaRegulationView> rnaRegList = new LinkedList<>();
@@ -1812,16 +1819,15 @@ public class SearchController {
                     rnaRegList = (List<RnaRegulationView>) rnaRegDAO.findByGenome(genome.getId());
                 }
                 genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
-                
+
                 for (int i = 0; i < rnaRegList.size(); i++) {
                     //System.out.println("---6----");
                     sRNA = rnaRegList.get(i).getSrna();
                     srnasInfo.put(sRNA.getLocusTag(), sRNA);
                 }
-                
+
                 //rnaRegList is still missing on the cytoscape file
                 //cytoscapeFileName = cytoscapeFile.sRnaRegSif(rnaRegList, organism, gene);
-
             } else {
                 //System.out.println("---7----");
                 ris = riDAO.findByOrganism(organism);
@@ -1949,6 +1955,261 @@ public class SearchController {
         //}
     }
 
+    @RequestMapping("NetworkSelectedGenes")
+    public String NetworkSelectedGenes(Model model, Integer organism, Integer organismRna, String searchType,
+            String goBackTo, String geneListSelect, String srnaListSelect,
+            String layoutType, String geneRna) throws InterruptedException {
+
+        //fagC and friends
+        //String[] geneListArray = {"cg0012", "cg0001", "cg0009"};
+        //String[] geneList = {"Cp1002B_RS00130", "Cp1002B_RS06905", "Cp1002B_RS06620", "Cp1002B_RS02945", "Cp1002B_RS06175"};
+        //String[] geneList = {"JK_RS09260", "JK_RS05690", "JK_RS00525", "JK_RS05905", "JK_RS10995"};
+        // String[] geneList = {"cg0589", "cg2103", "cg3253", "cg2173", "cg2309"};
+        //String[] geneList = {"CKV68_RS06760", "CKV68_RS02225", "CKV68_RS01925", "CKV68_RS06035", "CKV68_RS02720"};
+        //String[] geneList = {"DIP_RS16485", "DIP_RS18250", "DIP_RS18535", "DIP_RS23775", "DIP_RS19000"};
+        //String[] geneList = {"CE_RS03550", "CE_RS09055", "CE_RS09360", "CE_RS13790", "CE_RS09980"};
+        //inositol
+        /*
+        inositol cg:
+         */
+//        String[] geneList = {"cg0201", "cg0204", "cg0205", "cg0699", "cg0910", "cg1543", "cg2090",
+//            "cg2298", "cg2964", "cg3137", "cg3323", "cg3391", "cg3392"};
+        /*
+        all sRNA-regulated genes in Cp
+//         */
+//        String[] geneList = {"Cp1002B_RS00040", "Cp1002B_RS00130", "Cp1002B_RS00395", "Cp1002B_RS00685", "Cp1002B_RS00695",
+//            "Cp1002B_RS01305", "Cp1002B_RS01770", "Cp1002B_RS02295", "Cp1002B_RS02490", "Cp1002B_RS02630",
+//            "Cp1002B_RS03145", "Cp1002B_RS03310", "Cp1002B_RS03820", "Cp1002B_RS03840", "Cp1002B_RS03915",
+//            "Cp1002B_RS04025", "Cp1002B_RS04165", "Cp1002B_RS04255", "Cp1002B_RS04740", "Cp1002B_RS05795",
+//            "Cp1002B_RS05995", "Cp1002B_RS06230", "Cp1002B_RS06430", "Cp1002B_RS06525", "Cp1002B_RS06620",
+//            "Cp1002B_RS06645", "Cp1002B_RS06695", "Cp1002B_RS06745", "Cp1002B_RS06805", "Cp1002B_RS07010",
+//            "Cp1002B_RS07590", "Cp1002B_RS07725", "Cp1002B_RS07805", "Cp1002B_RS08305", "Cp1002B_RS08320",
+//            "Cp1002B_RS08590", "Cp1002B_RS08715", "Cp1002B_RS09225", "Cp1002B_RS09230", "Cp1002B_RS09510",
+//            "Cp1002B_RS09680", "Cp1002B_RS09905	"
+//        };
+        //                       marZ             gatR       ltbR     marR
+        // String[] geneList = {"Cp1002B_RS05995", "Cp1002B_RS06840", "Cp1002B_RS08445", "Cp1002B_RS08875"};
+        //  String[] geneList = {"cg2378", "cg2115", "cg1486", "cg1324"};
+        // String[] geneList = {"CKV68_RS02900"};  //kein gatR, lbtR,marR
+        //   String[] geneList = {"DIP_RS19175", "DIP_RS18315", "DIP_RS16830", "DIP_RS16330"};
+        // String[] geneList = {"JK_RS03865", "JK_RS05740", "JK_RS06310", "JK_RS10540"};
+        // String[] geneList = {"CE_RS10235", "CE_RS09115", "CE_RS07145", "CE_RS06390"};
+        //fprA and fpr1
+        //String[] geneList = {"CE_RS12835", "CE_RS13095"};
+        // String[] geneList = {"cg3049", "cg3119"};
+        //  String[] geneList = { "JK_RS01235"};
+        //String[] geneList = {"", ""}
+        //  String[] geneList = {"DIP_RS21440"};
+        //   String[] geneList = {"Cp1002B_RS03820"};
+        //TFS: 
+        //String[] geneList ={"cg1765", "cg1765", "cg0156", "cg0454", "cg0709", "cg1765", "cg3224", "cg0156", "cg2502", "cg2109", "cg1846", "cg1704", "cg0878", "cg2109", "cg1271", "cg1846", "cg2114", "cg0709", "cg1410", "cg0090", "cg2109", "cg1861", "cg2200", "cg3097", "cg2092", "cg1765", "cg1032", "cg0702", "cg2115", "cg0741", "cg1053", "cg1547", "cg0215", "cg0337", "cg3261", "cg3285", "cg0371", "cg1053", "cg0371", "cg2910", "cg2114", "cg3261", "cg0741", "cg3285", "cg0696", "cg2831", "cg0986", "cg2766", "cg1765", "cg0862", "cg2092", "cg0012", "cg1053", "cg2152", "cg1211", "cg1425", "cg0878", "cg1765", "cg0019", "cg0019", "cg2627", "cg0993", "cg3097", "cg0862", "cg3097", "cg0862", "cg0019", "cg1340", "cg1817", "cg1935", "cg0878", "cg3285", "cg0350", "cg2102", "cg0090", "cg0463", "cg1308", "cg1340", "cg1340", "cg1340", "cg0800", "cg3082", "cg2114", "cg1324", "cg3224", "cg0800", "cg0695", "cg2910", "cg0309", "cg3097", "cg1547", "cg1935", "cg0156", "cg0090", "cg1765", "cg1846", "cg1271", "cg2831", "cg1324", "cg0051", "cg2200", "cg1846", "cg1585", "cg2103", "cg0019", "cg2092", "cg0156", "cg3082", "cg1765", "cg0051", "cg1425", "cg2118", "cg3352", "cg2309", "cg0371", "cg1846", "cg1861", "cg1585", "cg0146", "cg2615", "cg1410", "cg2516", "cg1324", "cg2115", "cg0090", "cg0696", "cg0696", "cg1340", "cg3352", "cg3224", "cg0702", "cg3315", "cg2092", "cg2615", "cg1120", "cg2114", "cg1211", "cg0800", "cg3388", "cg0986", "cg0800", "cg2118", "cg1340", "cg1765", "cg1486", "cg0463", "cg2500", "cg3202", "cg0090", "cg2114", "cg0371", "cg2500", "cg2627", "cg2109", "cg1738", "cg2737", "cg1765", "cg2641", "cg3247", "cg1053", "cg0090", "cg2114", "cg0337", "cg2112", "cg2200", "cg2888", "cg1831", "cg0862", "cg0019", "cg2544", "cg1486", "cg2200", "cg1324", "cg0709", "cg2888", "cg1765", "cg2502", "cg0709", "cg2092", "cg0463", "cg2936", "cg1831", "cg2965", "cg0876", "cg1218", "cg0012", "cg3315", "cg0317"};
+        //String[] geneList ={"DIP_RS19435","DIP_RS18315","DIP_RS16830","DIP_RS21035"};
+        // String[] geneList={"JK_RS05100","JK_RS05690","JK_RS00525","JK_RS01670"};
+        //genes regulated by TFs and sRNAs 
+        //String[] geneList={"cg0012","cg0018","cg0040","cg0042","cg0043","cg0044","cg0046","cg0052","cg0053","cg0054","cg0085","cg0088","cg0095","cg0096","cg0097","cg0103","cg0114","cg0115","cg0116","cg0117","cg0118","cg0119","cg0133","cg0134","cg0136","cg0142","cg0143","cg0144","cg0146","cg0147","cg0156","cg0159","cg0160","cg0184","cg0197","cg0198","cg0199","cg0201","cg0203","cg0204","cg0205","cg0207","cg0210","cg0223","cg0228","cg0229","cg0230","cg0246","cg0247","cg0282","cg0297","cg0304","cg0306","cg0307","cg0310","cg0311","cg0315","cg0318","cg0319","cg0337","cg0340","cg0341","cg0344","cg0345","cg0346","cg0350","cg0378","cg0397","cg0404","cg0405","cg0413","cg0441","cg0445","cg0446","cg0448","cg0451","cg0452","cg0454","cg0456","cg0463","cg0464","cg0465","cg0468","cg0469","cg0471","cg0497","cg0498","cg0501","cg0502","cg0504","cg0516","cg0517","cg0518","cg0519","cg0522","cg0523","cg0524","cg0532","cg0533","cg0544","cg0545","cg0561","cg0567","cg0568","cg0589","cg0590","cg0591","cg0607","cg0612","cg0614","cg0616","cg0617","cg0635","cg0636","cg0639","cg0642","cg0644","cg0676","cg0679","cg0681","cg0690","cg0695","cg0697","cg0701","cg0707","cg0709","cg0710","cg0713","cg0714","cg0715","cg0717","cg0718","cg0719","cg0720","cg0721","cg0723","cg0737","cg0738","cg0740","cg0741","cg0742","cg0754","cg0755","cg0760","cg0762","cg0763","cg0766","cg0767","cg0768","cg0769","cg0770","cg0771","cg0781","cg0790","cg0791","cg0794","cg0795","cg0797","cg0798","cg0800","cg0802","cg0811","cg0812","cg0814","cg0858","cg0875","cg0876","cg0878","cg0879","cg0892","cg0898","cg0899","cg0922","cg0927","cg0928","cg0936","cg0938","cg0948","cg0949","cg0952","cg0957","cg0961","cg0977","cg0980","cg0993","cg1010","cg1011","cg1012","cg1032","cg1033","cg1037","cg1038","cg1039","cg1040","cg1041","cg1052","cg1053","cg1054","cg1056","cg1059","cg1061","cg1062","cg1064","cg1065","cg1066","cg1069","cg1080","cg1081","cg1082","cg1083","cg1091","cg1109","cg1111","cg1120","cg1132","cg1133","cg1139","cg1140","cg1141","cg1142","cg1143","cg1145","cg1147","cg1151","cg1153","cg1179","cg1182","cg1211","cg1212","cg1215","cg1216","cg1218","cg1225","cg1245","cg1246","cg1247","cg1266","cg1268","cg1269","cg1271","cg1272","cg1279","cg1280","cg1283","cg1284","cg1288","cg1289","cg1290","cg1292","cg1294","cg1295","cg1296","cg1299","cg1300","cg1301","cg1307","cg1308","cg1309","cg1310","cg1311","cg1318","cg1322","cg1324","cg1325","cg1333","cg1337","cg1338","cg1340","cg1341","cg1342","cg1343","cg1344","cg1353","cg1354","cg1355","cg1358","cg1359","cg1360","cg1362","cg1363","cg1364","cg1365","cg1366","cg1367","cg1368","cg1369","cg1375","cg1376","cg1379","cg1387","cg1397","cg1398","cg1409","cg1410","cg1411","cg1413","cg1414","cg1418","cg1421","cg1424","cg1425","cg1426","cg1427","cg1432","cg1437","cg1453","cg1486","cg1487","cg1488","cg1543","cg1547","cg1555","cg1559","cg1560","cg1568","cg1570","cg1571","cg1572","cg1580","cg1582","cg1583","cg1585","cg1586","cg1588","cg1623","cg1640","cg1642","cg1647","cg1650","cg1651","cg1652","cg1653","cg1656","cg1665","cg1671","cg1686","cg1687","cg1688","cg1689","cg1696","cg1701","cg1705","cg1706","cg1708","cg1709","cg1726","cg1730","cg1734","cg1737","cg1738","cg1739","cg1746","cg1753","cg1760","cg1761","cg1762","cg1763","cg1764","cg1765","cg1767","cg1768","cg1769","cg1773","cg1774","cg1778","cg1779","cg1780","cg1784","cg1785","cg1787","cg1789","cg1790","cg1791","cg1799","cg1806","cg1812","cg1813","cg1814","cg1815","cg1816","cg1817","cg1831","cg1832","cg1834","cg1840","cg1844","cg1845","cg1846","cg1847","cg1848","cg1850","cg1869","cg1870","cg1871","cg1881","cg1930","cg1935","cg1943","cg1956","cg1992","cg1998","cg2034","cg2052","cg2076","cg2078","cg2079","cg2080","cg2092","cg2096","cg2102","cg2109","cg2112","cg2114","cg2115","cg2117","cg2118","cg2119","cg2120","cg2121","cg2126","cg2136","cg2138","cg2139","cg2140","cg2141","cg2148","cg2149","cg2152","cg2158","cg2177","cg2181","cg2182","cg2183","cg2184","cg2192","cg2194","cg2200","cg2201","cg2202","cg2204","cg2206","cg2214","cg2218","cg2247","cg2260","cg2261","cg2262","cg2263","cg2267","cg2277","cg2279","cg2291","cg2301","cg2311","cg2330","cg2332","cg2334","cg2342","cg2361","cg2363","cg2364","cg2365","cg2366","cg2381","cg2383","cg2397","cg2402","cg2404","cg2405","cg2406","cg2408","cg2409","cg2410","cg2411","cg2429","cg2437","cg2445","cg2449","cg2487","cg2489","cg2500","cg2502","cg2514","cg2515","cg2536","cg2537","cg2538","cg2540","cg2542","cg2543","cg2560","cg2572","cg2612","cg2613","cg2616","cg2617","cg2619","cg2620","cg2626","cg2627","cg2628","cg2629","cg2630","cg2631","cg2634","cg2635","cg2638","cg2640","cg2642","cg2643","cg2644","cg2645","cg2661","cg2674","cg2675","cg2677","cg2683","cg2687","cg2703","cg2704","cg2705","cg2708","cg2720","cg2732","cg2733","cg2743","cg2762","cg2766","cg2777","cg2780","cg2781","cg2787","cg2796","cg2800","cg2811","cg2812","cg2824","cg2831","cg2833","cg2836","cg2837","cg2838","cg2840","cg2843","cg2844","cg2846","cg2873","cg2876","cg2883","cg2886","cg2888","cg2891","cg2893","cg2895","cg2905","cg2911","cg2912","cg2925","cg2929","cg2931","cg2932","cg2933","cg2935","cg2936","cg2937","cg2938","cg2939","cg2940","cg2949","cg2950","cg2953","cg2954","cg2963","cg2965","cg2966","cg2984","cg3011","cg3047","cg3048","cg3068","cg3078","cg3082","cg3083","cg3085","cg3096","cg3097","cg3098","cg3099","cg3100","cg3107","cg3112","cg3113","cg3114","cg3115","cg3116","cg3117","cg3118","cg3119","cg3125","cg3126","cg3132","cg3138","cg3139","cg3141","cg3142","cg3156","cg3169","cg3170","cg3177","cg3178","cg3179","cg3181","cg3182","cg3202","cg3219","cg3221","cg3226","cg3236","cg3237","cg3240","cg3247","cg3251","cg3254","cg3264","cg3281","cg3284","cg3285","cg3286","cg3299","cg3315","cg3320","cg3321","cg3322","cg3327","cg3330","cg3335","cg3344","cg3351","cg3352","cg3353","cg3354","cg3357","cg3360","cg3362","cg3364","cg3366","cg3372","cg3374","cg3375","cg3382","cg3386","cg3388","cg3389","cg3390","cg3394","cg3395","cg3404","cg3405","cg3422","cg3423","cg3424","cg3429"};
+        //String[] geneList = {"DIP_RS11520","DIP_RS12055","DIP_RS12535","DIP_RS14315","DIP_RS14355","DIP_RS14430","DIP_RS15610","DIP_RS16200","DIP_RS16650","DIP_RS16660","DIP_RS17725","DIP_RS18360","DIP_RS18915","DIP_RS19435","DIP_RS20075","DIP_RS21285"};
+        String[] geneList = {"DIP_RS19435","DIP_RS16945","DIP_RS13175"};
+        //String[] geneList = {"JK_RS00285", "JK_RS00390", "JK_RS00405", "JK_RS00925", "JK_RS00955", "JK_RS01515", "JK_RS01960", "JK_RS02865", "JK_RS02870", "JK_RS05010", "JK_RS05100", "JK_RS07345", "JK_RS07350", "JK_RS07360", "JK_RS07470", "JK_RS07760", "JK_RS08650", "JK_RS08760", "JK_RS08820", "JK_RS09155"};
+       // String[] geneList = {"Cp1002B_RS00130", "Cp1002B_RS06745", "Cp1002B_RS06805", "Cp1002B_RS08590"};
+       // String[] geneList = {"CKV68_RS05460","CKV68_RS05710","CKV68_RS06760"};
+        
+        
+        List<String> geneListArray = new ArrayList<String>(Arrays.asList(geneList));
+
+        System.out.println("NetworkSelectedGenes");
+
+        System.out.println("GRN:");
+        System.out.println("--------------- Organism: " + organism);
+        System.out.println("--------------- OrganismRna: " + organismRna);
+        System.out.println("--------------- SearchType: " + searchType);
+        //System.out.println("--------------- Gene: " + gene);
+        System.out.println("--------------- geneListSelect: " + geneListSelect);
+        System.out.println("--------------- srnaListSelect: " + srnaListSelect);
+        //System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("gene: " + gene);
+        //System.out.println("goBackTo: " + goBackTo);
+        //System.out.println("layoutType: " + layoutType);
+        //System.out.println("Which network?");
+        RegulatoryInteractionDAO riDAO = new RegulatoryInteractionDAO();
+        ArrayList<RegulationView> regulationsView = new ArrayList<>();
+        ArrayList<RegulationView> regulationsViews = new ArrayList<>();
+        ArrayList<RegulatoryInteraction> ris = new ArrayList<>();
+        PredictedRegulatoryInteractionDAO priDAO = new PredictedRegulatoryInteractionDAO();
+        ArrayList<PredictedRegulatoryInteraction> pris = new ArrayList<>();
+
+        GeneOperonViewDAO govDAO = new GeneOperonViewDAO();
+        GeneInfoViewDAO gInfoDAO = new GeneInfoViewDAO();
+        //GeneOperonView operons = new GeneOperonView();
+        ArrayList<BindingSite> bss = new ArrayList<>();
+        //GeneInfo geneInfo = new GeneInfo();
+        TreeMap<String, GeneInfo> genesInfo = new TreeMap<>();
+        TreeMap<String, GeneInfo> genesInfos = new TreeMap<>();
+        TreeMap<String, SmallRna> srnasInfo = new TreeMap<>();
+        List<SmallRna> srnalist = new ArrayList<SmallRna>();
+        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+
+        OperonDAO opDAO = new OperonDAO();
+        TreeMap<String, ArrayList<String>> operons = new TreeMap<>();
+        OrganismDAO organismDAO = new OrganismDAO();
+
+        Organism o = organismDAO.findById(organism);
+        GenomeDAO genomeDAO = new GenomeDAO();
+        Genome genome = genomeDAO.findByOrganism(organism);
+        ArrayList<String> sigmas = new ArrayList<>();
+        BigDecimal newBI = BigDecimal.ONE;
+        newBI = newBI.negate();
+        CytoscapeFile cytoscapeFile = new CytoscapeFile();
+        String cytoscapeFileName = "";
+        //String[] hubsConnected;
+
+        Gene g = new Gene();
+        SmallRna sRNA = new SmallRna();
+        GeneDAO geneDAO = new GeneDAO();
+        String role = new String();
+        Set<Gene> genes = new ArraySet<>();
+        ArrayList infos = new ArrayList();
+        RegulatoryInteractionViewDAO riViewDAO = new RegulatoryInteractionViewDAO();
+        RegulatoryInteractionView riView = new RegulatoryInteractionView();
+        List<RegulatoryInteractionView> regulatoryInteractionViews;
+        PredictedRegulatoryInteractionViewDAO priViewDAO = new PredictedRegulatoryInteractionViewDAO();
+        PredictedRegulatoryInteractionView priView = new PredictedRegulatoryInteractionView();
+        List<PredictedRegulatoryInteractionView> predictedRegulatoryInteractionViews;
+        String entireNetwork = "false";
+
+        RnaRegulationViewDAO rnaRegDAO = new RnaRegulationViewDAO();
+        List<RnaRegulationView> rnaRegList = new LinkedList<>();
+        List<RnaRegulationView> rnaRegLists = new LinkedList<>();
+
+        List<String> regulatedRegulatingGenes = new ArrayList<>();
+        for (String gene : geneListArray) {
+
+            List<TableView> tableViews;
+            TableViewDAO tableViewDAO = new TableViewDAO();
+            tableViews = tableViewDAO.findByLocusTagGeneName(gene);
+            for (TableView tableView : tableViews) {
+                String regulates = tableView.getRegulatedGenes();
+                String regulatedBy = tableView.getRegulatedBy();
+                String rnasRegulating = tableView.getRnasLocus();
+
+                if (regulates != null && !regulates.isEmpty()) {
+                    String regulatesArray[] = regulates.split(";");
+                    for (String string : regulatesArray) {
+                        string = string.replace(",A", "").replace(",R", "").trim();
+                        regulatedRegulatingGenes.add(string);
+                    }
+                }
+
+                if (regulatedBy != null && !regulatedBy.isEmpty()) {
+                    String regulatedByArray[] = regulatedBy.split(";");
+                    for (String string : regulatedByArray) {
+                        regulatedRegulatingGenes.add(string.replace(",A", "").replace(",R", "").trim());
+                    }
+                }
+
+            }
+        }
+
+        System.out.println(regulatedRegulatingGenes.toString());
+        for (String regulatedRegulatingGene : regulatedRegulatingGenes) {
+            if (!geneListArray.contains(regulatedRegulatingGene)) {
+                geneListArray.add(regulatedRegulatingGene);
+            }
+        }
+//        
+        // geneListArray.addAll(regulatedRegulatingGenes);
+
+        for (String gene : geneListArray) {
+            g = geneDAO.findGeneByLocusTagOrGeneName(organism, gene);
+            System.out.println("----------------------------------g: " + g);
+            if (g != null) {
+                ris = (ArrayList<RegulatoryInteraction>) riDAO.findByOrganismAndGene(organism, g.getId());
+                pris = (ArrayList<PredictedRegulatoryInteraction>) priDAO.findByOrganismAndGene(organism, g.getId());
+                rnaRegList = rnaRegDAO.findByTg(g.getId());
+
+                if (o.getType().equals("model")) {
+                    regulatoryInteractionViews = riViewDAO.findByGene(g.getId());
+                    regulationsView = riView.getRegulationViewList(regulatoryInteractionViews);
+                    //ris = (ArrayList<RegulatoryInteraction>) riDAO.findByOrganismAndGene(organism, g.getId());
+                    cytoscapeFileName = cytoscapeFile.experimentalRegSif(ris, organism, gene);
+                } else {
+                    //System.out.println("Predicted TRN of organism");
+                    //pris = (ArrayList<PredictedRegulatoryInteraction>) priDAO.findByOrganismAndGene(organism, g.getId());
+                    predictedRegulatoryInteractionViews = priViewDAO.findByGene(g.getId());
+                    regulationsView = priView.getRegulationViewList(predictedRegulatoryInteractionViews);
+                    cytoscapeFileName = cytoscapeFile.predictedRegSif(pris, organism, gene);
+                }
+
+                genesInfo = gInfoDAO.getGeneInfoTreeByGenome(genome.getId());
+                for (Map.Entry<String, GeneInfo> entry : genesInfo.entrySet()) {
+                    String key = entry.getKey();
+                    GeneInfo value = entry.getValue();
+                    genesInfos.put(key, value);
+                }
+                srnalist = srnaDAO.findByGenome(genome.getId());
+                for (int i = 0; i < srnalist.size(); i++) {
+                    srnasInfo.put(srnalist.get(i).getLocusTag(), srnalist.get(i));
+                }
+
+                for (int i = 0; i < rnaRegList.size(); i++) {
+                    rnaRegLists.add(rnaRegList.get(i));
+                }
+                for (int i = 0; i < regulationsView.size(); i++) {
+                    regulationsViews.add(regulationsView.get(i));
+                }
+            }
+
+        }
+        //System.out.println("---10----");
+        operons = govDAO.getOperonsTreeByGenome(genome.getId());
+
+        System.out.println("cytoscapeFileName: " + cytoscapeFileName);
+        cytoscapeFileName += ".sif";
+        System.out.println("cytoscapeFileName: " + cytoscapeFileName);
+
+        //  System.out.println("regulationsView: " + regulationsView);
+        //   System.out.println("rnaRegList: " + rnaRegList);
+        if (regulationsViews.isEmpty() && rnaRegLists.isEmpty()) {
+            model.addAttribute("o", o);
+            model.addAttribute("type", searchType);
+            model.addAttribute("message", "No regulation is known for " + " in this organism so far.");
+            return "networkEmpty";
+        }
+
+        System.out.println("Goooooooooooooooo networkkkkkkkkkkkkkkkkkk");
+
+        for (int i = 0; i < rnaRegLists.size(); i++) {
+            System.out.println("rnaRegLists: " + rnaRegLists.get(i));
+        }
+
+        System.out.println("\n\n");
+
+        for (int i = 0; i < regulationsView.size(); i++) {
+            System.out.println("regulationsView: " + regulationsView.get(i));
+        }
+
+        //rnaRegList srnasInfo
+        model.addAttribute("srnasInfo", srnasInfo);
+        model.addAttribute("rnaRegList", rnaRegLists);
+        model.addAttribute("goBackTo", goBackTo);
+        model.addAttribute("typeOfGoBack", "normal");
+        model.addAttribute("type", searchType);
+        //model.addAttribute("nodes", nodes);
+        model.addAttribute("cytoscapeFileName", cytoscapeFileName);
+        model.addAttribute("o", o);
+        model.addAttribute("operons", operons);
+        //model.addAttribute("geneOpInfo", geneOpInfo);
+        model.addAttribute("genesInfo", genesInfos);
+        model.addAttribute("regulationsView", regulationsViews);
+        model.addAttribute("geneRna", geneRna);
+        model.addAttribute("entireNetwork", entireNetwork);
+
+        //if (layoutType.equals("fast")) {
+        return "networkDinamicVisualization-fast";
+        //} else {
+        //  return "networkDinamicVisualization";
+        //}
+    }
+
     public Model returnToSearch(Model model, String searchType) {
         if (searchType.equals("experimental")) {
             Object[] features = bringSearchExperimentalFeatures();
@@ -2011,8 +2272,17 @@ public class SearchController {
 //// 
     @RequestMapping("networkDinamicVisualizationOperons")
     public String networkDinamicVisualizationOperons(Model model, Integer organism, String searchType, String[] interestGenes, String role) throws InterruptedException {
-        //System.out.println("--------------- Organism: " + organism);
-        // System.out.println("--------------- SearchType: " + searchType);
+        String[] geneListArray = {"cg0012", "cg0001", "cg0009"};
+        interestGenes = geneListArray;
+
+        System.out.println("\n\n------------------------------------");
+        System.out.println("--------------- Organism: " + organism);
+        System.out.println("--------------- SearchType: " + searchType);
+        System.out.println("interestGenes " + interestGenes.toString());
+        for (int i = 0; i < interestGenes.length; i++) {
+            System.out.println("gene: " + interestGenes[i]);
+        }
+        System.out.println("------------------------------------\n\n");
         //System.out.println("Gooooooooooooooo networkVisualization!!!!!!!!!!!!!!!!!!!!!!!");
         // System.out.println("gene: " + gene);
         //System.out.println("role: " + role);

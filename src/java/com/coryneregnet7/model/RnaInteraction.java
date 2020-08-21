@@ -103,6 +103,8 @@ public class RnaInteraction implements Serializable {
     private Gene mrna;
     @Column(name = "part_of_trn")
     private Boolean partOfTrn;
+    @Column(name = "ajusted_pvalue")
+    private BigDecimal ajustedPvalue;
 
     public RnaInteraction() {
     }
@@ -288,6 +290,20 @@ public class RnaInteraction implements Serializable {
      */
     public void setTrn(Boolean partOfTrn) {
         this.partOfTrn = partOfTrn;
+    }
+
+    /**
+     * @return the ajustedPvalue
+     */
+    public BigDecimal getAjustedPvalue() {
+        return ajustedPvalue;
+    }
+
+    /**
+     * @param ajustedPvalue the ajustedPvalue to set
+     */
+    public void setAjustedPvalue(BigDecimal ajustedPvalue) {
+        this.ajustedPvalue = ajustedPvalue;
     }
 
 }

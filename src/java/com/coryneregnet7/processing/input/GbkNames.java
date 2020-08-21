@@ -24,10 +24,10 @@ import static javax.script.ScriptEngine.FILENAME;
  *
  * @author mariana
  */
-public class AddGbkNames {
+public class GbkNames {
 
     public static void main(String[] args) throws InterruptedException {
-        AddGbkNames g = new AddGbkNames();
+        GbkNames g = new GbkNames();
         //g.readFileIntoDatabase(new File("/home/parise/Downloads/Cd_NCTC11397.gbff"), "target");
         //g.readIntoDatabase("/home/parise/Doutorado/Corynebacterium_genomes/genbank/", "target");
         g.readIntoDatabase("/data/home/mariana/Dropbox/Doutorado/CoryneRegNet7/Corynebacterium_genomes/", "target");

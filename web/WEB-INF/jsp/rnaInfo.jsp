@@ -59,6 +59,12 @@
             }
 
         </style>
+        <script>
+            function formatNumber(num) {
+                var n = num.toExponential(3);
+                return n;
+            }
+        </script>
     </head>
 
     <body style="background-image: url('images/background.png'); background-size: cover;">
@@ -192,6 +198,7 @@
                     <div class="col-sm-9 ">
                         <br>
                         <p>Locus tag: ${srna.locusTag}</p>
+                        <p>Genome: ${srna.genome.organism.genera} ${srna.genome.organism.species} ${srna.genome.organism.strain}</p>
                         <p>Evidence: ${srna.evidence}</p>
                         <c:if test="${type eq 'predicted'}">
 
@@ -298,6 +305,7 @@
                                 <tr>
                                     <th>mRNA</th>
                                     <th>P-value</th>
+                                    <th>Adjusted p-value</th>
                                     <th>Position mRNA</th>
                                     <th>Position sRNA</th>
                                     <th>Minimum energy</th>
@@ -307,9 +315,22 @@
                             <tbody>
                                 <c:forEach items="${rnaInteractions}" var="ri">
                                     <tr>
-                                        <td><span><a href="geneInfo.htm?locusTag=${ri.mrna.locusTag}&type=${type}">${ri.mrna.locusTag}</a></span></td>
                                         <td>
-                                            <span>${ri.copraPvalue}</span>
+                                            <span>
+                                                <a href="geneInfo.htm?locusTag=${ri.mrna.locusTag}&type=${type}">${ri.mrna.locusTag}</a>
+                                                <c:choose>
+                                                    <c:when test="${not empty ri.mrna.name}">
+                                                        (${ri.mrna.name})
+                                                    </c:when>
+                                                </c:choose>
+                                                
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span><script>document.write(formatNumber(${ri.copraPvalue}))</script></span>
+                                        </td>
+                                        <td>
+                                            <span><script>document.write(formatNumber(${ri.ajustedPvalue}))</script></span>
                                         </td>
                                         <td>
                                             <span>${ri.positionMrna}</span>
@@ -399,7 +420,7 @@
             }
             $('#regulates-table').DataTable({
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "order": [[5, "desc"]]
+                "order": [[5, "asc"]]
             });
             $('[data-toggle="popover"]').popover();
         });

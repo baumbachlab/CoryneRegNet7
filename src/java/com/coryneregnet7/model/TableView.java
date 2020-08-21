@@ -68,6 +68,18 @@ public class TableView implements Serializable {
     private String rnasLocus;
     @Column(name = "reg_rna")
     private String regRna;
+    //count_regulated_genes
+    @Column(name = "count_regulated_genes")
+    private Integer countRegulatedGenes;
+    //count_regulated_by
+    @Column(name = "count_regulated_by")
+    private Integer countRegulatedBy;
+    //count_rnas_locus
+    @Column(name = "count_rnas_locus")
+    private Integer countRnasLocus;
+    //count_reg_rna
+    @Column(name = "count_reg_rna")
+    private Integer countRegRna;
 
 //reg_rna
     
@@ -219,7 +231,7 @@ public class TableView implements Serializable {
 
     @Override
     public String toString() {
-        return "TableView{" + "id=" + id + ", locusTag=" + locusTag + ", proteinId=" + proteinId + ", product=" + product + ", operonId=" + operonId + ", operonName=" + operonName + ", genomeId=" + genomeId + ", organismId=" + organismId + ", organismName=" + organismName + ", regulatedGenes=" + regulatedGenes + ", regulatedBy=" + regulatedBy + '}';
+        return "TableView{" + "id=" + id + ", locusTag=" + locusTag + ", geneName=" + geneName + ", alternativeLocusTag=" + alternativeLocusTag + ", proteinId=" + proteinId + ", product=" + product + ", operonId=" + operonId + ", operonName=" + operonName + ", genomeId=" + genomeId + ", organismId=" + organismId + ", organismName=" + organismName + ", regulatedGenes=" + regulatedGenes + ", regulatedBy=" + regulatedBy + ", rnasLocus=" + rnasLocus + ", regRna=" + regRna + ", countRegulatedGenes=" + countRegulatedGenes + ", countRegulatedBy=" + countRegulatedBy + ", countRnasLocus=" + countRnasLocus + ", countRegRna=" + countRegRna + '}';
     }
 
     /**
@@ -262,6 +274,62 @@ public class TableView implements Serializable {
      */
     public void setRegRna(String regRna) {
         this.regRna = regRna;
+    }
+
+    /**
+     * @return the countRegulatedGenes
+     */
+    public Integer getCountRegulatedGenes() {
+        return countRegulatedGenes;
+    }
+
+    /**
+     * @param countRegulatedGenes the countRegulatedGenes to set
+     */
+    public void setCountRegulatedGenes(Integer countRegulatedGenes) {
+        this.countRegulatedGenes = countRegulatedGenes;
+    }
+
+    /**
+     * @return the countRegulatedBy
+     */
+    public Integer getCountRegulatedBy() {
+        return countRegulatedBy;
+    }
+
+    /**
+     * @param countRegulatedBy the countRegulatedBy to set
+     */
+    public void setCountRegulatedBy(Integer countRegulatedBy) {
+        this.countRegulatedBy = countRegulatedBy;
+    }
+
+    /**
+     * @return the countRnasLocus
+     */
+    public Integer getCountRnasLocus() {
+        return countRnasLocus;
+    }
+
+    /**
+     * @param countRnasLocus the countRnasLocus to set
+     */
+    public void setCountRnasLocus(Integer countRnasLocus) {
+        this.countRnasLocus = countRnasLocus;
+    }
+
+    /**
+     * @return the countRegRna
+     */
+    public Integer getCountRegRna() {
+        return countRegRna;
+    }
+
+    /**
+     * @param countRegRna the countRegRna to set
+     */
+    public void setCountRegRna(Integer countRegRna) {
+        this.countRegRna = countRegRna;
     }
 
 }
