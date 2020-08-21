@@ -30,12 +30,12 @@ public class AddGbkNames {
         AddGbkNames g = new AddGbkNames();
         //g.readFileIntoDatabase(new File("/home/parise/Downloads/Cd_NCTC11397.gbff"), "target");
         //g.readIntoDatabase("/home/parise/Doutorado/Corynebacterium_genomes/genbank/", "target");
-        g.readIntoDatabase("/home/parise/Doutorado/Corynebacterium_genomes/", "target");
+        g.readIntoDatabase("/data/home/mariana/Dropbox/Doutorado/CoryneRegNet7/Corynebacterium_genomes/", "target");
     }
 
     public void readIntoDatabase(String folderPath, String type) throws InterruptedException {
 
-        //lê a pasta dos gbks 
+        //lê a pasta dos gbks
         File folder = new File(folderPath);
         File[] listOfFolders = folder.listFiles();
 
@@ -43,7 +43,7 @@ public class AddGbkNames {
         System.out.println(listOfFolders.length);
         System.out.println(folderPath);
         int count = 0;
-        String genomesToUpdateFile = folderPath + "Genomes_to_update_partII.tsv";
+        String genomesToUpdateFile = folderPath + "Genomes_to_update_pt2.tsv";
         File genomesToUpdate = new File(genomesToUpdateFile);
         BufferedReader br = null;
         FileReader fr = null;
@@ -159,8 +159,8 @@ public class AddGbkNames {
                     //System.out.println(sCurrentLine);
 
                     if (!firstGene && sCurrentLine.contains("gene") && sCurrentLine.contains("..")) {
-                        //salva o gene anterior e dá um novo gene. 
-                        //zera todas as variáveis temporárias depois de salvar o novo gene. 
+                        //salva o gene anterior e dá um novo gene.
+                        //zera todas as variáveis temporárias depois de salvar o novo gene.
 
                         if (!startPosition.isEmpty()) {
 //                            if (startPosition.contains("<")) {
@@ -483,8 +483,8 @@ public class AddGbkNames {
                     // System.out.println(sCurrentLine);
 
                     if (!firstGene && sCurrentLine.contains("gene") && sCurrentLine.contains("..")) {
-                        //salva o gene anterior e dá um novo gene. 
-                        //zera todas as variáveis temporárias depois de salvar o novo gene. 
+                        //salva o gene anterior e dá um novo gene.
+                        //zera todas as variáveis temporárias depois de salvar o novo gene.
 
                         if (!startPosition.isEmpty()) {
 //                            if (startPosition.contains("<")) {
@@ -822,8 +822,8 @@ public class AddGbkNames {
                     // System.out.println(sCurrentLine);
 
                     if (!firstGene && sCurrentLine.contains("gene") && sCurrentLine.contains("..")) {
-                        //salva o gene anterior e dá um novo gene. 
-                        //zera todas as variáveis temporárias depois de salvar o novo gene. 
+                        //salva o gene anterior e dá um novo gene.
+                        //zera todas as variáveis temporárias depois de salvar o novo gene.
 
                         if (!startPosition.isEmpty()) {
 //                            if (startPosition.contains("<")) {
