@@ -79,7 +79,12 @@ public class RnaTableView implements Serializable {
     private Boolean functionalRna;
     @Column(name = "count_mrnas")
     private Integer countMrnas;
-    
+    @Column(name = "regulates_tf")
+    private Integer regulatesTf;
+    @Column(name = "regulates_tg")
+    private Integer regulatesTg;
+    @Column(name = "regulates_trn")
+    private Integer regulatesTrn;
 
 //reg_rna
     public String getLocusTag() {
@@ -186,7 +191,7 @@ public class RnaTableView implements Serializable {
 
     @Override
     public String toString() {
-        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + ", countMrnas=" + countMrnas + '}';
+        return "RnaTableView{" + "id=" + id + ", locusTag=" + locusTag + ", genome=" + genome + ", sequence=" + sequence + ", type=" + type + ", srnaClass=" + srnaClass + ", startPosition=" + startPosition + ", endPosition=" + endPosition + ", orientation=" + orientation + ", sourceRna=" + sourceRna + ", evidence=" + evidence + ", mrnas=" + mrnas + ", evidenceFunctional=" + evidenceFunctional + ", functionalRna=" + functionalRna + ", countMrnas=" + countMrnas + ", regulatesTf=" + regulatesTf + ", regulatesTg=" + regulatesTg + ", regulatesTrn=" + regulatesTrn + '}';
     }
 
     /**
@@ -229,6 +234,48 @@ public class RnaTableView implements Serializable {
      */
     public void setCountMrnas(Integer countMrnas) {
         this.countMrnas = countMrnas;
+    }
+
+    /**
+     * @return the regulatesTf
+     */
+    public Integer getRegulatesTf() {
+        return regulatesTf;
+    }
+
+    /**
+     * @param regulatesTf the regulatesTf to set
+     */
+    public void setRegulatesTf(Integer regulatesTf) {
+        this.regulatesTf = regulatesTf;
+    }
+
+    /**
+     * @return the regulatesTg
+     */
+    public Integer getRegulatesTg() {
+        return regulatesTg;
+    }
+
+    /**
+     * @param regulatesTg the regulatesTg to set
+     */
+    public void setRegulatesTg(Integer regulatesTg) {
+        this.regulatesTg = regulatesTg;
+    }
+
+    /**
+     * @return the regulatesTrn
+     */
+    public Integer getRegulatesTrn() {
+        return regulatesTrn;
+    }
+
+    /**
+     * @param regulatesTrn the regulatesTrn to set
+     */
+    public void setRegulatesTrn(Integer regulatesTrn) {
+        this.regulatesTrn = regulatesTrn;
     }
 
 }

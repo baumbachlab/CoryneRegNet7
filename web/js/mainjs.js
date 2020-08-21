@@ -4,21 +4,95 @@
  * and open the template in the editor.
  */
 
+function chooseFilter() {
+    var value = document.getElementById("filters").value;
+
+    if (value == 'all') {
+        showAllRows();
+    }
+
+    if (value == 'tfs') {
+        showAllRows();
+        hideNonTfs();
+    }
+
+    if (value == 'func') {
+        showAllRows();
+        hideNonFunc();
+    }
+
+    if (value == 'trn') {
+        showAllRows();
+        hideNonTrns();
+    }
+
+    getNumberOfRows();
+
+}
+
+function showAllRows() {
+    $("[funcional]").show();
+
+}
+
+function hideNonFunc() {
+    $('#experimental-data').dataTable({
+        destroy: true,
+        "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
+        "order": [[0, "asc"]],
+
+    });
+    if ($("[funcional=false]").is(":visible")) {
+        $("[funcional=false]").hide();
+    }
+}
+
+function hideNonTfs() {
+    $('#experimental-data').dataTable({
+        destroy: true,
+        "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
+        "order": [[0, "asc"]],
+
+    });
+    if ($("[regulates-tf=0]").is(":visible")) {
+        $("[regulates-tf=0]").hide();
+    }
+}
+
+function hideNonTrns() {
+    $('#experimental-data').dataTable({
+        destroy: true,
+        "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
+        "order": [[0, "asc"]],
+
+    });
+    if ($("[regulates-trn=0]").is(":visible")) {
+        $("[regulates-trn=0]").hide();
+    }
+}
+
+function getNumberOfRows() {
+    var length = $('tr:visible').length;
+    document.getElementById("table-length").innerHTML = "Results (" + (parseInt(length) - 1) + " found)";
+    //$("#table-length").load();
+}
+
 $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 });
 
 function checkSelectSrnas() {
     var value = document.getElementById("srnaList-select").value;
-  //alert(value);
+    //alert(value);
     //wildcards
     if (value == "wildcards") {
         //alert("wildcard selected!");
         document.getElementById("gene-search").style.display = "block";
         document.getElementById("dinamic-network-caller").disabled = true;
-
+        document.getElementById("dinamic-network-caller-list").disabled = true;
     } else if (value == "all") {
         document.getElementById("dinamic-network-caller").disabled = true;
+        document.getElementById("dinamic-network-caller-list").disabled = true;
     } else {
         document.getElementById("gene-search").style.display = "none";
     }
@@ -27,14 +101,16 @@ function checkSelectSrnas() {
 
 function checkSelectGenes() {
     var value = document.getElementById("geneList-select").value;
-  //alert(value);
+    //alert(value);
     //wildcards
     if (value == "wildcards") {
         //alert("wildcard selected!");
         document.getElementById("gene-search").style.display = "block";
         document.getElementById("dinamic-network-caller").disabled = true;
+        document.getElementById("dinamic-network-caller-list").disabled = true;
     } else if (value == "all") {
         document.getElementById("dinamic-network-caller").disabled = true;
+        document.getElementById("dinamic-network-caller-list").disabled = true;
     } else {
         document.getElementById("gene-search").style.display = "none";
     }
@@ -137,16 +213,17 @@ function setAllGenesSelect() {
 
 function enableNetworkButton(type) {
     //organism-search-rna
-   //window.alert("organism rna"+document.getElementById('organism-search-rna').value);
-   //window.alert("organism "+document.getElementById('organism-search').value);
+    //window.alert("organism rna"+document.getElementById('organism-search-rna').value);
+    //window.alert("organism "+document.getElementById('organism-search').value);
     if (document.getElementById('gene').checked) {
         var value = document.getElementById("organism-search").value;
     } else {
         var value = document.getElementById("organism-search-rna").value;
     }
     if (value == 0) {
-       //window.alert("value 0");
+        //window.alert("value 0");
         document.getElementById("dinamic-network-caller").disabled = true;
+        document.getElementById("dinamic-network-caller-list").disabled = true;
         if (document.getElementById('gene').checked) {
             setAllGenesSelect();
         } else {
@@ -155,8 +232,9 @@ function enableNetworkButton(type) {
 
 
     } else {
-       //window.alert("else :)");
+        //window.alert("else :)");
         document.getElementById("dinamic-network-caller").disabled = false;
+        document.getElementById("dinamic-network-caller-list").disabled = false;
         if (document.getElementById('gene').checked) {
             getGeneList(value);
         } else {
@@ -164,23 +242,25 @@ function enableNetworkButton(type) {
         }
 
     }
-    
-     if (document.getElementById('rna').checked && 
-                document.getElementById('organism-search-rna').value == "1239" &&
-                    type == "experimental") {
-           //window.alert("CG! :)");
-            document.getElementById("dinamic-network-caller").disabled = true;
-            document.getElementById("tooltip-text").innerHTML = "There is no experimental sRNA network for this organism.";
 
-        }else{
-           document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style."; 
-        }
+    if (document.getElementById('rna').checked &&
+            document.getElementById('organism-search-rna').value == "1239" &&
+            type == "experimental") {
+        //window.alert("CG! :)");
+        document.getElementById("dinamic-network-caller").disabled = true;
+        document.getElementById("dinamic-network-caller-list").disabled = true;
+        document.getElementById("tooltip-text").innerHTML = "There is no experimental sRNA network for this organism.";
+
+    } else {
+        document.getElementById("tooltip-text").innerHTML = "Searches the database content and presents it in a table based style.";
+    }
 
 
 }
 
 function checkGeneRna(element) {
     document.getElementById("dinamic-network-caller").disabled = true;
+    document.getElementById("dinamic-network-caller-list").disabled = true;
     var value = element.value;
     var organismValue = "";
     if (value == 'gene') {
@@ -199,12 +279,13 @@ function checkGeneRna(element) {
         document.getElementById("gene-search").style.display = "none";
         document.getElementById("gene-search").value = "";
         document.getElementById("dinamic-network-caller").value = "Gene Regulatory Network";
+        document.getElementById("dinamic-network-caller-list").value = "Gene List";
 
 
         document.getElementById("organism-select-rna").style.display = "none";
         document.getElementById("organism-select-gene").style.display = "block";
-        
-        
+
+
         setAllGenesSelect();
 //        if (organismValue != 0) {
 //            getGeneList(organismValue);
@@ -243,13 +324,14 @@ function checkGeneRna(element) {
         document.getElementById("gene-search").style.display = "none";
         document.getElementById("gene-search").value = "";
         document.getElementById("dinamic-network-caller").value = "sRNA Regulatory Network";
+        document.getElementById("dinamic-network-caller-list").value = "sRNA Regulatory List";
 //
 //
 //        //organism-select-rna
         document.getElementById("organism-select-rna").style.display = "block";
         document.getElementById("organism-select-gene").style.display = "none";
         setAllRnasSelect();
-        
+
 //
 //
 //        if (organismValue != 0) {
@@ -259,7 +341,7 @@ function checkGeneRna(element) {
 
         //srnaList-select
     }
-    
+
 }
 
 function goBack() {

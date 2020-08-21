@@ -17,8 +17,8 @@
         <script type="text/javascript" src="js/mainjs.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-        
-           <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
         <style>
@@ -144,7 +144,18 @@
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-sm-10">
-                            <label for="organism-search">Search by organism&nbsp;</label>
+
+                            <label for="checkbox-div" style="margin-top: 15px;" >Search for:&nbsp;</label>
+                            <%-- <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search regulatory interactions regulated by Transcripction Factors (TFs), non-coding RNAs (ncRNAs) or both." style="text-rendering: optimizeLegibility;">
+                                <i class="fa fa-question-circle" style='color:black;'></i>
+                            </a>--%><br>
+                            <span class="align-text-bottom" id="checkbox-div">
+                                <input type="radio" id="gene" name="geneRna" value="gene" checked="checked" onclick="checkGeneRna(this);">
+                                <label style="margin-right: 30px" for="tf">Genes</label>
+                                <input type="radio" id="rna" name="geneRna" value="rna" onclick="checkGeneRna(this);">
+                                <label for="rna">Small RNAs</label><br>
+                            </span>
+                            <label for="organism-search">Organism&nbsp;</label>
                             <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="How to search?" data-content="For network visualization it is necessary to select an organism. For search button it is possible to search the database content of all organisms, but a gene is required." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
                             </a>
@@ -171,7 +182,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-1"></div>
-                         <div class="col-sm-10 form-small-screen">
+                        <div class="col-sm-10 form-small-screen">
                             <label for="gene-search" id="gene-rna-label">Gene&nbsp;</label>
                             <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search by gene id(locus_tag) and gene name. To search in all organisms a gene is mandatory." style="text-rendering: optimizeLegibility;">
                                 <i class="fa fa-question-circle" style='color:black;'></i>
@@ -190,16 +201,6 @@
                             </div>
                             <input type="text" class="form-control" id="gene-search" name="gene"  style="display: none;">
 
-                            <label for="checkbox-div" style="margin-top: 15px;" >Search for:&nbsp;</label>
-                            <%-- <a tabindex="1" role="button" data-toggle="popover" data-trigger="focus" title="How gene search works?" data-content="It is possible to search regulatory interactions regulated by Transcripction Factors (TFs), non-coding RNAs (ncRNAs) or both." style="text-rendering: optimizeLegibility;">
-                                <i class="fa fa-question-circle" style='color:black;'></i>
-                            </a>--%><br>
-                            <span class="align-text-bottom" id="checkbox-div">
-                                <input type="radio" id="gene" name="geneRna" value="gene" checked="checked" onclick="checkGeneRna(this);">
-                                <label style="margin-right: 30px" for="tf">Genes</label>
-                                <input type="radio" id="rna" name="geneRna" value="rna" onclick="checkGeneRna(this);">
-                                <label for="rna">Small RNAs</label><br>
-                            </span>
                             <%--<span class="align-text-bottom"> 
                                 <a href="#" onclick="document.getElementById('organism-search').value = 1239; document.getElementById('gene-search').value = 'cg0012';  document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
@@ -260,6 +261,26 @@
                                                onclick="showLoader()" disabled>
                                         <span class="tooltiptext">Searches the database content and presents a dynamic network visualization
                                             of the TRN of selected organism</span>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row" style="padding-bottom: 20px">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <div class="row">
+
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <center>
+                                    <input type="hidden" id="role-for-network" name="role" value="">
+                                    <div class="tooltip">
+                                        <input id="dinamic-network-caller-list" formaction="NetworkSelectedGenes.htm" type="submit" class="btn btn-primary btn-block btn-normal font" value="Gene List" onclick="showLoader()" disabled>
+                                        <span class="tooltiptext" id="tooltip-text">Searches the database content and presents a dynamic network visualization of the TRN of selected organism</span>
                                     </div>
                                 </center>
                             </div>

@@ -10,7 +10,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
+<html> 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CoryneRegNet 7.0</title>
@@ -31,20 +31,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.cssf">
     </head>
     <script>
-        function hideNonTfs() {
-            if ($("[funcional=false]").is(":visible")) {
-                $("[funcional=false]").hide();
-                var el = document.getElementById("nc-tfs");
-                el.innerHTML="Show non-functional sRNAs";
-                window.alert("element " + el.innerHTML);
-                //$("#btnAddProfile").html('Save');
-            } else {
-                $("[funcional=false]").show();
-                var el = document.getElementById("nc-tfs");
-                el.innerHTML="Hide non-functional sRNAs";
-                window.alert("element2 " + el.innerHTML);
-            }
-        }
+
     </script>
 
     <body>
@@ -123,26 +110,29 @@
     <div class="container-fluid badge badge-light space-to-footer">
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row">
-            <div class="col-sm-2">
-                <button type="button" class="btn btn-primary btn-block">sRNAs regulating TFs</button>
-            </div>
-            <div class="col-sm-2">
-                <button id="nc-tfs" type="button"  onclick="hideNonTfs()" class="btn btn-primary btn-block">Hide non-functional sRNAs</button>
-            </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
+                <c:choose>
+                    <c:when test="${type eq 'predicted'}">
+                        <label for="filters">Filter sRNA table: </label>
+                        <select id="filters" class="form-control" onchange="chooseFilter()">
+                            <option value="all">See all sRNAs</option>
+                            <option value="tfs">sRNAs regulating TFs</option>
+                            <option value="func">Functional sRNAs</option>
+                            <option value="trn">sRNAs regulating genes in the TRN</option>
 
+                        </select>
+                    </c:when>
+                </c:choose>
             </div>
-            <div class="col-sm-2">
-
-            </div>
-            <div class="col-sm-4">
+           
+            <div class="col-sm-9">
 
             </div>
 
         </div>
         <div class="row">
             <div class="col-sm-12 text-center tables-top" style="font-size: 22px">
-                <p class="font">Results (${fn:length(rnaTableView)} found)</p>
+                <p class="font" id="table-length">Results (${fn:length(rnaTableView)} found)</p>
             </div>
         </div>
 
@@ -164,6 +154,7 @@
                                 <c:when test="${type eq 'predicted'}">
                                     <th>Is functional?</th>
                                     <th>Functional evidence</th>
+                                    <th>Genome</th>
                                     <th>Num. of regulated genes</th>
                                     <th>Regulated genes</th>
                                     </c:when>
@@ -173,28 +164,40 @@
                     </thead>
                     <tbody> 
                         <c:forEach items="${rnaTableView}" var="list">
-                            <c:choose>
-                                <c:when test="${list.functionalRna}">
-                                    <tr funcional="true">
+                            <tr funcional="${list.functionalRna}" regulates-tf="${list.regulatesTf}" regulates-trn="${list.regulatesTrn}">
+                                <%--<c:choose>
+                                    <c:when test="${list.functionalRna}">
+                                        <tr funcional="true">
+
+                                        <c:choose>
+                                            <c:when test="${list.regulatesTf}">
+                                                <tr funcional="true" regulates-tg="true">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr funcional="true" regulates-tg="false">
+                                            </c:otherwise>    
+                                        </c:choose>
+
+
                                     </c:when>
                                     <c:otherwise>
                                     <tr funcional="false">
                                     </c:otherwise>  
-                                </c:choose>
+                                </c:choose>--%>
                                 <%--
                                 ${list.functionalRna}
                                 --%>
 
-                                <td>    
+                                <th>    
                                     <a style="color: black; font-size: medium; font-weight: bold" href="rnaInfo.htm?locusTag=${list.locusTag}&type=${type}">${list.locusTag}</a>
-                                </td>
-                                <td>${list.evidence}</td>
+                                </th>
+                                <th>${list.evidence}</th>
 
-                                <td>${list.srnaClass}
+                                <th>${list.srnaClass}
                                     <c:if test="${empty list.srnaClass}">-</c:if>
-                                    </td>
-                                    <td>${list.startPosition} - ${list.endPosition}</td>
-                                <td>${list.orientation}</td>
+                                    </th>
+                                    <th>${list.startPosition} - ${list.endPosition}</th>
+                                <th>${list.orientation}</th>
 
                                 <%--<c:choose>
                                     <c:when test="${type eq 'predicted'}">
@@ -208,20 +211,39 @@
 
                                 <c:choose>
                                     <c:when test="${type eq 'predicted'}">
-                                        <td>${list.functionalRna}</td>
-                                        <td>${list.evidenceFunctional}</td>
-                                    </c:when>
-                                </c:choose>
-                                <td>${list.countMrnas}</td>
+                                        <th>${list.functionalRna}</th>
+                                        <th>${list.evidenceFunctional}</th>
+                                        <th>${list.genome}</th>
+                                           
+                                                <th>${list.countMrnas}</th>
+                                              
+                                        </c:when>
+                                    </c:choose>
+
+
+
+
                                 <c:choose>
                                     <c:when test="${type eq 'predicted'}">
-                                        <td style="word-wrap:break-word; max-width: 500px;">      
-                                            <c:forTokens var="token" items="${list.mrnas} " delims=",">
-                                                <c:set var="i" value="0"/>
-                                                <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=${type}"><c:out value="${token}"/></a>&nbsp;
+                                        <th style="word-wrap:break-word; max-width: 500px;">     
 
-                                            </c:forTokens>
-                                        </td>
+
+                                            <c:choose>
+                                                <c:when test="${empty list.mrnas}">
+                                                    -
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:forTokens var="token" items="${list.mrnas} " delims=",">
+                                                        <c:set var="i" value="0"/>
+                                                        <a style="color: black; font-size: medium" href="geneInfo.htm?locusTag=${token}&type=${type}">
+                                                            <c:out value="${token}"/>
+                                                        </a>&nbsp;
+                                                    </c:forTokens>
+                                                </c:otherwise>    
+                                            </c:choose>
+
+
+                                        </th>
                                     </c:when>
                                 </c:choose>
                             </tr>

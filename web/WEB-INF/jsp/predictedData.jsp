@@ -29,7 +29,110 @@
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     </head>
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 40px;
+            height: 40px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
 
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function getNumberOfRows() {
+            var length = $('tr:visible').length;
+            document.getElementById("table-length").innerHTML = "Results (" + (parseInt(length) - 1) + " found)";
+            //$("#table-length").load();
+        }
+
+        function chooseFilter() {
+            var value = document.getElementById("filters").value;
+
+            if (value == 'all') {
+                //spinner
+                showAllRows();
+            }
+
+            if (value == 'tfs') {
+                showAllRows();
+                showRows('tf');//
+            }
+
+            if (value == 'tg') {
+                showAllRows();
+                showRows('regulated-by-both');
+            }
+
+            if (value == 'reg-tf') {
+                showAllRows();
+                showRows('regulated-by-tf');
+            }
+
+            if (value == 'reg-srna') {
+                showAllRows();
+                showRows('regulated-by-rna');
+            }
+
+            if (value == 'reg-tf-srna') {
+                showAllRows();
+                showRowsTags('regulated-by-rna', 'regulated-by-tf');
+            }
+
+            getNumberOfRows();
+            myFunction();
+
+
+            //alert('teste2');
+
+
+
+        }
+
+        function showAllRows() {
+            $("[tf]").show();
+        }
+
+        //regulated-by-tf
+        function showRows(tag) {
+            if ($("[" + tag + "=0]").is(":visible")) {
+                $("[" + tag + "=0]").hide();
+            }
+        }
+
+        function showRowsTags(tag1, tag2) {
+            if ($("[" + tag1 + "=0]").is(":visible") && $("[" + tag2 + "=0]").is(":visible")) {
+                $("[" + tag1 + "=0]").hide();
+                $("[" + tag2 + "=0]").hide();
+            }
+        }
+
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            //var t = document.getElementById("teste");
+            
+            if (x.style.display === "none") {
+               // t.innerHTML = "loading.....";
+                x.style.display = "block";
+            } else {
+              //  t.innerHTML = "";
+                x.style.display = "none";
+            }
+          
+        }
+    </script>
     <body style="background-color: #fcfcfc; background-size: cover;" >
 
     <nav class="navbar navbar-expand-md navbar-inverse bg-dark fixed-top navbar-dark">
@@ -87,8 +190,27 @@
     <div class="container-fluid badge badge-light space-to-footer">
         <hr style="color: #eee; margin-bottom: 30px">
         <div class="row">
+            <div class="col-sm-3">
+                <label for="filters">Filter gene table: </label>
+                <select id="filters" class="form-control" onchange="myFunction();chooseFilter()">
+                    <option value="all">See all genes</option>
+                    <option value="tfs">Genes enconding regulatory proteins</option>
+                    <option value="reg-tf">Genes regulated by regulatory proteins</option>
+                    <option value="reg-srna">Genes regulated by sRNAs</option>
+                    <option value="tg">Genes regulated by regulatory proteins or sRNAs</option>
+                    <option value="reg-tf-srna">Genes regulated by regulatory proteins and sRNAs</option>
+                </select>
+            </div>
+            <div class="col-sm-2" id="myDIV" style="display: none;">
+                <div class="loader"></div> We are loading your filters... 
+            </div>
+            <div class="col-sm-7" id="teste">
+            </div>
+           
+        </div>
+        <div class="row">
             <div class="col-sm-12 text-center tables-top" style="font-size: 22px">
-                <p class="font">Results (${entriesFound} found)</p>
+                <p class="font" id="table-length">Results (${fn:length(tableViews)} found)</p>
             </div>
         </div>
         <div class="row">
@@ -104,13 +226,17 @@
                                 <th>Product</th>
                                 <th>Predicted operon</th>
                                 <th>Organism</th>
+                                <th>Regulated by</th>
+                                <th>Regulates</th>
                                 <th>Regulation</th>
+
                             </tr>
                         </thead>
                     </c:if>
                     <tbody> 
                         <c:forEach items="${tableViews}" var="g">
-                            <tr>
+                           
+                            <tr tf="${g.countRegulatedGenes}" tg="${g.countRegRna}" regulated-by-tf="${g.countRegulatedBy}" regulated-by-rna="${g.countRnasLocus}" regulated-by-both="${g.countRegRna}">
                                 <th><a href="geneInfo.htm?locusTag=${g.locusTag}&type=predicted">${g.locusTag}</a></th>
                                     <c:choose>
                                         <c:when test="${g.alternativeLocusTag eq ''}">
@@ -147,16 +273,41 @@
                                                 </c:otherwise>
                                             </c:choose>
                                 <th><a href="organismInfo.htm?id=${g.organismId}&type=predicted">${g.organismName}</a></th>
+                                <th>${g.countRegRna}</th>
+                                <th>${g.countRegulatedGenes}</th>
                                 <th>
                                     <c:set var="emptyReg" value="0"/>
                                     <c:choose>
-                                        <c:when test="${g.regulatedBy eq null}">
+                                        <c:when test="${g.regulatedBy eq null && g.rnasLocus eq null}">
                                             <span>-</span>
                                             <c:set var="emptyReg" value="1"/>
                                         </c:when>    
                                         <c:otherwise>
                                             <span>Regulated by:</span><br>
-                                            <c:forTokens var="token" items="${g.regRna}"
+                                            <c:forTokens var="token" items="${g.regulatedBy}"
+                                                         delims=";">
+                                                <c:set var="i" value="0"/>
+                                                <c:forTokens var="tokenInside" items="${token}" delims=",">
+                                                    <c:choose>
+                                                        <c:when test="${i eq 0}">
+                                                            <a href="geneInfo.htm?locusTag=${tokenInside}&type=predicted"><c:out value="${tokenInside}"/> </a>
+                                                        </c:when>    
+                                                        <c:otherwise>
+                                                            <c:choose>
+                                                                <c:when test="${fn:length(tokenInside) eq 1}">
+                                                                    , <c:out value="${tokenInside}"/>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    , <c:out value="${fn:substring(tokenInside, 0, 1)}"/>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:otherwise>
+
+                                                    </c:choose>
+                                                    <c:set var="i" value="1"/>
+                                                </c:forTokens><br>
+                                            </c:forTokens>
+                                            <c:forTokens var="token" items="${g.rnasLocus}"
                                                          delims=";">
                                                 <c:set var="i" value="0"/>
                                                 <c:forTokens var="tokenInside" items="${token}" delims=",">
@@ -228,6 +379,7 @@
 
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -290,12 +442,15 @@
     <script>
         $(document).ready(function () {
             $('#predicted-data').DataTable({
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
                 "order": [[0, "asc"]]
             });
-            
+
             $('[data-toggle="popover"]').popover();
+
+
         });
+
     </script>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class FreeTest {
 
     public static void main(String[] args) throws IOException {
 
-        usingFileChannel();
+       /// usingFileChannel();
 
 //        
 //        Homologous homologous = new Homologous();
