@@ -82,6 +82,20 @@
         <div id="accordion">
             <div class="card">
                 <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapseZero" style="color: blue">
+                        How to cite us
+                    </a>
+                </div>
+                <div id="collapseZero" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul>
+                            <li><p>Parise, M.T.D., Parise, D., Kato, R.B., Pauling, J.K., Tauch, A., de Carvalho Azevedo, V.A. and Baumbach, J., 2020. <a href="https://www.nature.com/articles/s41597-020-0484-9" style="color: blue" target="_blank">CoryneRegNet 7, the reference database and analysis platform for corynebacterial gene regulatory networks.</a>  Scientific data, 7(1), pp.1-9.</p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
                     <a class="card-link" data-toggle="collapse" href="#collapseOne" style="color: blue">
                         Transcriptional Regulatory Networks (TRNs)
                     </a>
@@ -115,7 +129,7 @@
                         <p><b>CoryneRegNet experimental collection:</b></p>
                         <p><i>Corynebacterium glutamicum</i> ATCC 13032:</p>
                         <ul>
-                            <li><p>Pauling, J., Röttger, R., Tauch, A., Azevedo, V. and Baumbach, J., 2011. <a href="https://academic.oup.com/nar/article/40/D1/D610/2903480" style="color: blue" target="_blank">CoryneRegNet 6.0—Updated database content, new analysis methods and novel features focusing on community demands.</a>  Nucleic acids research, 40(D1), pp.D610-D614.</p></li>
+                            <li><p>Pauling, J., Röttger, R., Tauch, A., Azevedo, V. and Baumbach, J., 2012. <a href="https://academic.oup.com/nar/article/40/D1/D610/2903480" style="color: blue" target="_blank">CoryneRegNet 6.0—Updated database content, new analysis methods and novel features focusing on community demands.</a>  Nucleic acids research, 40(D1), pp.D610-D614.</p></li>
                             <li><p>Freyre-González, J.A. and Tauch, A., 2017. <a href="https://www.sciencedirect.com/science/article/pii/S0168165616315887" style="color: blue" target="_blank">Functional architecture and global properties of the Corynebacterium glutamicum regulatory network: Novel insights from a dataset with a high genomic coverage.</a> Journal of biotechnology, 257, pp.199-210.</p></li>
                             <li><p>Mentz A, Neshat A, Pfeifer-Sancar K, Pühler A, Rückert C, Kalinowski J., 2013. <a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-14-714" style="color: blue" target="_blank">Comprehensive discovery and characterization of small RNAs in Corynebacterium glutamicum ATCC 13032.</a> BMC Genomics. 2013;14(1):714. </p></li>
                         </ul>
@@ -462,7 +476,8 @@
                                 <li><p>Baumbach, J., Wittkop, T., Rademacher, K., Rahmann, S., Brinkrolf, K. and Tauch, A., 2007. <a href="https://www.sciencedirect.com/science/article/pii/S0168165606010339" style="color: blue" target="_blank">CoryneRegNet 3.0—an interactive systems biology platform for the analysis of gene regulatory networks in corynebacteria and Escherichia coli.</a>  Journal of biotechnology, 129(2), pp.279-289.</p></li>
                                 <li><p>Baumbach, J., 2007. <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-8-429" style="color: blue" target="_blank">CoryneRegNet 4.0–A reference database for corynebacterial gene regulatory networks.</a> BMC bioinformatics, 8(1), p.429.</p></li>
                                 <li><p>Baumbach, J., Rahmann, S. and Tauch, A., 2009. <a href="https://bmcsystbiol.biomedcentral.com/articles/10.1186/1752-0509-3-8" style="color: blue" target="_blank">Reliable transfer of transcriptional gene regulatory networks between taxonomically related organisms.</a> BMC systems biology, 3(1), p.8. [Methodological paper, not a database release]</p></li>
-                                <li><p>Pauling, J., Röttger, R., Tauch, A., Azevedo, V. and Baumbach, J., 2011. <a href="https://academic.oup.com/nar/article/40/D1/D610/2903480" style="color: blue" target="_blank">CoryneRegNet 6.0—Updated database content, new analysis methods and novel features focusing on community demands.</a>  Nucleic acids research, 40(D1), pp.D610-D614.</p></li>
+                                <li><p>Pauling, J., Röttger, R., Tauch, A., Azevedo, V. and Baumbach, J., 2012. <a href="https://academic.oup.com/nar/article/40/D1/D610/2903480" style="color: blue" target="_blank">CoryneRegNet 6.0—Updated database content, new analysis methods and novel features focusing on community demands.</a>  Nucleic acids research, 40(D1), pp.D610-D614.</p></li>
+                                <li><p>Parise, M.T.D., Parise, D., Kato, R.B., Pauling, J.K., Tauch, A., de Carvalho Azevedo, V.A. and Baumbach, J., 2020. <a href="https://www.nature.com/articles/s41597-020-0484-9" style="color: blue" target="_blank">CoryneRegNet 7, the reference database and analysis platform for corynebacterial gene regulatory networks.</a>  Scientific data, 7(1), pp.1-9.</p></li>
                             </ul>  
                         </div>
                     </div>
@@ -572,7 +587,19 @@
                         <p>7. Click on the "Network Visualization" button to open the network with the regulated 
                             and regulating genes of gene CD31A_RS034300 in a new tab - if the selected gene is 
                             regulated by other genes, it will also appear in the new network.</p>
-
+                        
+                        <p><b>If I want to see the sRNA information of a genome of interest, how can I see this information? How can I later check for information of a specific sRNA? E.g. <i>Corynebacterium glutamicum</i> ATCC 13032 and sRNA cgb_07555.</b></p>
+                        <div class="row" style="padding-bottom: 30px">
+                            <img class="img-fluid img-responsive" src="images/sRNA-example.svg" alt="sRNA_of_interest">
+                        </div>
+                        <p>1. Go to the CoryneRegNet home page and click on the "Predicted" button to search for 
+                            organisms in the predicted database.</p>
+                        <p>2. In Search for choose Small RNAs. In the "Search by organism" dropdown menu choose Corynebacterium glutamicum DSM 20300 = ATCC 13032 and click on the "Search" button.</p>
+                        <p>3. In the results table, you will see sRNAs and sRNAs regulatory information of the selected genome. Scroll down (or in Search field type cgb_07555) to find the cgb_07555 sRNA in the "RNA ID" column and click on it.</p>
+                        <p>4. The next page will present genomic and regulatory information of the selected sRNA. The first tab will present sRNA information.</p>
+                        <p>5. If you click on "See dot plot graph", it will present the dot plot graph in a pop-up.</p>
+                        <p>6. If you click on "See alignment graph", it will present the alignment graph in a pop-up.</p>
+                        <p>7. The "Regulates" tab presents all genes that are regulated by the selected sRNA.</p>
                     </div>
                 </div>
             </div>
