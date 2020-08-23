@@ -4,6 +4,47 @@
  * and open the template in the editor.
  */
 
+function callGeneExampleSearch(value) {
+    //geneRna
+    //var value = element.value;
+    var geneRna = document.getElementById('gene').checked;
+    alert(geneRna);
+    
+    if (geneRna) {
+         console.log('is gene');
+         document.getElementById('organism-search').value = 1239;
+        var select = document.getElementById('geneList-select');
+        select.value = 'wildcards';
+    }else{
+        console.log('is rna');
+        document.getElementById('organism-search-rna').value = 1239;
+        var select = document.getElementById('srnaList-select');
+        select.value = 'wildcards';
+        if(value.endsWith("%")){
+            value = 'cgb_075%';
+        }else{
+            value = 'cgb_07555';
+        }
+        
+    }
+    
+    document.getElementById('gene-search').style.display = 'block';
+    document.getElementById('gene-search').value = value;
+    document.getElementById('dinamic-network-caller').disabled = false;
+}
+
+function callRnaExampleSearch(value) {
+
+    document.getElementById('organism-search').value = 1239;
+    var select = document.getElementById('srnaList-select');
+    select.value = 'wildcards';
+    document.getElementById('gene-search').style.display = 'block';
+    document.getElementById('gene-search').value = value;
+    document.getElementById('dinamic-network-caller').disabled = false;
+}
+
+
+
 function chooseFilter() {
     var value = document.getElementById("filters").value;
 
@@ -130,7 +171,7 @@ function getGeneList(id) {
             var geneListHtml = "";
             // $('#genesList').html(geneListHtml);
             var i;
-            geneListHtml += '<select class="form-control space-after-input select2" id="geneList-select" name="geneListSelect" onchange="checkSelectGenes()">';
+            geneListHtml += '<select class="form-control space-after-input" id="geneList-select" name="geneListSelect" onchange="checkSelectGenes()">';
             geneListHtml += '<option value="all">All genes</option>';
             geneListHtml += '<option value="wildcards">Search with wildcards</option>';
             for (i = 0; i < geneList.length; i++) {
@@ -176,7 +217,7 @@ function getRnaList(id) {
             var value = document.getElementById("organism-search").value;
 
             $('#srnaList').html(geneListHtml);
-            $('.select2').select2();
+
             // alert(value);
 
 
@@ -199,7 +240,7 @@ function setAllRnasSelect() {
 
 
 function setAllGenesSelect() {
-    console.log("SET RNA SELECT")
+    console.log("SET GENES SELECT")
     var geneListHtml = "";
     geneListHtml += '<select class="form-control space-after-input" id="geneList-select" name="geneListSelect" onchange="checkSelectGenes()">';
     geneListHtml += '<option value="all">All genes</option>';
@@ -323,7 +364,7 @@ function checkGeneRna(element) {
 //        //dinamic-network-caller
         document.getElementById("gene-search").style.display = "none";
         document.getElementById("gene-search").value = "";
-        document.getElementById("dinamic-network-caller").value = "sRNA Regulatory Network";
+        document.getElementById("dinamic-network-caller").value = "Gene Regulatory Network";
         document.getElementById("dinamic-network-caller-list").value = "sRNA Regulatory List";
 //
 //

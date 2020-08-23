@@ -218,13 +218,13 @@
                             <input type="text" class="form-control" id="gene-search" name="gene"  style="display: none;">
 
                             
-                            <%--<span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('gene-search').value = 'cg0012'; document.getElementById('organism-search').value = 1239; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
+                            <span class="align-text-bottom"> 
+                                <a href="#" onclick="document.getElementById('organism-search').value = 1239; document.getElementById('geneList-select').value = 'wildcards'; document.getElementById('gene-search').style.display = 'block'; document.getElementById('gene-search').value = 'cg0012'; document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
 
                             <span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0; document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
-                            </span>--%>
+                                <a href="#" onclick="document.getElementById('organism-search').value = 0; document.getElementById('geneList-select').value = 'wildcards'; document.getElementById('gene-search').style.display = 'block'; document.getElementById('gene-search').value = 'dna%';  document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
+                            </span>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>

@@ -26,14 +26,33 @@ import java.util.logging.Logger;
 public class SmallRnaTest {
 
     public static void main(String[] args) {
-        try {
+       
             SmallRnaTest srTest = new SmallRnaTest();
-            srTest.changeFiguresNamesCgHomologous();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(SmallRnaTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            srTest.changek411Names();
+        
     }
     
+    
+    //"Cj-K411=NCTC11915-sRNA-1" 1390
+    //"Cj-K411-sRNA-1" 1390
+    
+    public void changek411Names(){
+        SmallRnaDAO srnaDAO = new SmallRnaDAO();
+                
+        List<SmallRna> srnas = srnaDAO.findByGenome(1390);
+        
+        for (SmallRna srna : srnas) {
+            System.out.println(srna.toString());
+            if(srna.getLocusTag().startsWith("Cj-K411=NCTC11915-")){
+                String locus = srna.getLocusTag();
+                locus = locus.replace("Cj-K411=NCTC11915-", "Cj-K411-");
+                System.out.println("locus: "+locus);
+                srna.setLocusTag(locus);
+                srnaDAO.update(srna);
+            }
+            
+        }
+    }
     
     public void changeFiguresNamesBSRD(){
         

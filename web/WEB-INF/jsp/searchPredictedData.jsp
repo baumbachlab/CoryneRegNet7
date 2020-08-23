@@ -189,7 +189,7 @@
                             </a>
                             <div id="resultList">
                                 <select class="form-control space-after-input" id="geneList-select" name="geneListSelect" onchange="checkSelectGenes()">
-                                    <option value="all">All genes</option>
+                                    <option value="all" >All genes</option>
                                     <option value="wildcards">Search with wildcards</option>
                                 </select>
                             </div>
@@ -201,13 +201,13 @@
                             </div>
                             <input type="text" class="form-control" id="gene-search" name="gene"  style="display: none;">
 
-                            <%--<span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('organism-search').value = 1239; document.getElementById('gene-search').value = 'cg0012';  document.getElementById('dinamic-network-caller').disabled = false;" style="color: #000000; font-size: small;">Example search</a>
+                           <span class="align-text-bottom"> 
+                                <a href="#" onclick="callGeneExampleSearch('cg0012')" style="color: #000000; font-size: small;">Example search</a>
                             </span><br>
 
                             <span class="align-text-bottom"> 
-                                <a href="#" onclick="document.getElementById('gene-search').value = 'dna%'; document.getElementById('organism-search').value = 0; document.getElementById('dinamic-network-caller').disabled = true;" style="color: #000000; font-size: small;">Example search with wildcards</a>
-                            </span>--%>
+                                <a href="#" onclick="callGeneExampleSearch('dna%')" style="color: #000000; font-size: small;">Example search with wildcards</a>
+                            </span>
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
